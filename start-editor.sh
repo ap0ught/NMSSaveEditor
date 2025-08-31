@@ -30,8 +30,9 @@ echo "Java version:"
 java -version
 
 # Start the application without auto-update to prevent forceExit issues
-# Use increased memory allocation for large save files
-java -Xmx4G -jar NMSSaveEditor.jar "$@"
+# Use configurable memory allocation for large save files
+JAVA_XMX_OPTION="${JAVA_XMX:--Xmx2G}"
+java "$JAVA_XMX_OPTION" -jar NMSSaveEditor.jar "$@"
 
 # Capture the exit code
 EXIT_CODE=$?

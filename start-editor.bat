@@ -34,8 +34,11 @@ echo Java version:
 java -version
 
 REM Start the application without auto-update to prevent forceExit issues
-REM Use increased memory allocation for large save files
-java -Xmx4G -jar NMSSaveEditor.jar %*
+REM Use configurable memory allocation for large save files
+REM Allow user to override default heap size via NMS_XMX environment variable
+set "NMS_XMX=%NMS_XMX%"
+if "%NMS_XMX%"=="" set "NMS_XMX=2G"
+java -Xmx%NMS_XMX% -jar NMSSaveEditor.jar %*
 
 REM Capture the exit code
 set EXIT_CODE=%ERRORLEVEL%

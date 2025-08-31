@@ -80,6 +80,26 @@ _NOTE: Some antivirus solutions actually falsely flag the above EXE file as a "v
 
 Frequently asked questions can be found [here](FAQ.md).
 
+## Troubleshooting
+
+If you experience issues with the application forcefully exiting or "forceExit" problems, see the [Troubleshooting Guide](TROUBLESHOOTING.md).
+
+### Quick Start Scripts
+
+For a more reliable startup experience that avoids common issues, use the provided scripts:
+
+**Linux/macOS:**
+```bash
+./start-editor.sh
+```
+
+**Windows:**
+```batch
+start-editor.bat
+```
+
+These scripts automatically configure the application to avoid network-related shutdown issues.
+
 ## Contribution
 
 This tool will always be released publicly for free, and I intend to continue maintaining it for as long as there is interest in the game. If this tool has been useful and you want to contribute to it's further development, feel free to visit me on Patreon:

@@ -1,0 +1,10 @@
+Starting NMS Save Editor...
+Working directory: /home/runner/work/NMSSaveEditor/NMSSaveEditor
+Java version:
+openjdk version "17.0.16" 2025-07-15
+OpenJDK Runtime Environment Temurin-17.0.16+8 (build 17.0.16+8)
+OpenJDK 64-Bit Server VM Temurin-17.0.16+8 (build 17.0.16+8, mixed mode, sharing)
+Initializing environment...
+Starting Editor...
+Exception in thread "Thread-2" java.lang.NegativeArraySizeException: -1
+	at nomanssave.x.run(Unknown Source)

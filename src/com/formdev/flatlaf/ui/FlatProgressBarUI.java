@@ -67,46 +67,9 @@ public class FlatProgressBarUI extends BasicProgressBarUI implements FlatStyling
     
     @Override
     protected void installListeners() {
-        // 
-        // This method could not be decompiled.
-        // 
-        // Original Bytecode:
-        // 
-        //     1: invokespecial   javax/swing/plaf/basic/BasicProgressBarUI.installListeners:()V
-        //     4: aload_0         /* this */
-        //     5: aload_0         /* this */
-        //     6: invokedynamic   BootstrapMethod #0, propertyChange:(Lcom/formdev/flatlaf/ui/FlatProgressBarUI;)Ljava/beans/PropertyChangeListener;
-        //    11: putfield        com/formdev/flatlaf/ui/FlatProgressBarUI.propertyChangeListener:Ljava/beans/PropertyChangeListener;
-        //    14: aload_0         /* this */
-        //    15: getfield        com/formdev/flatlaf/ui/FlatProgressBarUI.progressBar:Ljavax/swing/JProgressBar;
-        //    18: aload_0         /* this */
-        //    19: getfield        com/formdev/flatlaf/ui/FlatProgressBarUI.propertyChangeListener:Ljava/beans/PropertyChangeListener;
-        //    22: invokevirtual   javax/swing/JProgressBar.addPropertyChangeListener:(Ljava/beans/PropertyChangeListener;)V
-        //    25: return         
-        // 
-        // The error that occurred was:
-        // 
-        // java.lang.NullPointerException: Cannot invoke "com.strobel.assembler.metadata.TypeReference.getSimpleType()" because the return value of "com.strobel.decompiler.ast.Variable.getType()" is null
-        //     at com.strobel.decompiler.languages.java.ast.NameVariables.generateNameForVariable(NameVariables.java:252)
-        //     at com.strobel.decompiler.languages.java.ast.NameVariables.assignNamesToVariables(NameVariables.java:185)
-        //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.nameVariables(AstMethodBodyBuilder.java:1482)
-        //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.populateVariables(AstMethodBodyBuilder.java:1411)
-        //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:210)
-        //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:93)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(AstBuilder.java:868)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(AstBuilder.java:761)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(AstBuilder.java:638)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(AstBuilder.java:605)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(AstBuilder.java:195)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createType(AstBuilder.java:162)
-        //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addType(AstBuilder.java:137)
-        //     at com.strobel.decompiler.languages.java.JavaLanguage.buildAst(JavaLanguage.java:71)
-        //     at com.strobel.decompiler.languages.java.JavaLanguage.decompileType(JavaLanguage.java:59)
-        //     at com.strobel.decompiler.DecompilerDriver.decompileType(DecompilerDriver.java:334)
-        //     at com.strobel.decompiler.DecompilerDriver.decompileJar(DecompilerDriver.java:255)
-        //     at com.strobel.decompiler.DecompilerDriver.main(DecompilerDriver.java:130)
-        // 
-        throw new IllegalStateException("An error occurred while decompiling this method.");
+        super.installListeners();
+        this.propertyChangeListener = this::propertyChange;
+        this.progressBar.addPropertyChangeListener(this.propertyChangeListener);
     }
     
     @Override
@@ -114,6 +77,15 @@ public class FlatProgressBarUI extends BasicProgressBarUI implements FlatStyling
         super.uninstallListeners();
         this.progressBar.removePropertyChangeListener(this.propertyChangeListener);
         this.propertyChangeListener = null;
+    }
+    
+    private void propertyChange(final PropertyChangeEvent e) {
+        switch (e.getPropertyName()) {
+            case "style":
+            case "JProgressBar.style":
+                this.installStyle();
+                break;
+        }
     }
     
     protected void installStyle() {

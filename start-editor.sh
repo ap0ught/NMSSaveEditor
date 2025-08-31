@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # NMS Save Editor Startup Script
 # This script starts the NMS Save Editor without auto-update to avoid forceExit issues

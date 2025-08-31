@@ -38,7 +38,7 @@ jobs:
     - name: Test JAR file execution
       run: |
         # Try to run the JAR to verify it's valid
-        java -jar NMSSaveEditor.jar --help || echo "JAR execution test completed"
+        java -jar NMSSaveEditor.jar --help
         
     - name: Verify VERSION.txt
       run: |

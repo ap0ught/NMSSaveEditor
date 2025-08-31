@@ -70,3 +70,43 @@ After applying a solution:
 - See [README.md](README.md) for installation instructions
 - See [FAQ.md](FAQ.md) for general usage questions
 - This resolves GitHub issue #11
+
+## GitHub Actions Firewall Issues
+
+### Problem
+GitHub Actions workflows may encounter firewall restrictions when accessing certain Ubuntu repositories (particularly `esm.ubuntu.com`) during dependency installation.
+
+### Symptoms
+- Workflow failures during Java setup or package installation
+- DNS resolution errors for `esm.ubuntu.com`
+- Timeout errors in `/usr/lib/apt/methods/https`
+- Failed GitHub Actions runs with network-related errors
+
+### Root Cause
+Some corporate firewalls or network policies block access to Ubuntu's Extended Security Maintenance (ESM) repositories, which are accessed during package installation operations.
+
+### Solutions
+
+#### Solution 1: Use Pre-installed Tools (Recommended)
+The GitHub Actions workflows have been configured with fallback mechanisms to use pre-installed Java when network access is restricted.
+
+#### Solution 2: Configure Allowlist
+Repository administrators can add the following domains to their Copilot coding agent allowlist:
+- `esm.ubuntu.com`
+- `security.ubuntu.com`
+- `archive.ubuntu.com`
+
+#### Solution 3: Alternative Setup Actions
+Use Actions setup steps that run before firewall restrictions are enabled, as suggested in the GitHub Copilot documentation.
+
+### Verification
+After applying solutions:
+1. Check GitHub Actions logs for successful Java installation
+2. Verify CI workflows complete without network errors
+3. Monitor for fallback mechanisms being triggered
+
+### Additional Notes
+- The CI workflows include automatic fallbacks for network restrictions
+- Core application functionality is not affected by these network issues
+- Manual local development is unaffected by GitHub Actions firewall restrictions
+- For comprehensive firewall solutions, see [Firewall Guide](docs/FIREWALL_GUIDE.md)

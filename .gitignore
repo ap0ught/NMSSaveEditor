@@ -1,0 +1,7 @@
+# Temporary files
+test_output.log
+nomanssave/
+
+# Application generated files
+*.log
+backups/

@@ -9,7 +9,6 @@
 # IDE files
 .idea/
 *.iml
-.vscode/
 
 # OS generated files
 .DS_Store
@@ -20,8 +19,15 @@
 ehthumbs.db
 Thumbs.db
 
-# Build artifacts (if any are added in future)
+# Build artifacts
 target/
 build/
 dist/
 out/
+*.class
+
+# Backup files
+src_backup/
+
+# Maven wrapper (if added)
+.mvn/wrapper/maven-wrapper.jar

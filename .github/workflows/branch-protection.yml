@@ -63,7 +63,15 @@ jobs:
               console.error('❌ Failed to setup branch protection:', error.message);
               
               // If the error is due to missing required status checks, set up basic protection
-              if (error.message.includes('required_status_checks')) {
+              if (
+                error.status === 422 &&
+                error.response &&
+                error.response.data &&
+                Array.isArray(error.response.data.errors) &&
+                error.response.data.errors.some(e =>
+                  typeof e.message === 'string' && e.message.includes('required_status_checks')
+                )
+              ) {
                 console.log('Setting up basic branch protection without status checks...');
                 
                 await github.rest.repos.updateBranchProtection({

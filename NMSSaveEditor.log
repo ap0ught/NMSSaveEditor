@@ -1,0 +1,14 @@
+[DEBUG] Java Vendor: Private Build
+[DEBUG] Java Version: 1.8.0_462
+[DEBUG] Java Architecture: amd64
+[DEBUG] Operating System: Linux
+[DEBUG] Working Dir: /home/runner/work/NMSSaveEditor/NMSSaveEditor
+[DEBUG] Look and Feel: FlatLaf Light
+[INFO] Starting Editor...
+[DEBUG] Path not found: MainFrame.X
+[DEBUG] Path not found: MainFrame.Y
+[DEBUG] Path not found: MainFrame.Width
+[DEBUG] Path not found: MainFrame.Height
+[DEBUG] Mem Usage: 203/3729 MB
+[STDERR] Exception in thread "Thread-4" java.lang.NegativeArraySizeException
+[STDERR] 	at nomanssave.x.run(Unknown Source)

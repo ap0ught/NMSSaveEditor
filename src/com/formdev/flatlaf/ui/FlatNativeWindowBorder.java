@@ -1,276 +1,268 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.ui;
 
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.Color;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.SystemInfo;
-import java.beans.PropertyChangeEvent;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Rectangle;
+import java.awt.Window;
+import java.beans.PropertyChangeListener;
 import java.util.List;
-import javax.swing.JComponent;
-import com.formdev.flatlaf.FlatLaf;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import java.beans.PropertyChangeListener;
-import java.awt.Container;
-import java.awt.Window;
 import javax.swing.JRootPane;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
 
-public class FlatNativeWindowBorder
-{
-    private static final boolean canUseWindowDecorations;
-    private static final boolean canUseJBRCustomDecorations;
-    private static Boolean supported;
-    private static Provider nativeProvider;
-    
-    public static boolean isSupported() {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            return JBRCustomDecorations.isSupported();
-        }
-        initialize();
-        return FlatNativeWindowBorder.supported;
-    }
-    
-    static Object install(final JRootPane rootPane) {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            return JBRCustomDecorations.install(rootPane);
-        }
-        if (!isSupported()) {
+public class FlatNativeWindowBorder {
+   private static final boolean canUseWindowDecorations = SystemInfo.isWindows_10_orLater
+      && (SystemInfo.isWindows_11_orLater || !FlatSystemProperties.getBoolean("sun.java2d.opengl", false))
+      && !SystemInfo.isProjector
+      && !SystemInfo.isWebswing
+      && !SystemInfo.isWinPE
+      && FlatSystemProperties.getBoolean("flatlaf.useWindowDecorations", true);
+   private static final boolean canUseJBRCustomDecorations = canUseWindowDecorations
+      && SystemInfo.isJetBrainsJVM_11_orLater
+      && FlatSystemProperties.getBoolean("flatlaf.useJetBrainsCustomDecorations", false);
+   private static Boolean supported;
+   private static FlatNativeWindowBorder.Provider nativeProvider;
+
+   public static boolean isSupported() {
+      if (canUseJBRCustomDecorations) {
+         return JBRCustomDecorations.isSupported();
+      } else {
+         initialize();
+         return supported;
+      }
+   }
+
+   static Object install(JRootPane rootPane) {
+      if (canUseJBRCustomDecorations) {
+         return JBRCustomDecorations.install(rootPane);
+      } else if (!isSupported()) {
+         return null;
+      } else {
+         Container parent = rootPane.getParent();
+         if (parent != null && !(parent instanceof Window)) {
             return null;
-        }
-        final Container parent = rootPane.getParent();
-        if (parent != null && !(parent instanceof Window)) {
-            return null;
-        }
-        if (parent instanceof Window && parent.isDisplayable()) {
-            install((Window)parent);
-        }
-        final PropertyChangeListener ancestorListener = e -> {
-            final Object newValue = e.getNewValue();
-            if (newValue instanceof Window) {
-                install((Window)newValue);
+         } else {
+            if (parent instanceof Window && parent.isDisplayable()) {
+               install((Window)parent);
             }
-            else if (newValue == null && e.getOldValue() instanceof Window) {
-                uninstall((Window)e.getOldValue());
+
+            PropertyChangeListener ancestorListener = e -> {
+               Object newValue = e.getNewValue();
+               if (newValue instanceof Window) {
+                  install((Window)newValue);
+               } else if (newValue == null && e.getOldValue() instanceof Window) {
+                  uninstall((Window)e.getOldValue());
+               }
+            };
+            rootPane.addPropertyChangeListener("ancestor", ancestorListener);
+            return ancestorListener;
+         }
+      }
+   }
+
+   static void install(Window window) {
+      if (!hasCustomDecoration(window)) {
+         if (!UIManager.getLookAndFeel().getSupportsWindowDecorations()) {
+            if (window instanceof JFrame) {
+               JFrame frame = (JFrame)window;
+               JRootPane rootPane = frame.getRootPane();
+               if (!useWindowDecorations(rootPane)) {
+                  return;
+               }
+
+               if (frame.isUndecorated()) {
+                  return;
+               }
+
+               setHasCustomDecoration(frame, true);
+               if (!hasCustomDecoration(frame)) {
+                  return;
+               }
+
+               rootPane.setWindowDecorationStyle(1);
+            } else if (window instanceof JDialog) {
+               JDialog dialog = (JDialog)window;
+               JRootPane rootPanex = dialog.getRootPane();
+               if (!useWindowDecorations(rootPanex)) {
+                  return;
+               }
+
+               if (dialog.isUndecorated()) {
+                  return;
+               }
+
+               setHasCustomDecoration(dialog, true);
+               if (!hasCustomDecoration(dialog)) {
+                  return;
+               }
+
+               rootPanex.setWindowDecorationStyle(2);
             }
-            return;
-        };
-        rootPane.addPropertyChangeListener("ancestor", ancestorListener);
-        return ancestorListener;
-    }
-    
-    static void install(final Window window) {
-        if (hasCustomDecoration(window)) {
-            return;
-        }
-        if (UIManager.getLookAndFeel().getSupportsWindowDecorations()) {
-            return;
-        }
-        if (window instanceof JFrame) {
-            final JFrame frame = (JFrame)window;
-            final JRootPane rootPane = frame.getRootPane();
-            if (!useWindowDecorations(rootPane)) {
-                return;
-            }
-            if (frame.isUndecorated()) {
-                return;
-            }
-            setHasCustomDecoration(frame, true);
-            if (!hasCustomDecoration(frame)) {
-                return;
-            }
-            rootPane.setWindowDecorationStyle(1);
-        }
-        else if (window instanceof JDialog) {
-            final JDialog dialog = (JDialog)window;
-            final JRootPane rootPane = dialog.getRootPane();
-            if (!useWindowDecorations(rootPane)) {
-                return;
-            }
-            if (dialog.isUndecorated()) {
-                return;
-            }
-            setHasCustomDecoration(dialog, true);
-            if (!hasCustomDecoration(dialog)) {
-                return;
-            }
-            rootPane.setWindowDecorationStyle(2);
-        }
-    }
-    
-    static void uninstall(final JRootPane rootPane, final Object data) {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            JBRCustomDecorations.uninstall(rootPane, data);
-            return;
-        }
-        if (!isSupported()) {
-            return;
-        }
-        if (data instanceof PropertyChangeListener) {
+         }
+      }
+   }
+
+   static void uninstall(JRootPane rootPane, Object data) {
+      if (canUseJBRCustomDecorations) {
+         JBRCustomDecorations.uninstall(rootPane, data);
+      } else if (isSupported()) {
+         if (data instanceof PropertyChangeListener) {
             rootPane.removePropertyChangeListener("ancestor", (PropertyChangeListener)data);
-        }
-        if (UIManager.getLookAndFeel() instanceof FlatLaf && useWindowDecorations(rootPane)) {
-            return;
-        }
-        final Container parent = rootPane.getParent();
-        if (parent instanceof Window) {
-            uninstall((Window)parent);
-        }
-    }
-    
-    private static void uninstall(final Window window) {
-        if (!hasCustomDecoration(window)) {
-            return;
-        }
-        setHasCustomDecoration(window, false);
-        if (window instanceof JFrame) {
-            final JFrame frame = (JFrame)window;
+         }
+
+         if (!(UIManager.getLookAndFeel() instanceof FlatLaf) || !useWindowDecorations(rootPane)) {
+            Container parent = rootPane.getParent();
+            if (parent instanceof Window) {
+               uninstall((Window)parent);
+            }
+         }
+      }
+   }
+
+   private static void uninstall(Window window) {
+      if (hasCustomDecoration(window)) {
+         setHasCustomDecoration(window, false);
+         if (window instanceof JFrame) {
+            JFrame frame = (JFrame)window;
             frame.getRootPane().setWindowDecorationStyle(0);
-        }
-        else if (window instanceof JDialog) {
-            final JDialog dialog = (JDialog)window;
+         } else if (window instanceof JDialog) {
+            JDialog dialog = (JDialog)window;
             dialog.getRootPane().setWindowDecorationStyle(0);
-        }
-    }
-    
-    private static boolean useWindowDecorations(final JRootPane rootPane) {
-        return FlatUIUtils.getBoolean(rootPane, "flatlaf.useWindowDecorations", "JRootPane.useWindowDecorations", "TitlePane.useWindowDecorations", false);
-    }
-    
-    public static boolean hasCustomDecoration(final Window window) {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            return JBRCustomDecorations.hasCustomDecoration(window);
-        }
-        return isSupported() && FlatNativeWindowBorder.nativeProvider.hasCustomDecoration(window);
-    }
-    
-    public static void setHasCustomDecoration(final Window window, final boolean hasCustomDecoration) {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            JBRCustomDecorations.setHasCustomDecoration(window, hasCustomDecoration);
-            return;
-        }
-        if (!isSupported()) {
-            return;
-        }
-        FlatNativeWindowBorder.nativeProvider.setHasCustomDecoration(window, hasCustomDecoration);
-    }
-    
-    static void setTitleBarHeightAndHitTestSpots(final Window window, final int titleBarHeight, final List<Rectangle> hitTestSpots, final Rectangle appIconBounds, final Rectangle minimizeButtonBounds, final Rectangle maximizeButtonBounds, final Rectangle closeButtonBounds) {
-        if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-            JBRCustomDecorations.setTitleBarHeightAndHitTestSpots(window, titleBarHeight, hitTestSpots);
-            return;
-        }
-        if (!isSupported()) {
-            return;
-        }
-        FlatNativeWindowBorder.nativeProvider.updateTitleBarInfo(window, titleBarHeight, hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds);
-    }
-    
-    static boolean showWindow(final Window window, final int cmd) {
-        return !FlatNativeWindowBorder.canUseJBRCustomDecorations && isSupported() && FlatNativeWindowBorder.nativeProvider.showWindow(window, cmd);
-    }
-    
-    private static void initialize() {
-        if (FlatNativeWindowBorder.supported != null) {
-            return;
-        }
-        FlatNativeWindowBorder.supported = false;
-        if (!FlatNativeWindowBorder.canUseWindowDecorations) {
-            return;
-        }
-        try {
-            setNativeProvider(FlatWindowsNativeWindowBorder.getInstance());
-        }
-        catch (final Exception ex) {}
-    }
-    
-    public static void setNativeProvider(final Provider provider) {
-        if (FlatNativeWindowBorder.nativeProvider != null) {
-            throw new IllegalStateException();
-        }
-        FlatNativeWindowBorder.nativeProvider = provider;
-        FlatNativeWindowBorder.supported = (FlatNativeWindowBorder.nativeProvider != null);
-    }
-    
-    static {
-        canUseWindowDecorations = (SystemInfo.isWindows_10_orLater && (SystemInfo.isWindows_11_orLater || !FlatSystemProperties.getBoolean("sun.java2d.opengl", false)) && !SystemInfo.isProjector && !SystemInfo.isWebswing && !SystemInfo.isWinPE && FlatSystemProperties.getBoolean("flatlaf.useWindowDecorations", true));
-        canUseJBRCustomDecorations = (FlatNativeWindowBorder.canUseWindowDecorations && SystemInfo.isJetBrainsJVM_11_orLater && FlatSystemProperties.getBoolean("flatlaf.useJetBrainsCustomDecorations", false));
-    }
-    
-    static class WindowTopBorder extends JBRCustomDecorations.JBRWindowTopBorder
-    {
-        private static WindowTopBorder instance;
-        
-        static JBRCustomDecorations.JBRWindowTopBorder getInstance() {
-            if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
-                return JBRCustomDecorations.JBRWindowTopBorder.getInstance();
+         }
+      }
+   }
+
+   private static boolean useWindowDecorations(JRootPane rootPane) {
+      return FlatUIUtils.getBoolean(rootPane, "flatlaf.useWindowDecorations", "JRootPane.useWindowDecorations", "TitlePane.useWindowDecorations", false);
+   }
+
+   public static boolean hasCustomDecoration(Window window) {
+      if (canUseJBRCustomDecorations) {
+         return JBRCustomDecorations.hasCustomDecoration(window);
+      } else {
+         return !isSupported() ? false : nativeProvider.hasCustomDecoration(window);
+      }
+   }
+
+   public static void setHasCustomDecoration(Window window, boolean hasCustomDecoration) {
+      if (canUseJBRCustomDecorations) {
+         JBRCustomDecorations.setHasCustomDecoration(window, hasCustomDecoration);
+      } else if (isSupported()) {
+         nativeProvider.setHasCustomDecoration(window, hasCustomDecoration);
+      }
+   }
+
+   static void setTitleBarHeightAndHitTestSpots(
+      Window window,
+      int titleBarHeight,
+      List<Rectangle> hitTestSpots,
+      Rectangle appIconBounds,
+      Rectangle minimizeButtonBounds,
+      Rectangle maximizeButtonBounds,
+      Rectangle closeButtonBounds
+   ) {
+      if (canUseJBRCustomDecorations) {
+         JBRCustomDecorations.setTitleBarHeightAndHitTestSpots(window, titleBarHeight, hitTestSpots);
+      } else if (isSupported()) {
+         nativeProvider.updateTitleBarInfo(window, titleBarHeight, hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds);
+      }
+   }
+
+   static boolean showWindow(Window window, int cmd) {
+      return !canUseJBRCustomDecorations && isSupported() ? nativeProvider.showWindow(window, cmd) : false;
+   }
+
+   private static void initialize() {
+      if (supported == null) {
+         supported = false;
+         if (canUseWindowDecorations) {
+            try {
+               setNativeProvider(FlatWindowsNativeWindowBorder.getInstance());
+            } catch (Exception var1) {
             }
-            if (WindowTopBorder.instance == null) {
-                WindowTopBorder.instance = new WindowTopBorder();
+         }
+      }
+   }
+
+   public static void setNativeProvider(FlatNativeWindowBorder.Provider provider) {
+      if (nativeProvider != null) {
+         throw new IllegalStateException();
+      } else {
+         nativeProvider = provider;
+         supported = nativeProvider != null;
+      }
+   }
+
+   public interface Provider {
+      int SW_MAXIMIZE = 3;
+      int SW_MINIMIZE = 6;
+      int SW_RESTORE = 9;
+
+      boolean hasCustomDecoration(Window var1);
+
+      void setHasCustomDecoration(Window var1, boolean var2);
+
+      void updateTitleBarInfo(Window var1, int var2, List<Rectangle> var3, Rectangle var4, Rectangle var5, Rectangle var6, Rectangle var7);
+
+      boolean showWindow(Window var1, int var2);
+
+      boolean isColorizationColorAffectsBorders();
+
+      Color getColorizationColor();
+
+      int getColorizationColorBalance();
+
+      void addChangeListener(ChangeListener var1);
+
+      void removeChangeListener(ChangeListener var1);
+   }
+
+   static class WindowTopBorder extends JBRCustomDecorations.JBRWindowTopBorder {
+      private static FlatNativeWindowBorder.WindowTopBorder instance;
+
+      static JBRCustomDecorations.JBRWindowTopBorder getInstance() {
+         if (FlatNativeWindowBorder.canUseJBRCustomDecorations) {
+            return JBRCustomDecorations.JBRWindowTopBorder.getInstance();
+         } else {
+            if (instance == null) {
+               instance = new FlatNativeWindowBorder.WindowTopBorder();
             }
-            return WindowTopBorder.instance;
-        }
-        
-        @Override
-        void installListeners() {
-            FlatNativeWindowBorder.nativeProvider.addChangeListener(e -> {
-                this.update();
-                Window.getWindows();
-                final Window[] array;
-                int i = 0;
-                for (int length = array.length; i < length; ++i) {
-                    final Window window = array[i];
-                    if (window.isDisplayable()) {
-                        window.repaint(0, 0, window.getWidth(), 1);
-                    }
-                }
-            });
-        }
-        
-        @Override
-        boolean isColorizationColorAffectsBorders() {
-            return FlatNativeWindowBorder.nativeProvider.isColorizationColorAffectsBorders();
-        }
-        
-        @Override
-        Color getColorizationColor() {
-            return FlatNativeWindowBorder.nativeProvider.getColorizationColor();
-        }
-        
-        @Override
-        int getColorizationColorBalance() {
-            return FlatNativeWindowBorder.nativeProvider.getColorizationColorBalance();
-        }
-    }
-    
-    public interface Provider
-    {
-        public static final int SW_MAXIMIZE = 3;
-        public static final int SW_MINIMIZE = 6;
-        public static final int SW_RESTORE = 9;
-        
-        boolean hasCustomDecoration(final Window p0);
-        
-        void setHasCustomDecoration(final Window p0, final boolean p1);
-        
-        void updateTitleBarInfo(final Window p0, final int p1, final List<Rectangle> p2, final Rectangle p3, final Rectangle p4, final Rectangle p5, final Rectangle p6);
-        
-        boolean showWindow(final Window p0, final int p1);
-        
-        boolean isColorizationColorAffectsBorders();
-        
-        Color getColorizationColor();
-        
-        int getColorizationColorBalance();
-        
-        void addChangeListener(final ChangeListener p0);
-        
-        void removeChangeListener(final ChangeListener p0);
-    }
+
+            return instance;
+         }
+      }
+
+      @Override
+      void installListeners() {
+         FlatNativeWindowBorder.nativeProvider.addChangeListener(e -> {
+            this.update();
+
+            for (Window window : Window.getWindows()) {
+               if (window.isDisplayable()) {
+                  window.repaint(0, 0, window.getWidth(), 1);
+               }
+            }
+         });
+      }
+
+      @Override
+      boolean isColorizationColorAffectsBorders() {
+         return FlatNativeWindowBorder.nativeProvider.isColorizationColorAffectsBorders();
+      }
+
+      @Override
+      Color getColorizationColor() {
+         return FlatNativeWindowBorder.nativeProvider.getColorizationColor();
+      }
+
+      @Override
+      int getColorizationColorBalance() {
+         return FlatNativeWindowBorder.nativeProvider.getColorizationColorBalance();
+      }
+   }
 }

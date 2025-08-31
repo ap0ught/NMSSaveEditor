@@ -1,91 +1,81 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.ui;
 
-import javax.swing.plaf.ListUI;
-import javax.swing.SwingUtilities;
-import javax.swing.JList;
-import java.util.function.Function;
-import java.awt.Graphics;
 import java.awt.Color;
-import java.awt.Insets;
-import javax.swing.UIManager;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.util.function.Function;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.ListUI;
 
-public class FlatListCellBorder extends FlatLineBorder
-{
-    protected boolean showCellFocusIndicator;
-    private Component c;
-    
-    protected FlatListCellBorder() {
-        super(UIManager.getInsets("List.cellMargins"), UIManager.getColor("List.cellFocusColor"));
-        this.showCellFocusIndicator = UIManager.getBoolean("List.showCellFocusIndicator");
-    }
-    
-    @Override
-    public Insets getBorderInsets(final Component c, final Insets insets) {
-        final Insets m = getStyleFromListUI(c, ui -> ui.cellMargins);
-        if (m != null) {
-            return FlatEmptyBorder.scaleInsets(c, insets, m.top, m.left, m.bottom, m.right);
-        }
-        return super.getBorderInsets(c, insets);
-    }
-    
-    @Override
-    public Color getLineColor() {
-        if (this.c != null) {
-            final Color color = getStyleFromListUI(this.c, ui -> ui.cellFocusColor);
-            if (color != null) {
-                return color;
+public class FlatListCellBorder extends FlatLineBorder {
+   protected boolean showCellFocusIndicator = UIManager.getBoolean("List.showCellFocusIndicator");
+   // $VF: renamed from: c java.awt.Component
+   private Component field_48;
+
+   protected FlatListCellBorder() {
+      super(UIManager.getInsets("List.cellMargins"), UIManager.getColor("List.cellFocusColor"));
+   }
+
+   @Override
+   public Insets getBorderInsets(Component c, Insets insets) {
+      Insets m = getStyleFromListUI(c, ui -> ui.cellMargins);
+      return m != null ? scaleInsets(c, insets, m.top, m.left, m.bottom, m.right) : super.getBorderInsets(c, insets);
+   }
+
+   @Override
+   public Color getLineColor() {
+      if (this.field_48 != null) {
+         Color color = getStyleFromListUI(this.field_48, ui -> ui.cellFocusColor);
+         if (color != null) {
+            return color;
+         }
+      }
+
+      return super.getLineColor();
+   }
+
+   @Override
+   public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+      this.field_48 = c;
+      super.paintBorder(c, g, x, y, width, height);
+      this.field_48 = null;
+   }
+
+   static <T> T getStyleFromListUI(Component c, Function<FlatListUI, T> f) {
+      JList<?> list = (JList<?>)SwingUtilities.getAncestorOfClass(JList.class, c);
+      if (list != null) {
+         ListUI ui = list.getUI();
+         if (ui instanceof FlatListUI) {
+            return f.apply((FlatListUI)ui);
+         }
+      }
+
+      return null;
+   }
+
+   public static class Default extends FlatListCellBorder {
+      @Override
+      public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+      }
+   }
+
+   public static class Focused extends FlatListCellBorder {
+   }
+
+   public static class Selected extends FlatListCellBorder {
+      @Override
+      public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+         Boolean b = getStyleFromListUI(c, ui -> ui.showCellFocusIndicator);
+         boolean showCellFocusIndicator = b != null ? b : this.showCellFocusIndicator;
+         if (showCellFocusIndicator) {
+            JList<?> list = (JList<?>)SwingUtilities.getAncestorOfClass(JList.class, c);
+            if (list == null || list.getMinSelectionIndex() != list.getMaxSelectionIndex()) {
+               super.paintBorder(c, g, x, y, width, height);
             }
-        }
-        return super.getLineColor();
-    }
-    
-    @Override
-    public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) {
-        super.paintBorder(this.c = c, g, x, y, width, height);
-        this.c = null;
-    }
-    
-    static <T> T getStyleFromListUI(final Component c, final Function<FlatListUI, T> f) {
-        final JList<?> list = (JList<?>)SwingUtilities.getAncestorOfClass(JList.class, c);
-        if (list != null) {
-            final ListUI ui = list.getUI();
-            if (ui instanceof FlatListUI) {
-                return f.apply((FlatListUI)ui);
-            }
-        }
-        return null;
-    }
-    
-    public static class Default extends FlatListCellBorder
-    {
-        @Override
-        public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) {
-        }
-    }
-    
-    public static class Focused extends FlatListCellBorder
-    {
-    }
-    
-    public static class Selected extends FlatListCellBorder
-    {
-        @Override
-        public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) {
-            final Boolean b = FlatListCellBorder.getStyleFromListUI(c, ui -> ui.showCellFocusIndicator);
-            final boolean showCellFocusIndicator = (b != null) ? b : this.showCellFocusIndicator;
-            if (!showCellFocusIndicator) {
-                return;
-            }
-            final JList<?> list = (JList<?>)SwingUtilities.getAncestorOfClass(JList.class, c);
-            if (list != null && list.getMinSelectionIndex() == list.getMaxSelectionIndex()) {
-                return;
-            }
-            super.paintBorder(c, g, x, y, width, height);
-        }
-    }
+         }
+      }
+   }
 }

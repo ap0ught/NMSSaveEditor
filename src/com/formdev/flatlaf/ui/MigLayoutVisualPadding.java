@@ -1,111 +1,97 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.ui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import com.formdev.flatlaf.util.UIScale;
-import java.util.function.Function;
-import java.awt.Component;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
+import java.util.function.Function;
 import javax.swing.JComponent;
 
-public class MigLayoutVisualPadding
-{
-    public static String VISUAL_PADDING_PROPERTY;
-    private static final FlatMigInsets ZERO;
-    private static final boolean migLayoutAvailable;
-    
-    public static void install(final JComponent c, final Insets insets) {
-        if (!MigLayoutVisualPadding.migLayoutAvailable) {
-            return;
-        }
-        setVisualPadding(c, insets);
-    }
-    
-    public static void install(final JComponent c) {
-        if (!MigLayoutVisualPadding.migLayoutAvailable) {
-            return;
-        }
-        install(c, c2 -> {
-            final FlatBorder border = FlatUIUtils.getOutsideFlatBorder(c2);
+public class MigLayoutVisualPadding {
+   public static String VISUAL_PADDING_PROPERTY = "visualPadding";
+   private static final MigLayoutVisualPadding.FlatMigInsets ZERO = new MigLayoutVisualPadding.FlatMigInsets(0, 0, 0, 0);
+   private static final boolean migLayoutAvailable;
+
+   public static void install(JComponent c, Insets insets) {
+      if (migLayoutAvailable) {
+         setVisualPadding(c, insets);
+      }
+   }
+
+   public static void install(JComponent c) {
+      if (migLayoutAvailable) {
+         install(c, c2 -> {
+            FlatBorder border = FlatUIUtils.getOutsideFlatBorder(c2);
             if (border != null) {
-                final int focusWidth = border.getFocusWidth(c2);
-                return new Insets(focusWidth, focusWidth, focusWidth, focusWidth);
+               int focusWidth = border.getFocusWidth(c2);
+               return new Insets(focusWidth, focusWidth, focusWidth, focusWidth);
+            } else {
+               return null;
             }
-            else {
-                return null;
+         }, "border", "FlatLaf.style", "FlatLaf.styleClass");
+      }
+   }
+
+   public static void install(JComponent c, Function<JComponent, Insets> getPaddingFunction, String... propertyNames) {
+      if (migLayoutAvailable) {
+         setVisualPadding(c, getPaddingFunction.apply(c));
+         c.addPropertyChangeListener(e -> {
+            String propertyName = e.getPropertyName();
+
+            for (String name : propertyNames) {
+               if (name.equals(propertyName)) {
+                  setVisualPadding(c, getPaddingFunction.apply(c));
+                  break;
+               }
             }
-        }, new String[] { "border", "FlatLaf.style", "FlatLaf.styleClass" });
-    }
-    
-    public static void install(final JComponent c, final Function<JComponent, Insets> getPaddingFunction, final String... propertyNames) {
-        if (!MigLayoutVisualPadding.migLayoutAvailable) {
-            return;
-        }
-        setVisualPadding(c, getPaddingFunction.apply(c));
-        c.addPropertyChangeListener(e -> {
-            final String propertyName = e.getPropertyName();
-            final int length = propertyNames.length;
-            int i = 0;
-            while (i < length) {
-                final String name = propertyNames[i];
-                if (name.equals(propertyName)) {
-                    setVisualPadding(c, getPaddingFunction.apply(c));
-                    break;
-                }
-                else {
-                    ++i;
-                }
+         });
+      }
+   }
+
+   private static void setVisualPadding(JComponent c, Insets visualPadding) {
+      Object oldPadding = c.getClientProperty(VISUAL_PADDING_PROPERTY);
+      if (oldPadding == null || oldPadding instanceof MigLayoutVisualPadding.FlatMigInsets) {
+         MigLayoutVisualPadding.FlatMigInsets flatVisualPadding = visualPadding != null
+            ? new MigLayoutVisualPadding.FlatMigInsets(
+               UIScale.scale2(visualPadding.top), UIScale.scale2(visualPadding.left), UIScale.scale2(visualPadding.bottom), UIScale.scale2(visualPadding.right)
+            )
+            : ZERO;
+         c.putClientProperty(VISUAL_PADDING_PROPERTY, flatVisualPadding);
+      }
+   }
+
+   public static void uninstall(JComponent c) {
+      if (migLayoutAvailable) {
+         for (PropertyChangeListener l : c.getPropertyChangeListeners()) {
+            if (l instanceof MigLayoutVisualPadding.FlatMigListener) {
+               c.removePropertyChangeListener(l);
+               break;
             }
-        });
-    }
-    
-    private static void setVisualPadding(final JComponent c, final Insets visualPadding) {
-        final Object oldPadding = c.getClientProperty(MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY);
-        if (oldPadding == null || oldPadding instanceof FlatMigInsets) {
-            final FlatMigInsets flatVisualPadding = (visualPadding != null) ? new FlatMigInsets(UIScale.scale2(visualPadding.top), UIScale.scale2(visualPadding.left), UIScale.scale2(visualPadding.bottom), UIScale.scale2(visualPadding.right)) : MigLayoutVisualPadding.ZERO;
-            c.putClientProperty(MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY, flatVisualPadding);
-        }
-    }
-    
-    public static void uninstall(final JComponent c) {
-        if (!MigLayoutVisualPadding.migLayoutAvailable) {
-            return;
-        }
-        for (final PropertyChangeListener l : c.getPropertyChangeListeners()) {
-            if (l instanceof FlatMigListener) {
-                c.removePropertyChangeListener(l);
-                break;
-            }
-        }
-        if (c.getClientProperty(MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY) instanceof FlatMigInsets) {
-            c.putClientProperty(MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY, null);
-        }
-    }
-    
-    static {
-        MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY = "visualPadding";
-        ZERO = new FlatMigInsets(0, 0, 0, 0);
-        boolean available = false;
-        try {
-            Class.forName("net.miginfocom.swing.MigLayout");
-            available = true;
-        }
-        catch (final ClassNotFoundException ex) {}
-        migLayoutAvailable = available;
-    }
-    
-    private static class FlatMigInsets extends Insets
-    {
-        FlatMigInsets(final int top, final int left, final int bottom, final int right) {
-            super(top, left, bottom, right);
-        }
-    }
-    
-    private interface FlatMigListener extends PropertyChangeListener
-    {
-    }
+         }
+
+         if (c.getClientProperty(VISUAL_PADDING_PROPERTY) instanceof MigLayoutVisualPadding.FlatMigInsets) {
+            c.putClientProperty(VISUAL_PADDING_PROPERTY, null);
+         }
+      }
+   }
+
+   static {
+      boolean available = false;
+
+      try {
+         Class.forName("net.miginfocom.swing.MigLayout");
+         available = true;
+      } catch (ClassNotFoundException var2) {
+      }
+
+      migLayoutAvailable = available;
+   }
+
+   private static class FlatMigInsets extends Insets {
+      FlatMigInsets(int top, int left, int bottom, int right) {
+         super(top, left, bottom, right);
+      }
+   }
+
+   private interface FlatMigListener extends PropertyChangeListener {
+   }
 }

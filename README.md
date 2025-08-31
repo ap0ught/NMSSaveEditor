@@ -114,12 +114,16 @@ This repository now includes the decompiled source code for developers who want 
 3. Run `./build.sh` to attempt compilation and see specific error messages
 4. Once fixed, the build script will create `NMSSaveEditor-compiled.jar`
 
-### Known Decompilation Issues
+### Decompilation Quality
 
-The decompiled source code is provided for reference and modification, but requires manual fixes:
-- **Keyword conflicts**: Some class and method names use Java reserved keywords
-- **Obfuscated names**: Many classes have single-letter names (typical for obfuscated code)
-- **Third-party libraries**: Some dependencies may have decompilation artifacts
+The source code has been decompiled using **Vineflower** (modern successor to Fernflower) with improved naming:
+- **Better naming**: Classes are now named `class_0`, `class_1`, etc. instead of single letters
+- **Cleaner code**: Vineflower produces higher quality decompiled code than Procyon
+- **Preserved mappings**: Comments show original obfuscated names for reference (`// $VF: renamed from: nomanssave.fV`)
+
+Some expected decompilation artifacts remain:
+- **Obfuscated origins**: Original class names were heavily obfuscated and can't be recovered
+- **Third-party libraries**: Some dependencies may have minor decompilation issues
 
 The original `NMSSaveEditor.jar` remains fully functional regardless of source code compilation status.
 

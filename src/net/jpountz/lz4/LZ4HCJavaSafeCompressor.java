@@ -1,440 +1,496 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package net.jpountz.lz4;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import net.jpountz.util.ByteBufferUtils;
-import java.nio.ByteBuffer;
 import net.jpountz.util.SafeUtils;
 
-final class LZ4HCJavaSafeCompressor extends LZ4Compressor
-{
-    public static final LZ4Compressor INSTANCE;
-    private final int maxAttempts;
-    final int compressionLevel;
-    static final /* synthetic */ boolean $assertionsDisabled;
-    
-    LZ4HCJavaSafeCompressor() {
-        this(9);
-    }
-    
-    LZ4HCJavaSafeCompressor(final int compressionLevel) {
-        this.maxAttempts = 1 << compressionLevel - 1;
-        this.compressionLevel = compressionLevel;
-    }
-    
-    @Override
-    public int compress(final byte[] src, final int srcOff, final int srcLen, final byte[] dest, final int destOff, final int maxDestLen) {
-        SafeUtils.checkRange(src, srcOff, srcLen);
-        SafeUtils.checkRange(dest, destOff, maxDestLen);
-        final int srcEnd = srcOff + srcLen;
-        final int destEnd = destOff + maxDestLen;
-        final int mfLimit = srcEnd - 12;
-        final int matchLimit = srcEnd - 5;
-        int sOff = srcOff;
-        int dOff = destOff;
-        int anchor = sOff++;
-        final HashTable ht = new HashTable(srcOff);
-        final LZ4Utils.Match match0 = new LZ4Utils.Match();
-        final LZ4Utils.Match match2 = new LZ4Utils.Match();
-        final LZ4Utils.Match match3 = new LZ4Utils.Match();
-        final LZ4Utils.Match match4 = new LZ4Utils.Match();
-    Label_0101:
-        while (sOff < mfLimit) {
-            if (ht.insertAndFindBestMatch(src, sOff, matchLimit, match2)) {
-                LZ4Utils.copyTo(match2, match0);
-                while (LZ4HCJavaSafeCompressor.$assertionsDisabled || match2.start >= anchor) {
-                    if (match2.end() >= mfLimit || !ht.insertAndFindWiderMatch(src, match2.end() - 2, match2.start + 1, matchLimit, match2.len, match3)) {
-                        dOff = LZ4SafeUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                        sOff = (anchor = match2.end());
-                        continue Label_0101;
-                    }
-                    if (match0.start < match2.start && match3.start < match2.start + match0.len) {
-                        LZ4Utils.copyTo(match0, match2);
-                    }
-                    assert match3.start > match2.start;
-                    if (match3.start - match2.start < 3) {
-                        LZ4Utils.copyTo(match3, match2);
-                    }
-                    else {
-                        while (true) {
-                            if (match3.start - match2.start < 18) {
-                                int newMatchLen = match2.len;
-                                if (newMatchLen > 18) {
-                                    newMatchLen = 18;
-                                }
-                                if (match2.start + newMatchLen > match3.end() - 4) {
-                                    newMatchLen = match3.start - match2.start + match3.len - 4;
-                                }
-                                final int correction = newMatchLen - (match3.start - match2.start);
-                                if (correction > 0) {
-                                    match3.fix(correction);
-                                }
-                            }
-                            if (match3.start + match3.len >= mfLimit || !ht.insertAndFindWiderMatch(src, match3.end() - 3, match3.start, matchLimit, match3.len, match4)) {
-                                if (match3.start < match2.end()) {
-                                    match2.len = match3.start - match2.start;
-                                }
-                                dOff = LZ4SafeUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                sOff = (anchor = match2.end());
-                                dOff = LZ4SafeUtils.encodeSequence(src, anchor, match3.start, match3.ref, match3.len, dest, dOff, destEnd);
-                                sOff = (anchor = match3.end());
-                                continue Label_0101;
-                            }
-                            if (match4.start < match2.end() + 3) {
-                                if (match4.start >= match2.end()) {
-                                    if (match3.start < match2.end()) {
-                                        final int correction2 = match2.end() - match3.start;
-                                        match3.fix(correction2);
-                                        if (match3.len < 4) {
-                                            LZ4Utils.copyTo(match4, match3);
-                                        }
-                                    }
-                                    dOff = LZ4SafeUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                    sOff = (anchor = match2.end());
-                                    LZ4Utils.copyTo(match4, match2);
-                                    LZ4Utils.copyTo(match3, match0);
-                                    break;
-                                }
-                                LZ4Utils.copyTo(match4, match3);
-                            }
-                            else {
-                                if (match3.start < match2.end()) {
-                                    if (match3.start - match2.start < 15) {
-                                        if (match2.len > 18) {
-                                            match2.len = 18;
-                                        }
-                                        if (match2.end() > match3.end() - 4) {
-                                            match2.len = match3.end() - match2.start - 4;
-                                        }
-                                        final int correction2 = match2.end() - match3.start;
-                                        match3.fix(correction2);
-                                    }
-                                    else {
-                                        match2.len = match3.start - match2.start;
-                                    }
-                                }
-                                dOff = LZ4SafeUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                sOff = (anchor = match2.end());
-                                LZ4Utils.copyTo(match3, match2);
-                                LZ4Utils.copyTo(match4, match3);
-                            }
+final class LZ4HCJavaSafeCompressor extends LZ4Compressor {
+   public static final LZ4Compressor INSTANCE = new LZ4HCJavaSafeCompressor();
+   private final int maxAttempts;
+   final int compressionLevel;
+
+   LZ4HCJavaSafeCompressor() {
+      this(9);
+   }
+
+   LZ4HCJavaSafeCompressor(int compressionLevel) {
+      this.maxAttempts = 1 << compressionLevel - 1;
+      this.compressionLevel = compressionLevel;
+   }
+
+   @Override
+   public int compress(byte[] src, int srcOff, int srcLen, byte[] dest, int destOff, int maxDestLen) {
+      SafeUtils.checkRange(src, srcOff, srcLen);
+      SafeUtils.checkRange(dest, destOff, maxDestLen);
+      int srcEnd = srcOff + srcLen;
+      int destEnd = destOff + maxDestLen;
+      int mfLimit = srcEnd - 12;
+      int matchLimit = srcEnd - 5;
+      int dOff = destOff;
+      int sOff = srcOff + 1;
+      int anchor = srcOff;
+      LZ4HCJavaSafeCompressor.HashTable ht = new LZ4HCJavaSafeCompressor.HashTable(srcOff);
+      LZ4Utils.Match match0 = new LZ4Utils.Match();
+      LZ4Utils.Match match1 = new LZ4Utils.Match();
+      LZ4Utils.Match match2 = new LZ4Utils.Match();
+      LZ4Utils.Match match3 = new LZ4Utils.Match();
+
+      label105:
+      while (sOff < mfLimit) {
+         if (!ht.insertAndFindBestMatch(src, sOff, matchLimit, match1)) {
+            sOff++;
+         } else {
+            LZ4Utils.copyTo(match1, match0);
+
+            label101:
+            while ($assertionsDisabled || match1.start >= anchor) {
+               if (match1.method_56() < mfLimit
+                  && ht.insertAndFindWiderMatch(src, match1.method_56() - 2, match1.start + 1, matchLimit, match1.field_29, match2)) {
+                  if (match0.start < match1.start && match2.start < match1.start + match0.field_29) {
+                     LZ4Utils.copyTo(match0, match1);
+                  }
+
+                  assert match2.start > match1.start;
+
+                  if (match2.start - match1.start < 3) {
+                     LZ4Utils.copyTo(match2, match1);
+                     continue;
+                  }
+
+                  while (true) {
+                     if (match2.start - match1.start < 18) {
+                        int newMatchLen = match1.field_29;
+                        if (newMatchLen > 18) {
+                           newMatchLen = 18;
                         }
-                    }
-                }
-                throw new AssertionError();
-            }
-            ++sOff;
-        }
-        dOff = LZ4SafeUtils.lastLiterals(src, anchor, srcEnd - anchor, dest, dOff, destEnd);
-        return dOff - destOff;
-    }
-    
-    @Override
-    public int compress(ByteBuffer src, final int srcOff, final int srcLen, ByteBuffer dest, final int destOff, final int maxDestLen) {
-        if (src.hasArray() && dest.hasArray()) {
-            return this.compress(src.array(), srcOff + src.arrayOffset(), srcLen, dest.array(), destOff + dest.arrayOffset(), maxDestLen);
-        }
-        src = ByteBufferUtils.inNativeByteOrder(src);
-        dest = ByteBufferUtils.inNativeByteOrder(dest);
-        ByteBufferUtils.checkRange(src, srcOff, srcLen);
-        ByteBufferUtils.checkRange(dest, destOff, maxDestLen);
-        final int srcEnd = srcOff + srcLen;
-        final int destEnd = destOff + maxDestLen;
-        final int mfLimit = srcEnd - 12;
-        final int matchLimit = srcEnd - 5;
-        int sOff = srcOff;
-        int dOff = destOff;
-        int anchor = sOff++;
-        final HashTable ht = new HashTable(srcOff);
-        final LZ4Utils.Match match0 = new LZ4Utils.Match();
-        final LZ4Utils.Match match2 = new LZ4Utils.Match();
-        final LZ4Utils.Match match3 = new LZ4Utils.Match();
-        final LZ4Utils.Match match4 = new LZ4Utils.Match();
-    Label_0159:
-        while (sOff < mfLimit) {
-            if (ht.insertAndFindBestMatch(src, sOff, matchLimit, match2)) {
-                LZ4Utils.copyTo(match2, match0);
-                while (LZ4HCJavaSafeCompressor.$assertionsDisabled || match2.start >= anchor) {
-                    if (match2.end() >= mfLimit || !ht.insertAndFindWiderMatch(src, match2.end() - 2, match2.start + 1, matchLimit, match2.len, match3)) {
-                        dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                        sOff = (anchor = match2.end());
-                        continue Label_0159;
-                    }
-                    if (match0.start < match2.start && match3.start < match2.start + match0.len) {
-                        LZ4Utils.copyTo(match0, match2);
-                    }
-                    assert match3.start > match2.start;
-                    if (match3.start - match2.start < 3) {
-                        LZ4Utils.copyTo(match3, match2);
-                    }
-                    else {
-                        while (true) {
-                            if (match3.start - match2.start < 18) {
-                                int newMatchLen = match2.len;
-                                if (newMatchLen > 18) {
-                                    newMatchLen = 18;
-                                }
-                                if (match2.start + newMatchLen > match3.end() - 4) {
-                                    newMatchLen = match3.start - match2.start + match3.len - 4;
-                                }
-                                final int correction = newMatchLen - (match3.start - match2.start);
-                                if (correction > 0) {
-                                    match3.fix(correction);
-                                }
-                            }
-                            if (match3.start + match3.len >= mfLimit || !ht.insertAndFindWiderMatch(src, match3.end() - 3, match3.start, matchLimit, match3.len, match4)) {
-                                if (match3.start < match2.end()) {
-                                    match2.len = match3.start - match2.start;
-                                }
-                                dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                sOff = (anchor = match2.end());
-                                dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match3.start, match3.ref, match3.len, dest, dOff, destEnd);
-                                sOff = (anchor = match3.end());
-                                continue Label_0159;
-                            }
-                            if (match4.start < match2.end() + 3) {
-                                if (match4.start >= match2.end()) {
-                                    if (match3.start < match2.end()) {
-                                        final int correction2 = match2.end() - match3.start;
-                                        match3.fix(correction2);
-                                        if (match3.len < 4) {
-                                            LZ4Utils.copyTo(match4, match3);
-                                        }
-                                    }
-                                    dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                    sOff = (anchor = match2.end());
-                                    LZ4Utils.copyTo(match4, match2);
-                                    LZ4Utils.copyTo(match3, match0);
-                                    break;
-                                }
-                                LZ4Utils.copyTo(match4, match3);
-                            }
-                            else {
-                                if (match3.start < match2.end()) {
-                                    if (match3.start - match2.start < 15) {
-                                        if (match2.len > 18) {
-                                            match2.len = 18;
-                                        }
-                                        if (match2.end() > match3.end() - 4) {
-                                            match2.len = match3.end() - match2.start - 4;
-                                        }
-                                        final int correction2 = match2.end() - match3.start;
-                                        match3.fix(correction2);
-                                    }
-                                    else {
-                                        match2.len = match3.start - match2.start;
-                                    }
-                                }
-                                dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match2.start, match2.ref, match2.len, dest, dOff, destEnd);
-                                sOff = (anchor = match2.end());
-                                LZ4Utils.copyTo(match3, match2);
-                                LZ4Utils.copyTo(match4, match3);
-                            }
+
+                        if (match1.start + newMatchLen > match2.method_56() - 4) {
+                           newMatchLen = match2.start - match1.start + match2.field_29 - 4;
                         }
-                    }
-                }
-                throw new AssertionError();
+
+                        int correction = newMatchLen - (match2.start - match1.start);
+                        if (correction > 0) {
+                           match2.method_55(correction);
+                        }
+                     }
+
+                     if (match2.start + match2.field_29 >= mfLimit
+                        || !ht.insertAndFindWiderMatch(src, match2.method_56() - 3, match2.start, matchLimit, match2.field_29, match3)) {
+                        if (match2.start < match1.method_56()) {
+                           match1.field_29 = match2.start - match1.start;
+                        }
+
+                        dOff = LZ4SafeUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                        anchor = match1.method_56();
+                        dOff = LZ4SafeUtils.encodeSequence(src, anchor, match2.start, match2.field_28, match2.field_29, dest, dOff, destEnd);
+                        anchor = sOff = match2.method_56();
+                        continue label105;
+                     }
+
+                     if (match3.start < match1.method_56() + 3) {
+                        if (match3.start >= match1.method_56()) {
+                           if (match2.start < match1.method_56()) {
+                              int correction = match1.method_56() - match2.start;
+                              match2.method_55(correction);
+                              if (match2.field_29 < 4) {
+                                 LZ4Utils.copyTo(match3, match2);
+                              }
+                           }
+
+                           dOff = LZ4SafeUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                           anchor = match1.method_56();
+                           LZ4Utils.copyTo(match3, match1);
+                           LZ4Utils.copyTo(match2, match0);
+                           continue label101;
+                        }
+
+                        LZ4Utils.copyTo(match3, match2);
+                     } else {
+                        if (match2.start < match1.method_56()) {
+                           if (match2.start - match1.start < 15) {
+                              if (match1.field_29 > 18) {
+                                 match1.field_29 = 18;
+                              }
+
+                              if (match1.method_56() > match2.method_56() - 4) {
+                                 match1.field_29 = match2.method_56() - match1.start - 4;
+                              }
+
+                              int correction = match1.method_56() - match2.start;
+                              match2.method_55(correction);
+                           } else {
+                              match1.field_29 = match2.start - match1.start;
+                           }
+                        }
+
+                        dOff = LZ4SafeUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                        anchor = match1.method_56();
+                        LZ4Utils.copyTo(match2, match1);
+                        LZ4Utils.copyTo(match3, match2);
+                     }
+                  }
+               }
+
+               dOff = LZ4SafeUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+               anchor = sOff = match1.method_56();
+               continue label105;
             }
-            ++sOff;
-        }
-        dOff = LZ4ByteBufferUtils.lastLiterals(src, anchor, srcEnd - anchor, dest, dOff, destEnd);
-        return dOff - destOff;
-    }
-    
-    static {
-        INSTANCE = new LZ4HCJavaSafeCompressor();
-    }
-    
-    private class HashTable
-    {
-        static final int MASK = 65535;
-        int nextToUpdate;
-        private final int base;
-        private final int[] hashTable;
-        private final short[] chainTable;
-        
-        HashTable(final int base) {
-            this.base = base;
-            this.nextToUpdate = base;
-            Arrays.fill(this.hashTable = new int[32768], -1);
-            this.chainTable = new short[65536];
-        }
-        
-        private int hashPointer(final byte[] bytes, final int off) {
-            final int v = SafeUtils.readInt(bytes, off);
-            return this.hashPointer(v);
-        }
-        
-        private int hashPointer(final ByteBuffer bytes, final int off) {
-            final int v = ByteBufferUtils.readInt(bytes, off);
-            return this.hashPointer(v);
-        }
-        
-        private int hashPointer(final int v) {
-            final int h = LZ4Utils.hashHC(v);
-            return this.hashTable[h];
-        }
-        
-        private int next(final int off) {
-            return off - (this.chainTable[off & 0xFFFF] & 0xFFFF);
-        }
-        
-        private void addHash(final byte[] bytes, final int off) {
-            final int v = SafeUtils.readInt(bytes, off);
-            this.addHash(v, off);
-        }
-        
-        private void addHash(final ByteBuffer bytes, final int off) {
-            final int v = ByteBufferUtils.readInt(bytes, off);
-            this.addHash(v, off);
-        }
-        
-        private void addHash(final int v, final int off) {
-            final int h = LZ4Utils.hashHC(v);
-            int delta = off - this.hashTable[h];
-            assert delta > 0 : delta;
-            if (delta >= 65536) {
-                delta = 65535;
+
+            throw new AssertionError();
+         }
+      }
+
+      dOff = LZ4SafeUtils.lastLiterals(src, anchor, srcEnd - anchor, dest, dOff, destEnd);
+      return dOff - destOff;
+   }
+
+   @Override
+   public int compress(ByteBuffer src, int srcOff, int srcLen, ByteBuffer dest, int destOff, int maxDestLen) {
+      if (src.hasArray() && dest.hasArray()) {
+         return this.compress(src.array(), srcOff + src.arrayOffset(), srcLen, dest.array(), destOff + dest.arrayOffset(), maxDestLen);
+      } else {
+         src = ByteBufferUtils.inNativeByteOrder(src);
+         dest = ByteBufferUtils.inNativeByteOrder(dest);
+         ByteBufferUtils.checkRange(src, srcOff, srcLen);
+         ByteBufferUtils.checkRange(dest, destOff, maxDestLen);
+         int srcEnd = srcOff + srcLen;
+         int destEnd = destOff + maxDestLen;
+         int mfLimit = srcEnd - 12;
+         int matchLimit = srcEnd - 5;
+         int dOff = destOff;
+         int sOff = srcOff + 1;
+         int anchor = srcOff;
+         LZ4HCJavaSafeCompressor.HashTable ht = new LZ4HCJavaSafeCompressor.HashTable(srcOff);
+         LZ4Utils.Match match0 = new LZ4Utils.Match();
+         LZ4Utils.Match match1 = new LZ4Utils.Match();
+         LZ4Utils.Match match2 = new LZ4Utils.Match();
+         LZ4Utils.Match match3 = new LZ4Utils.Match();
+
+         label111:
+         while (sOff < mfLimit) {
+            if (!ht.insertAndFindBestMatch(src, sOff, matchLimit, match1)) {
+               sOff++;
+            } else {
+               LZ4Utils.copyTo(match1, match0);
+
+               label107:
+               while ($assertionsDisabled || match1.start >= anchor) {
+                  if (match1.method_56() < mfLimit
+                     && ht.insertAndFindWiderMatch(src, match1.method_56() - 2, match1.start + 1, matchLimit, match1.field_29, match2)) {
+                     if (match0.start < match1.start && match2.start < match1.start + match0.field_29) {
+                        LZ4Utils.copyTo(match0, match1);
+                     }
+
+                     assert match2.start > match1.start;
+
+                     if (match2.start - match1.start < 3) {
+                        LZ4Utils.copyTo(match2, match1);
+                        continue;
+                     }
+
+                     while (true) {
+                        if (match2.start - match1.start < 18) {
+                           int newMatchLen = match1.field_29;
+                           if (newMatchLen > 18) {
+                              newMatchLen = 18;
+                           }
+
+                           if (match1.start + newMatchLen > match2.method_56() - 4) {
+                              newMatchLen = match2.start - match1.start + match2.field_29 - 4;
+                           }
+
+                           int correction = newMatchLen - (match2.start - match1.start);
+                           if (correction > 0) {
+                              match2.method_55(correction);
+                           }
+                        }
+
+                        if (match2.start + match2.field_29 >= mfLimit
+                           || !ht.insertAndFindWiderMatch(src, match2.method_56() - 3, match2.start, matchLimit, match2.field_29, match3)) {
+                           if (match2.start < match1.method_56()) {
+                              match1.field_29 = match2.start - match1.start;
+                           }
+
+                           dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                           anchor = match1.method_56();
+                           dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match2.start, match2.field_28, match2.field_29, dest, dOff, destEnd);
+                           anchor = sOff = match2.method_56();
+                           continue label111;
+                        }
+
+                        if (match3.start < match1.method_56() + 3) {
+                           if (match3.start >= match1.method_56()) {
+                              if (match2.start < match1.method_56()) {
+                                 int correction = match1.method_56() - match2.start;
+                                 match2.method_55(correction);
+                                 if (match2.field_29 < 4) {
+                                    LZ4Utils.copyTo(match3, match2);
+                                 }
+                              }
+
+                              dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                              anchor = match1.method_56();
+                              LZ4Utils.copyTo(match3, match1);
+                              LZ4Utils.copyTo(match2, match0);
+                              continue label107;
+                           }
+
+                           LZ4Utils.copyTo(match3, match2);
+                        } else {
+                           if (match2.start < match1.method_56()) {
+                              if (match2.start - match1.start < 15) {
+                                 if (match1.field_29 > 18) {
+                                    match1.field_29 = 18;
+                                 }
+
+                                 if (match1.method_56() > match2.method_56() - 4) {
+                                    match1.field_29 = match2.method_56() - match1.start - 4;
+                                 }
+
+                                 int correction = match1.method_56() - match2.start;
+                                 match2.method_55(correction);
+                              } else {
+                                 match1.field_29 = match2.start - match1.start;
+                              }
+                           }
+
+                           dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                           anchor = match1.method_56();
+                           LZ4Utils.copyTo(match2, match1);
+                           LZ4Utils.copyTo(match3, match2);
+                        }
+                     }
+                  }
+
+                  dOff = LZ4ByteBufferUtils.encodeSequence(src, anchor, match1.start, match1.field_28, match1.field_29, dest, dOff, destEnd);
+                  anchor = sOff = match1.method_56();
+                  continue label111;
+               }
+
+               throw new AssertionError();
             }
-            this.chainTable[off & 0xFFFF] = (short)delta;
-            this.hashTable[h] = off;
-        }
-        
-        void insert(final int off, final byte[] bytes) {
-            while (this.nextToUpdate < off) {
-                this.addHash(bytes, this.nextToUpdate);
-                ++this.nextToUpdate;
+         }
+
+         dOff = LZ4ByteBufferUtils.lastLiterals(src, anchor, srcEnd - anchor, dest, dOff, destEnd);
+         return dOff - destOff;
+      }
+   }
+
+   private class HashTable {
+      static final int MASK = 65535;
+      int nextToUpdate;
+      private final int base;
+      private final int[] hashTable;
+      private final short[] chainTable;
+
+      HashTable(int base) {
+         this.base = base;
+         this.nextToUpdate = base;
+         this.hashTable = new int[32768];
+         Arrays.fill(this.hashTable, -1);
+         this.chainTable = new short[65536];
+      }
+
+      private int hashPointer(byte[] bytes, int off) {
+         int v = SafeUtils.readInt(bytes, off);
+         return this.hashPointer(v);
+      }
+
+      private int hashPointer(ByteBuffer bytes, int off) {
+         int v = ByteBufferUtils.readInt(bytes, off);
+         return this.hashPointer(v);
+      }
+
+      private int hashPointer(int v) {
+         int h = LZ4Utils.hashHC(v);
+         return this.hashTable[h];
+      }
+
+      private int next(int off) {
+         return off - (this.chainTable[off & 65535] & 65535);
+      }
+
+      private void addHash(byte[] bytes, int off) {
+         int v = SafeUtils.readInt(bytes, off);
+         this.addHash(v, off);
+      }
+
+      private void addHash(ByteBuffer bytes, int off) {
+         int v = ByteBufferUtils.readInt(bytes, off);
+         this.addHash(v, off);
+      }
+
+      private void addHash(int v, int off) {
+         int h = LZ4Utils.hashHC(v);
+         int delta = off - this.hashTable[h];
+
+         assert delta > 0 : delta;
+
+         if (delta >= 65536) {
+            delta = 65535;
+         }
+
+         this.chainTable[off & 65535] = (short)delta;
+         this.hashTable[h] = off;
+      }
+
+      void insert(int off, byte[] bytes) {
+         while (this.nextToUpdate < off) {
+            this.addHash(bytes, this.nextToUpdate);
+            this.nextToUpdate++;
+         }
+      }
+
+      void insert(int off, ByteBuffer bytes) {
+         while (this.nextToUpdate < off) {
+            this.addHash(bytes, this.nextToUpdate);
+            this.nextToUpdate++;
+         }
+      }
+
+      boolean insertAndFindBestMatch(byte[] buf, int off, int matchLimit, LZ4Utils.Match match) {
+         match.start = off;
+         match.field_29 = 0;
+         int delta = 0;
+         int repl = 0;
+         this.insert(off, buf);
+         int ref = this.hashPointer(buf, off);
+         if (ref >= off - 4 && ref <= off && ref >= this.base) {
+            if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
+               delta = off - ref;
+               repl = match.field_29 = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               match.field_28 = ref;
             }
-        }
-        
-        void insert(final int off, final ByteBuffer bytes) {
-            while (this.nextToUpdate < off) {
-                this.addHash(bytes, this.nextToUpdate);
-                ++this.nextToUpdate;
+
+            ref = this.next(ref);
+         }
+
+         for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; i++) {
+            if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
+               int matchLen = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               if (matchLen > match.field_29) {
+                  match.field_28 = ref;
+                  match.field_29 = matchLen;
+               }
             }
-        }
-        
-        boolean insertAndFindBestMatch(final byte[] buf, final int off, final int matchLimit, final LZ4Utils.Match match) {
-            match.start = off;
-            match.len = 0;
-            int delta = 0;
-            int repl = 0;
-            this.insert(off, buf);
-            int ref = this.hashPointer(buf, off);
-            if (ref >= off - 4 && ref <= off && ref >= this.base) {
-                if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
-                    delta = off - ref;
-                    final int len = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    match.len = len;
-                    repl = len;
-                    match.ref = ref;
-                }
-                ref = this.next(ref);
+
+            ref = this.next(ref);
+         }
+
+         if (repl != 0) {
+            int ptr = off;
+
+            int end;
+            for (end = off + repl - 3; ptr < end - delta; ptr++) {
+               this.chainTable[ptr & 65535] = (short)delta;
             }
-            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
-                if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
-                    final int matchLen = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    if (matchLen > match.len) {
-                        match.ref = ref;
-                        match.len = matchLen;
-                    }
-                }
+
+            do {
+               this.chainTable[ptr & 65535] = (short)delta;
+               this.hashTable[LZ4Utils.hashHC(SafeUtils.readInt(buf, ptr))] = ptr++;
+            } while (ptr < end);
+
+            this.nextToUpdate = end;
+         }
+
+         return match.field_29 != 0;
+      }
+
+      boolean insertAndFindWiderMatch(byte[] buf, int off, int startLimit, int matchLimit, int minLen, LZ4Utils.Match match) {
+         match.field_29 = minLen;
+         this.insert(off, buf);
+         int delta = off - startLimit;
+         int ref = this.hashPointer(buf, off);
+
+         for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; i++) {
+            if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
+               int matchLenForward = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               int matchLenBackward = LZ4SafeUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);
+               int matchLen = matchLenBackward + matchLenForward;
+               if (matchLen > match.field_29) {
+                  match.field_29 = matchLen;
+                  match.field_28 = ref - matchLenBackward;
+                  match.start = off - matchLenBackward;
+               }
             }
-            if (repl != 0) {
-                int ptr;
-                int end;
-                for (ptr = off, end = off + repl - 3; ptr < end - delta; ++ptr) {
-                    this.chainTable[ptr & 0xFFFF] = (short)delta;
-                }
-                do {
-                    this.chainTable[ptr & 0xFFFF] = (short)delta;
-                    this.hashTable[LZ4Utils.hashHC(SafeUtils.readInt(buf, ptr))] = ptr;
-                } while (++ptr < end);
-                this.nextToUpdate = end;
+
+            ref = this.next(ref);
+         }
+
+         return match.field_29 > minLen;
+      }
+
+      boolean insertAndFindBestMatch(ByteBuffer buf, int off, int matchLimit, LZ4Utils.Match match) {
+         match.start = off;
+         match.field_29 = 0;
+         int delta = 0;
+         int repl = 0;
+         this.insert(off, buf);
+         int ref = this.hashPointer(buf, off);
+         if (ref >= off - 4 && ref <= off && ref >= this.base) {
+            if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
+               delta = off - ref;
+               repl = match.field_29 = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               match.field_28 = ref;
             }
-            return match.len != 0;
-        }
-        
-        boolean insertAndFindWiderMatch(final byte[] buf, final int off, final int startLimit, final int matchLimit, final int minLen, final LZ4Utils.Match match) {
-            match.len = minLen;
-            this.insert(off, buf);
-            final int delta = off - startLimit;
-            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
-                if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
-                    final int matchLenForward = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    final int matchLenBackward = LZ4SafeUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);
-                    final int matchLen = matchLenBackward + matchLenForward;
-                    if (matchLen > match.len) {
-                        match.len = matchLen;
-                        match.ref = ref - matchLenBackward;
-                        match.start = off - matchLenBackward;
-                    }
-                }
+
+            ref = this.next(ref);
+         }
+
+         for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; i++) {
+            if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
+               int matchLen = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               if (matchLen > match.field_29) {
+                  match.field_28 = ref;
+                  match.field_29 = matchLen;
+               }
             }
-            return match.len > minLen;
-        }
-        
-        boolean insertAndFindBestMatch(final ByteBuffer buf, final int off, final int matchLimit, final LZ4Utils.Match match) {
-            match.start = off;
-            match.len = 0;
-            int delta = 0;
-            int repl = 0;
-            this.insert(off, buf);
-            int ref = this.hashPointer(buf, off);
-            if (ref >= off - 4 && ref <= off && ref >= this.base) {
-                if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
-                    delta = off - ref;
-                    final int len = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    match.len = len;
-                    repl = len;
-                    match.ref = ref;
-                }
-                ref = this.next(ref);
+
+            ref = this.next(ref);
+         }
+
+         if (repl != 0) {
+            int ptr = off;
+
+            int end;
+            for (end = off + repl - 3; ptr < end - delta; ptr++) {
+               this.chainTable[ptr & 65535] = (short)delta;
             }
-            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
-                if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
-                    final int matchLen = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    if (matchLen > match.len) {
-                        match.ref = ref;
-                        match.len = matchLen;
-                    }
-                }
+
+            do {
+               this.chainTable[ptr & 65535] = (short)delta;
+               this.hashTable[LZ4Utils.hashHC(ByteBufferUtils.readInt(buf, ptr))] = ptr++;
+            } while (ptr < end);
+
+            this.nextToUpdate = end;
+         }
+
+         return match.field_29 != 0;
+      }
+
+      boolean insertAndFindWiderMatch(ByteBuffer buf, int off, int startLimit, int matchLimit, int minLen, LZ4Utils.Match match) {
+         match.field_29 = minLen;
+         this.insert(off, buf);
+         int delta = off - startLimit;
+         int ref = this.hashPointer(buf, off);
+
+         for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; i++) {
+            if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
+               int matchLenForward = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
+               int matchLenBackward = LZ4ByteBufferUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);
+               int matchLen = matchLenBackward + matchLenForward;
+               if (matchLen > match.field_29) {
+                  match.field_29 = matchLen;
+                  match.field_28 = ref - matchLenBackward;
+                  match.start = off - matchLenBackward;
+               }
             }
-            if (repl != 0) {
-                int ptr;
-                int end;
-                for (ptr = off, end = off + repl - 3; ptr < end - delta; ++ptr) {
-                    this.chainTable[ptr & 0xFFFF] = (short)delta;
-                }
-                do {
-                    this.chainTable[ptr & 0xFFFF] = (short)delta;
-                    this.hashTable[LZ4Utils.hashHC(ByteBufferUtils.readInt(buf, ptr))] = ptr;
-                } while (++ptr < end);
-                this.nextToUpdate = end;
-            }
-            return match.len != 0;
-        }
-        
-        boolean insertAndFindWiderMatch(final ByteBuffer buf, final int off, final int startLimit, final int matchLimit, final int minLen, final LZ4Utils.Match match) {
-            match.len = minLen;
-            this.insert(off, buf);
-            final int delta = off - startLimit;
-            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
-                if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
-                    final int matchLenForward = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
-                    final int matchLenBackward = LZ4ByteBufferUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);
-                    final int matchLen = matchLenBackward + matchLenForward;
-                    if (matchLen > match.len) {
-                        match.len = matchLen;
-                        match.ref = ref - matchLenBackward;
-                        match.start = off - matchLenBackward;
-                    }
-                }
-            }
-            return match.len > minLen;
-        }
-    }
+
+            ref = this.next(ref);
+         }
+
+         return match.field_29 > minLen;
+      }
+   }
 }

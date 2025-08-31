@@ -1,49 +1,46 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package net.jpountz.lz4;
 
-import java.util.Arrays;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
-public abstract class LZ4SafeDecompressor implements LZ4UnknownSizeDecompressor
-{
-    @Override
-    public abstract int decompress(final byte[] p0, final int p1, final int p2, final byte[] p3, final int p4, final int p5);
-    
-    public abstract int decompress(final ByteBuffer p0, final int p1, final int p2, final ByteBuffer p3, final int p4, final int p5);
-    
-    @Override
-    public final int decompress(final byte[] src, final int srcOff, final int srcLen, final byte[] dest, final int destOff) {
-        return this.decompress(src, srcOff, srcLen, dest, destOff, dest.length - destOff);
-    }
-    
-    public final int decompress(final byte[] src, final byte[] dest) {
-        return this.decompress(src, 0, src.length, dest, 0);
-    }
-    
-    public final byte[] decompress(final byte[] src, final int srcOff, final int srcLen, final int maxDestLen) {
-        byte[] decompressed = new byte[maxDestLen];
-        final int decompressedLength = this.decompress(src, srcOff, srcLen, decompressed, 0, maxDestLen);
-        if (decompressedLength != decompressed.length) {
-            decompressed = Arrays.copyOf(decompressed, decompressedLength);
-        }
-        return decompressed;
-    }
-    
-    public final byte[] decompress(final byte[] src, final int maxDestLen) {
-        return this.decompress(src, 0, src.length, maxDestLen);
-    }
-    
-    public final void decompress(final ByteBuffer src, final ByteBuffer dest) {
-        final int decompressed = this.decompress(src, src.position(), src.remaining(), dest, dest.position(), dest.remaining());
-        src.position(src.limit());
-        dest.position(dest.position() + decompressed);
-    }
-    
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
-    }
+public abstract class LZ4SafeDecompressor implements LZ4UnknownSizeDecompressor {
+   @Override
+   public abstract int decompress(byte[] var1, int var2, int var3, byte[] var4, int var5, int var6);
+
+   public abstract int decompress(ByteBuffer var1, int var2, int var3, ByteBuffer var4, int var5, int var6);
+
+   @Override
+   public final int decompress(byte[] src, int srcOff, int srcLen, byte[] dest, int destOff) {
+      return this.decompress(src, srcOff, srcLen, dest, destOff, dest.length - destOff);
+   }
+
+   public final int decompress(byte[] src, byte[] dest) {
+      return this.decompress(src, 0, src.length, dest, 0);
+   }
+
+   public final byte[] decompress(byte[] src, int srcOff, int srcLen, int maxDestLen) {
+      byte[] decompressed = new byte[maxDestLen];
+      int decompressedLength = this.decompress(src, srcOff, srcLen, decompressed, 0, maxDestLen);
+      if (decompressedLength != decompressed.length) {
+         decompressed = Arrays.copyOf(decompressed, decompressedLength);
+      }
+
+      return decompressed;
+   }
+
+   public final byte[] decompress(byte[] src, int maxDestLen) {
+      return this.decompress(src, 0, src.length, maxDestLen);
+   }
+
+   public final void decompress(ByteBuffer src, ByteBuffer dest) {
+      int decompressed = this.decompress(src, src.position(), src.remaining(), dest, dest.position(), dest.remaining());
+      ((Buffer)src).position(src.limit());
+      ((Buffer)dest).position(dest.position() + decompressed);
+   }
+
+   @Override
+   public String toString() {
+      return this.getClass().getSimpleName();
+   }
 }

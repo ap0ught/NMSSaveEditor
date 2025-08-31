@@ -1,274 +1,277 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.util;
 
-import javax.swing.plaf.InsetsUIResource;
-import java.awt.Insets;
-import javax.swing.plaf.DimensionUIResource;
-import java.awt.Dimension;
-import javax.swing.plaf.FontUIResource;
 import com.formdev.flatlaf.FlatSystemProperties;
-import java.awt.Toolkit;
-import javax.swing.plaf.UIResource;
+import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.UIManager;
-import javax.swing.LookAndFeel;
-import java.beans.PropertyChangeEvent;
-import java.awt.GraphicsConfiguration;
 import java.awt.Graphics2D;
-import java.lang.reflect.Method;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.Method;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.plaf.DimensionUIResource;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.InsetsUIResource;
+import javax.swing.plaf.UIResource;
 
-public class UIScale
-{
-    private static final boolean DEBUG = false;
-    private static PropertyChangeSupport changeSupport;
-    private static Boolean jreHiDPI;
-    private static float scaleFactor;
-    private static boolean initialized;
-    
-    public static void addPropertyChangeListener(final PropertyChangeListener listener) {
-        if (UIScale.changeSupport == null) {
-            UIScale.changeSupport = new PropertyChangeSupport(UIScale.class);
-        }
-        UIScale.changeSupport.addPropertyChangeListener(listener);
-    }
-    
-    public static void removePropertyChangeListener(final PropertyChangeListener listener) {
-        if (UIScale.changeSupport == null) {
-            return;
-        }
-        UIScale.changeSupport.removePropertyChangeListener(listener);
-    }
-    
-    public static boolean isSystemScalingEnabled() {
-        if (UIScale.jreHiDPI != null) {
-            return UIScale.jreHiDPI;
-        }
-        UIScale.jreHiDPI = false;
-        if (SystemInfo.isJava_9_orLater) {
-            UIScale.jreHiDPI = true;
-        }
-        else if (SystemInfo.isJetBrainsJVM) {
+public class UIScale {
+   private static final boolean DEBUG = false;
+   private static PropertyChangeSupport changeSupport;
+   private static Boolean jreHiDPI;
+   private static float scaleFactor = 1.0F;
+   private static boolean initialized;
+
+   public static void addPropertyChangeListener(PropertyChangeListener listener) {
+      if (changeSupport == null) {
+         changeSupport = new PropertyChangeSupport(UIScale.class);
+      }
+
+      changeSupport.addPropertyChangeListener(listener);
+   }
+
+   public static void removePropertyChangeListener(PropertyChangeListener listener) {
+      if (changeSupport != null) {
+         changeSupport.removePropertyChangeListener(listener);
+      }
+   }
+
+   public static boolean isSystemScalingEnabled() {
+      if (jreHiDPI != null) {
+         return jreHiDPI;
+      } else {
+         jreHiDPI = false;
+         if (SystemInfo.isJava_9_orLater) {
+            jreHiDPI = true;
+         } else if (SystemInfo.isJetBrainsJVM) {
             try {
-                final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                final Class<?> sunGeClass = Class.forName("sun.java2d.SunGraphicsEnvironment");
-                if (sunGeClass.isInstance(ge)) {
-                    final Method m = sunGeClass.getDeclaredMethod("isUIScaleOn", (Class<?>[])new Class[0]);
-                    UIScale.jreHiDPI = (Boolean)m.invoke(ge, new Object[0]);
-                }
+               GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+               Class<?> sunGeClass = Class.forName("sun.java2d.SunGraphicsEnvironment");
+               if (sunGeClass.isInstance(ge)) {
+                  Method m = sunGeClass.getDeclaredMethod("isUIScaleOn");
+                  jreHiDPI = (Boolean)m.invoke(ge);
+               }
+            } catch (Throwable var3) {
             }
-            catch (final Throwable t) {}
-        }
-        return UIScale.jreHiDPI;
-    }
-    
-    public static double getSystemScaleFactor(final Graphics2D g) {
-        return isSystemScalingEnabled() ? getSystemScaleFactor(g.getDeviceConfiguration()) : 1.0;
-    }
-    
-    public static double getSystemScaleFactor(final GraphicsConfiguration gc) {
-        return (isSystemScalingEnabled() && gc != null) ? gc.getDefaultTransform().getScaleX() : 1.0;
-    }
-    
-    private static void initialize() {
-        if (UIScale.initialized) {
-            return;
-        }
-        UIScale.initialized = true;
-        if (!isUserScalingEnabled()) {
-            return;
-        }
-        final PropertyChangeListener listener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(final PropertyChangeEvent e) {
-                final String propertyName = e.getPropertyName();
-                switch (propertyName) {
-                    case "lookAndFeel": {
+         }
+
+         return jreHiDPI;
+      }
+   }
+
+   public static double getSystemScaleFactor(Graphics2D g) {
+      return isSystemScalingEnabled() ? getSystemScaleFactor(g.getDeviceConfiguration()) : 1.0;
+   }
+
+   public static double getSystemScaleFactor(GraphicsConfiguration gc) {
+      return isSystemScalingEnabled() && gc != null ? gc.getDefaultTransform().getScaleX() : 1.0;
+   }
+
+   private static void initialize() {
+      if (!initialized) {
+         initialized = true;
+         if (isUserScalingEnabled()) {
+            PropertyChangeListener listener = new PropertyChangeListener() {
+               @Override
+               public void propertyChange(PropertyChangeEvent e) {
+                  String var2 = e.getPropertyName();
+                  switch (var2) {
+                     case "lookAndFeel":
                         if (e.getNewValue() instanceof LookAndFeel) {
-                            UIManager.getLookAndFeelDefaults().addPropertyChangeListener(this);
+                           UIManager.getLookAndFeelDefaults().addPropertyChangeListener(this);
                         }
-                        updateScaleFactor();
+
+                        UIScale.updateScaleFactor();
                         break;
-                    }
-                    case "defaultFont":
-                    case "Label.font": {
-                        updateScaleFactor();
-                        break;
-                    }
-                }
-            }
-        };
-        UIManager.addPropertyChangeListener(listener);
-        UIManager.getDefaults().addPropertyChangeListener(listener);
-        UIManager.getLookAndFeelDefaults().addPropertyChangeListener(listener);
-        updateScaleFactor();
-    }
-    
-    private static void updateScaleFactor() {
-        if (!isUserScalingEnabled()) {
-            return;
-        }
-        final float customScaleFactor = getCustomScaleFactor();
-        if (customScaleFactor > 0.0f) {
+                     case "defaultFont":
+                     case "Label.font":
+                        UIScale.updateScaleFactor();
+                  }
+               }
+            };
+            UIManager.addPropertyChangeListener(listener);
+            UIManager.getDefaults().addPropertyChangeListener(listener);
+            UIManager.getLookAndFeelDefaults().addPropertyChangeListener(listener);
+            updateScaleFactor();
+         }
+      }
+   }
+
+   private static void updateScaleFactor() {
+      if (isUserScalingEnabled()) {
+         float customScaleFactor = getCustomScaleFactor();
+         if (customScaleFactor > 0.0F) {
             setUserScaleFactor(customScaleFactor, false);
-            return;
-        }
-        Font font = UIManager.getFont("defaultFont");
-        if (font == null) {
-            font = UIManager.getFont("Label.font");
-        }
-        setUserScaleFactor(computeFontScaleFactor(font), true);
-    }
-    
-    public static float computeFontScaleFactor(final Font font) {
-        if (SystemInfo.isWindows && font instanceof UIResource) {
-            final Font uiFont = (Font)Toolkit.getDefaultToolkit().getDesktopProperty("win.messagebox.font");
-            if (uiFont == null || uiFont.getSize() == font.getSize()) {
-                if (isSystemScalingEnabled()) {
-                    return 1.0f;
-                }
-                final Font winFont = (Font)Toolkit.getDefaultToolkit().getDesktopProperty("win.defaultGUI.font");
-                return computeScaleFactor((winFont != null) ? winFont : font);
+         } else {
+            Font font = UIManager.getFont("defaultFont");
+            if (font == null) {
+               font = UIManager.getFont("Label.font");
             }
-        }
-        return computeScaleFactor(font);
-    }
-    
-    private static float computeScaleFactor(final Font font) {
-        float fontSizeDivider = 12.0f;
-        if (SystemInfo.isWindows) {
-            if ("Tahoma".equals(font.getFamily())) {
-                fontSizeDivider = 11.0f;
+
+            setUserScaleFactor(computeFontScaleFactor(font), true);
+         }
+      }
+   }
+
+   public static float computeFontScaleFactor(Font font) {
+      if (SystemInfo.isWindows && font instanceof UIResource) {
+         Font uiFont = (Font)Toolkit.getDefaultToolkit().getDesktopProperty("win.messagebox.font");
+         if (uiFont == null || uiFont.getSize() == font.getSize()) {
+            if (isSystemScalingEnabled()) {
+               return 1.0F;
             }
-        }
-        else if (SystemInfo.isMacOS) {
-            fontSizeDivider = 13.0f;
-        }
-        else if (SystemInfo.isLinux) {
-            fontSizeDivider = (SystemInfo.isKDE ? 13.0f : 15.0f);
-        }
-        return font.getSize() / fontSizeDivider;
-    }
-    
-    private static boolean isUserScalingEnabled() {
-        return FlatSystemProperties.getBoolean("flatlaf.uiScale.enabled", true);
-    }
-    
-    public static FontUIResource applyCustomScaleFactor(final FontUIResource font) {
-        if (!isUserScalingEnabled()) {
+
+            Font winFont = (Font)Toolkit.getDefaultToolkit().getDesktopProperty("win.defaultGUI.font");
+            return computeScaleFactor(winFont != null ? winFont : font);
+         }
+      }
+
+      return computeScaleFactor(font);
+   }
+
+   private static float computeScaleFactor(Font font) {
+      float fontSizeDivider = 12.0F;
+      if (SystemInfo.isWindows) {
+         if ("Tahoma".equals(font.getFamily())) {
+            fontSizeDivider = 11.0F;
+         }
+      } else if (SystemInfo.isMacOS) {
+         fontSizeDivider = 13.0F;
+      } else if (SystemInfo.isLinux) {
+         fontSizeDivider = SystemInfo.isKDE ? 13.0F : 15.0F;
+      }
+
+      return (float)font.getSize() / fontSizeDivider;
+   }
+
+   private static boolean isUserScalingEnabled() {
+      return FlatSystemProperties.getBoolean("flatlaf.uiScale.enabled", true);
+   }
+
+   public static FontUIResource applyCustomScaleFactor(FontUIResource font) {
+      if (!isUserScalingEnabled()) {
+         return font;
+      } else {
+         float scaleFactor = getCustomScaleFactor();
+         if (scaleFactor <= 0.0F) {
             return font;
-        }
-        final float scaleFactor = getCustomScaleFactor();
-        if (scaleFactor <= 0.0f) {
-            return font;
-        }
-        final float fontScaleFactor = computeScaleFactor(font);
-        if (scaleFactor == fontScaleFactor) {
-            return font;
-        }
-        final int newFontSize = Math.max(Math.round(font.getSize() / fontScaleFactor * scaleFactor), 1);
-        return new FontUIResource(font.deriveFont((float)newFontSize));
-    }
-    
-    private static float getCustomScaleFactor() {
-        return parseScaleFactor(System.getProperty("flatlaf.uiScale"));
-    }
-    
-    private static float parseScaleFactor(String s) {
-        if (s == null) {
-            return -1.0f;
-        }
-        float units = 1.0f;
-        if (s.endsWith("x")) {
+         } else {
+            float fontScaleFactor = computeScaleFactor(font);
+            if (scaleFactor == fontScaleFactor) {
+               return font;
+            } else {
+               int newFontSize = Math.max(Math.round((float)font.getSize() / fontScaleFactor * scaleFactor), 1);
+               return new FontUIResource(font.deriveFont((float)newFontSize));
+            }
+         }
+      }
+   }
+
+   private static float getCustomScaleFactor() {
+      return parseScaleFactor(System.getProperty("flatlaf.uiScale"));
+   }
+
+   private static float parseScaleFactor(String s) {
+      if (s == null) {
+         return -1.0F;
+      } else {
+         float units = 1.0F;
+         if (s.endsWith("x")) {
             s = s.substring(0, s.length() - 1);
-        }
-        else if (s.endsWith("dpi")) {
-            units = 96.0f;
+         } else if (s.endsWith("dpi")) {
+            units = 96.0F;
             s = s.substring(0, s.length() - 3);
-        }
-        else if (s.endsWith("%")) {
-            units = 100.0f;
+         } else if (s.endsWith("%")) {
+            units = 100.0F;
             s = s.substring(0, s.length() - 1);
-        }
-        try {
-            final float scale = Float.parseFloat(s);
-            return (scale > 0.0f) ? (scale / units) : -1.0f;
-        }
-        catch (final NumberFormatException ex) {
-            return -1.0f;
-        }
-    }
-    
-    public static float getUserScaleFactor() {
-        initialize();
-        return UIScale.scaleFactor;
-    }
-    
-    private static void setUserScaleFactor(float scaleFactor, final boolean normalize) {
-        if (normalize) {
-            if (scaleFactor < 1.0f) {
-                scaleFactor = (FlatSystemProperties.getBoolean("flatlaf.uiScale.allowScaleDown", false) ? (Math.round(scaleFactor * 10.0f) / 10.0f) : 1.0f);
-            }
-            else if (scaleFactor > 1.0f) {
-                scaleFactor = Math.round(scaleFactor * 4.0f) / 4.0f;
-            }
-        }
-        scaleFactor = Math.max(scaleFactor, 0.1f);
-        final float oldScaleFactor = UIScale.scaleFactor;
-        UIScale.scaleFactor = scaleFactor;
-        if (UIScale.changeSupport != null) {
-            UIScale.changeSupport.firePropertyChange("userScaleFactor", oldScaleFactor, scaleFactor);
-        }
-    }
-    
-    public static float scale(final float value) {
-        initialize();
-        return (UIScale.scaleFactor == 1.0f) ? value : (value * UIScale.scaleFactor);
-    }
-    
-    public static int scale(final int value) {
-        initialize();
-        return (UIScale.scaleFactor == 1.0f) ? value : Math.round(value * UIScale.scaleFactor);
-    }
-    
-    public static int scale2(final int value) {
-        initialize();
-        return (UIScale.scaleFactor == 1.0f) ? value : ((int)(value * UIScale.scaleFactor));
-    }
-    
-    public static float unscale(final float value) {
-        initialize();
-        return (UIScale.scaleFactor == 1.0f) ? value : (value / UIScale.scaleFactor);
-    }
-    
-    public static int unscale(final int value) {
-        initialize();
-        return (UIScale.scaleFactor == 1.0f) ? value : Math.round(value / UIScale.scaleFactor);
-    }
-    
-    public static void scaleGraphics(final Graphics2D g) {
-        initialize();
-        if (UIScale.scaleFactor != 1.0f) {
-            g.scale(UIScale.scaleFactor, UIScale.scaleFactor);
-        }
-    }
-    
-    public static Dimension scale(final Dimension dimension) {
-        initialize();
-        return (dimension == null || UIScale.scaleFactor == 1.0f) ? dimension : ((dimension instanceof UIResource) ? new DimensionUIResource(scale(dimension.width), scale(dimension.height)) : new Dimension(scale(dimension.width), scale(dimension.height)));
-    }
-    
-    public static Insets scale(final Insets insets) {
-        initialize();
-        return (insets == null || UIScale.scaleFactor == 1.0f) ? insets : ((insets instanceof UIResource) ? new InsetsUIResource(scale(insets.top), scale(insets.left), scale(insets.bottom), scale(insets.right)) : new Insets(scale(insets.top), scale(insets.left), scale(insets.bottom), scale(insets.right)));
-    }
-    
-    static {
-        UIScale.scaleFactor = 1.0f;
-    }
+         }
+
+         try {
+            float scale = Float.parseFloat(s);
+            return scale > 0.0F ? scale / units : -1.0F;
+         } catch (NumberFormatException var3) {
+            return -1.0F;
+         }
+      }
+   }
+
+   public static float getUserScaleFactor() {
+      initialize();
+      return scaleFactor;
+   }
+
+   private static void setUserScaleFactor(float scaleFactor, boolean normalize) {
+      if (normalize) {
+         if (scaleFactor < 1.0F) {
+            scaleFactor = FlatSystemProperties.getBoolean("flatlaf.uiScale.allowScaleDown", false) ? (float)Math.round(scaleFactor * 10.0F) / 10.0F : 1.0F;
+         } else if (scaleFactor > 1.0F) {
+            scaleFactor = (float)Math.round(scaleFactor * 4.0F) / 4.0F;
+         }
+      }
+
+      scaleFactor = Math.max(scaleFactor, 0.1F);
+      float oldScaleFactor = UIScale.scaleFactor;
+      UIScale.scaleFactor = scaleFactor;
+      if (changeSupport != null) {
+         changeSupport.firePropertyChange("userScaleFactor", oldScaleFactor, scaleFactor);
+      }
+   }
+
+   public static float scale(float value) {
+      initialize();
+      return scaleFactor == 1.0F ? value : value * scaleFactor;
+   }
+
+   public static int scale(int value) {
+      initialize();
+      return scaleFactor == 1.0F ? value : Math.round((float)value * scaleFactor);
+   }
+
+   public static int scale2(int value) {
+      initialize();
+      return scaleFactor == 1.0F ? value : (int)((float)value * scaleFactor);
+   }
+
+   public static float unscale(float value) {
+      initialize();
+      return scaleFactor == 1.0F ? value : value / scaleFactor;
+   }
+
+   public static int unscale(int value) {
+      initialize();
+      return scaleFactor == 1.0F ? value : Math.round((float)value / scaleFactor);
+   }
+
+   public static void scaleGraphics(Graphics2D g) {
+      initialize();
+      if (scaleFactor != 1.0F) {
+         g.scale((double)scaleFactor, (double)scaleFactor);
+      }
+   }
+
+   public static Dimension scale(Dimension dimension) {
+      initialize();
+      return (Dimension)(dimension == null || scaleFactor == 1.0F
+         ? dimension
+         : (
+            dimension instanceof UIResource
+               ? new DimensionUIResource(scale(dimension.width), scale(dimension.height))
+               : new Dimension(scale(dimension.width), scale(dimension.height))
+         ));
+   }
+
+   public static Insets scale(Insets insets) {
+      initialize();
+      return (Insets)(insets == null || scaleFactor == 1.0F
+         ? insets
+         : (
+            insets instanceof UIResource
+               ? new InsetsUIResource(scale(insets.top), scale(insets.left), scale(insets.bottom), scale(insets.right))
+               : new Insets(scale(insets.top), scale(insets.left), scale(insets.bottom), scale(insets.right))
+         ));
+   }
 }

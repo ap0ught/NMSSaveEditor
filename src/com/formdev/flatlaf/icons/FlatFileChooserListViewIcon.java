@@ -1,31 +1,24 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.icons;
 
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.Stroke;
 import java.awt.BasicStroke;
-import java.awt.RenderingHints;
-import java.awt.Graphics2D;
 import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D.Float;
 import javax.swing.UIManager;
 
-public class FlatFileChooserListViewIcon extends FlatAbstractIcon
-{
-    public FlatFileChooserListViewIcon() {
-        super(16, 16, UIManager.getColor("Actions.Grey"));
-    }
-    
-    @Override
-    protected void paintIcon(final Component c, final Graphics2D g) {
-        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-        g.setStroke(new BasicStroke(1.0f, 1, 1));
-        g.draw(new RoundRectangle2D.Float(2.5f, 2.5f, 4.0f, 4.0f, 2.0f, 2.0f));
-        g.draw(new RoundRectangle2D.Float(2.5f, 9.5f, 4.0f, 4.0f, 2.0f, 2.0f));
-        g.draw(new RoundRectangle2D.Float(9.5f, 9.5f, 4.0f, 4.0f, 2.0f, 2.0f));
-        g.draw(new RoundRectangle2D.Float(9.5f, 2.5f, 4.0f, 4.0f, 2.0f, 2.0f));
-    }
+public class FlatFileChooserListViewIcon extends FlatAbstractIcon {
+   public FlatFileChooserListViewIcon() {
+      super(16, 16, UIManager.getColor("Actions.Grey"));
+   }
+
+   @Override
+   protected void paintIcon(Component c, Graphics2D g) {
+      g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+      g.setStroke(new BasicStroke(1.0F, 1, 1));
+      g.draw(new Float(2.5F, 2.5F, 4.0F, 4.0F, 2.0F, 2.0F));
+      g.draw(new Float(2.5F, 9.5F, 4.0F, 4.0F, 2.0F, 2.0F));
+      g.draw(new Float(9.5F, 9.5F, 4.0F, 4.0F, 2.0F, 2.0F));
+      g.draw(new Float(9.5F, 2.5F, 4.0F, 4.0F, 2.0F, 2.0F));
+   }
 }

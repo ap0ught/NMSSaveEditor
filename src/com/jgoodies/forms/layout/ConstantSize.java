@@ -1,225 +1,200 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.jgoodies.forms.layout;
 
-import java.util.List;
-import java.awt.Container;
 import java.awt.Component;
+import java.awt.Container;
 import java.io.Serializable;
+import java.util.List;
 
-public final class ConstantSize implements Size, Serializable
-{
-    public static final Unit PIXEL;
-    public static final Unit POINT;
-    public static final Unit DIALOG_UNITS_X;
-    public static final Unit DIALOG_UNITS_Y;
-    public static final Unit MILLIMETER;
-    public static final Unit CENTIMETER;
-    public static final Unit INCH;
-    public static final Unit PX;
-    public static final Unit PT;
-    public static final Unit DLUX;
-    public static final Unit DLUY;
-    public static final Unit MM;
-    public static final Unit CM;
-    public static final Unit IN;
-    private static final Unit[] VALUES;
-    private final double value;
-    private final Unit unit;
-    
-    public ConstantSize(final int value, final Unit unit) {
-        this.value = value;
-        this.unit = unit;
-    }
-    
-    public ConstantSize(final double value, final Unit unit) {
-        this.value = value;
-        this.unit = unit;
-    }
-    
-    static ConstantSize valueOf(final String encodedValueAndUnit, final boolean horizontal) {
-        final String[] split = splitValueAndUnit(encodedValueAndUnit);
-        final String encodedValue = split[0];
-        final String encodedUnit = split[1];
-        final Unit unit = Unit.valueOf(encodedUnit, horizontal);
-        final double value = Double.parseDouble(encodedValue);
-        if (unit.requiresIntegers && value != (int)value) {
-            throw new IllegalArgumentException(unit.toString() + " value " + encodedValue + " must be an integer.");
-        }
-        return new ConstantSize(value, unit);
-    }
-    
-    static ConstantSize dluX(final int value) {
-        return new ConstantSize(value, ConstantSize.DLUX);
-    }
-    
-    static ConstantSize dluY(final int value) {
-        return new ConstantSize(value, ConstantSize.DLUY);
-    }
-    
-    public double getValue() {
-        return this.value;
-    }
-    
-    public Unit getUnit() {
-        return this.unit;
-    }
-    
-    public int getPixelSize(final Component component) {
-        if (this.unit == ConstantSize.PIXEL) {
-            return this.intValue();
-        }
-        if (this.unit == ConstantSize.POINT) {
-            return Sizes.pointAsPixel(this.intValue(), component);
-        }
-        if (this.unit == ConstantSize.INCH) {
-            return Sizes.inchAsPixel(this.value, component);
-        }
-        if (this.unit == ConstantSize.MILLIMETER) {
-            return Sizes.millimeterAsPixel(this.value, component);
-        }
-        if (this.unit == ConstantSize.CENTIMETER) {
-            return Sizes.centimeterAsPixel(this.value, component);
-        }
-        if (this.unit == ConstantSize.DIALOG_UNITS_X) {
-            return Sizes.dialogUnitXAsPixel(this.intValue(), component);
-        }
-        if (this.unit == ConstantSize.DIALOG_UNITS_Y) {
-            return Sizes.dialogUnitYAsPixel(this.intValue(), component);
-        }
-        throw new IllegalStateException("Invalid unit " + this.unit);
-    }
-    
-    public int maximumSize(final Container container, final List components, final FormLayout.Measure minMeasure, final FormLayout.Measure prefMeasure, final FormLayout.Measure defaultMeasure) {
-        return this.getPixelSize(container);
-    }
-    
-    public boolean compressible() {
-        return false;
-    }
-    
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ConstantSize)) {
-            return false;
-        }
-        final ConstantSize size = (ConstantSize)o;
-        return this.value == size.value && this.unit == size.unit;
-    }
-    
-    public int hashCode() {
-        return new Double(this.value).hashCode() + 37 * this.unit.hashCode();
-    }
-    
-    public String toString() {
-        return (this.value == this.intValue()) ? (Integer.toString(this.intValue()) + this.unit.abbreviation()) : (Double.toString(this.value) + this.unit.abbreviation());
-    }
-    
-    public String encode() {
-        return (this.value == this.intValue()) ? (Integer.toString(this.intValue()) + this.unit.encode()) : (Double.toString(this.value) + this.unit.encode());
-    }
-    
-    private int intValue() {
-        return (int)Math.round(this.value);
-    }
-    
-    private static String[] splitValueAndUnit(final String encodedValueAndUnit) {
-        final String[] result = new String[2];
-        int firstLetterIndex;
-        for (int len = firstLetterIndex = encodedValueAndUnit.length(); firstLetterIndex > 0 && Character.isLetter(encodedValueAndUnit.charAt(firstLetterIndex - 1)); --firstLetterIndex) {}
-        result[0] = encodedValueAndUnit.substring(0, firstLetterIndex);
-        result[1] = encodedValueAndUnit.substring(firstLetterIndex);
-        return result;
-    }
-    
-    static {
-        PIXEL = new Unit("Pixel", "px", (String)null, true);
-        POINT = new Unit("Point", "pt", (String)null, true);
-        DIALOG_UNITS_X = new Unit("Dialog units X", "dluX", "dlu", true);
-        DIALOG_UNITS_Y = new Unit("Dialog units Y", "dluY", "dlu", true);
-        MILLIMETER = new Unit("Millimeter", "mm", (String)null, false);
-        CENTIMETER = new Unit("Centimeter", "cm", (String)null, false);
-        INCH = new Unit("Inch", "in", (String)null, false);
-        PX = ConstantSize.PIXEL;
-        PT = ConstantSize.POINT;
-        DLUX = ConstantSize.DIALOG_UNITS_X;
-        DLUY = ConstantSize.DIALOG_UNITS_Y;
-        MM = ConstantSize.MILLIMETER;
-        CM = ConstantSize.CENTIMETER;
-        IN = ConstantSize.INCH;
-        VALUES = new Unit[] { ConstantSize.PIXEL, ConstantSize.POINT, ConstantSize.DIALOG_UNITS_X, ConstantSize.DIALOG_UNITS_Y, ConstantSize.MILLIMETER, ConstantSize.CENTIMETER, ConstantSize.INCH };
-    }
-    
-    public static final class Unit implements Serializable
-    {
-        private final transient String name;
-        private final transient String abbreviation;
-        private final transient String parseAbbreviation;
-        final transient boolean requiresIntegers;
-        private static int nextOrdinal;
-        private final int ordinal;
-        
-        private Unit(final String name, final String abbreviation, final String parseAbbreviation, final boolean requiresIntegers) {
-            this.ordinal = Unit.nextOrdinal++;
-            this.name = name;
-            this.abbreviation = abbreviation;
-            this.parseAbbreviation = parseAbbreviation;
-            this.requiresIntegers = requiresIntegers;
-        }
-        
-        static Unit valueOf(final String name, final boolean horizontal) {
-            if (name.length() == 0) {
-                final Unit defaultUnit = Sizes.getDefaultUnit();
-                if (defaultUnit != null) {
-                    return defaultUnit;
-                }
-                return horizontal ? ConstantSize.DIALOG_UNITS_X : ConstantSize.DIALOG_UNITS_Y;
+public final class ConstantSize implements Size, Serializable {
+   public static final ConstantSize.Unit PIXEL = new ConstantSize.Unit("Pixel", "px", null, true);
+   public static final ConstantSize.Unit POINT = new ConstantSize.Unit("Point", "pt", null, true);
+   public static final ConstantSize.Unit DIALOG_UNITS_X = new ConstantSize.Unit("Dialog units X", "dluX", "dlu", true);
+   public static final ConstantSize.Unit DIALOG_UNITS_Y = new ConstantSize.Unit("Dialog units Y", "dluY", "dlu", true);
+   public static final ConstantSize.Unit MILLIMETER = new ConstantSize.Unit("Millimeter", "mm", null, false);
+   public static final ConstantSize.Unit CENTIMETER = new ConstantSize.Unit("Centimeter", "cm", null, false);
+   public static final ConstantSize.Unit INCH = new ConstantSize.Unit("Inch", "in", null, false);
+   // $VF: renamed from: PX com.jgoodies.forms.layout.ConstantSize$Unit
+   public static final ConstantSize.Unit field_38 = PIXEL;
+   // $VF: renamed from: PT com.jgoodies.forms.layout.ConstantSize$Unit
+   public static final ConstantSize.Unit field_39 = POINT;
+   public static final ConstantSize.Unit DLUX = DIALOG_UNITS_X;
+   public static final ConstantSize.Unit DLUY = DIALOG_UNITS_Y;
+   // $VF: renamed from: MM com.jgoodies.forms.layout.ConstantSize$Unit
+   public static final ConstantSize.Unit field_40 = MILLIMETER;
+   // $VF: renamed from: CM com.jgoodies.forms.layout.ConstantSize$Unit
+   public static final ConstantSize.Unit field_41 = CENTIMETER;
+   // $VF: renamed from: IN com.jgoodies.forms.layout.ConstantSize$Unit
+   public static final ConstantSize.Unit field_42 = INCH;
+   private static final ConstantSize.Unit[] VALUES = new ConstantSize.Unit[]{PIXEL, POINT, DIALOG_UNITS_X, DIALOG_UNITS_Y, MILLIMETER, CENTIMETER, INCH};
+   private final double value;
+   private final ConstantSize.Unit unit;
+
+   public ConstantSize(int value, ConstantSize.Unit unit) {
+      this.value = (double)value;
+      this.unit = unit;
+   }
+
+   public ConstantSize(double value, ConstantSize.Unit unit) {
+      this.value = value;
+      this.unit = unit;
+   }
+
+   static ConstantSize valueOf(String encodedValueAndUnit, boolean horizontal) {
+      String[] split = splitValueAndUnit(encodedValueAndUnit);
+      String encodedValue = split[0];
+      String encodedUnit = split[1];
+      ConstantSize.Unit unit = ConstantSize.Unit.valueOf(encodedUnit, horizontal);
+      double value = Double.parseDouble(encodedValue);
+      if (unit.requiresIntegers && value != (double)((int)value)) {
+         throw new IllegalArgumentException(unit.toString() + " value " + encodedValue + " must be an integer.");
+      } else {
+         return new ConstantSize(value, unit);
+      }
+   }
+
+   static ConstantSize dluX(int value) {
+      return new ConstantSize(value, DLUX);
+   }
+
+   static ConstantSize dluY(int value) {
+      return new ConstantSize(value, DLUY);
+   }
+
+   public double getValue() {
+      return this.value;
+   }
+
+   public ConstantSize.Unit getUnit() {
+      return this.unit;
+   }
+
+   public int getPixelSize(Component component) {
+      if (this.unit == PIXEL) {
+         return this.intValue();
+      } else if (this.unit == POINT) {
+         return Sizes.pointAsPixel(this.intValue(), component);
+      } else if (this.unit == INCH) {
+         return Sizes.inchAsPixel(this.value, component);
+      } else if (this.unit == MILLIMETER) {
+         return Sizes.millimeterAsPixel(this.value, component);
+      } else if (this.unit == CENTIMETER) {
+         return Sizes.centimeterAsPixel(this.value, component);
+      } else if (this.unit == DIALOG_UNITS_X) {
+         return Sizes.dialogUnitXAsPixel(this.intValue(), component);
+      } else if (this.unit == DIALOG_UNITS_Y) {
+         return Sizes.dialogUnitYAsPixel(this.intValue(), component);
+      } else {
+         throw new IllegalStateException("Invalid unit " + this.unit);
+      }
+   }
+
+   public int maximumSize(
+      Container container, List components, FormLayout.Measure minMeasure, FormLayout.Measure prefMeasure, FormLayout.Measure defaultMeasure
+   ) {
+      return this.getPixelSize(container);
+   }
+
+   public boolean compressible() {
+      return false;
+   }
+
+   public boolean equals(Object o) {
+      if (this == o) {
+         return true;
+      } else if (!(o instanceof ConstantSize)) {
+         return false;
+      } else {
+         ConstantSize size = (ConstantSize)o;
+         return this.value == size.value && this.unit == size.unit;
+      }
+   }
+
+   public int hashCode() {
+      return new Double(this.value).hashCode() + 37 * this.unit.hashCode();
+   }
+
+   public String toString() {
+      return this.value == (double)this.intValue()
+         ? Integer.toString(this.intValue()) + this.unit.abbreviation()
+         : Double.toString(this.value) + this.unit.abbreviation();
+   }
+
+   public String encode() {
+      return this.value == (double)this.intValue() ? Integer.toString(this.intValue()) + this.unit.encode() : Double.toString(this.value) + this.unit.encode();
+   }
+
+   private int intValue() {
+      return (int)Math.round(this.value);
+   }
+
+   private static String[] splitValueAndUnit(String encodedValueAndUnit) {
+      String[] result = new String[2];
+      int len = encodedValueAndUnit.length();
+      int firstLetterIndex = len;
+
+      while (firstLetterIndex > 0 && Character.isLetter(encodedValueAndUnit.charAt(firstLetterIndex - 1))) {
+         firstLetterIndex--;
+      }
+
+      result[0] = encodedValueAndUnit.substring(0, firstLetterIndex);
+      result[1] = encodedValueAndUnit.substring(firstLetterIndex);
+      return result;
+   }
+
+   public static final class Unit implements Serializable {
+      private final transient String name;
+      private final transient String abbreviation;
+      private final transient String parseAbbreviation;
+      final transient boolean requiresIntegers;
+      private static int nextOrdinal = 0;
+      private final int ordinal = nextOrdinal++;
+
+      private Unit(String name, String abbreviation, String parseAbbreviation, boolean requiresIntegers) {
+         this.name = name;
+         this.abbreviation = abbreviation;
+         this.parseAbbreviation = parseAbbreviation;
+         this.requiresIntegers = requiresIntegers;
+      }
+
+      static ConstantSize.Unit valueOf(String name, boolean horizontal) {
+         if (name.length() == 0) {
+            ConstantSize.Unit defaultUnit = Sizes.getDefaultUnit();
+            if (defaultUnit != null) {
+               return defaultUnit;
+            } else {
+               return horizontal ? ConstantSize.DIALOG_UNITS_X : ConstantSize.DIALOG_UNITS_Y;
             }
-            else {
-                if (name.equals("px")) {
-                    return ConstantSize.PIXEL;
-                }
-                if (name.equals("dlu")) {
-                    return horizontal ? ConstantSize.DIALOG_UNITS_X : ConstantSize.DIALOG_UNITS_Y;
-                }
-                if (name.equals("pt")) {
-                    return ConstantSize.POINT;
-                }
-                if (name.equals("in")) {
-                    return ConstantSize.INCH;
-                }
-                if (name.equals("mm")) {
-                    return ConstantSize.MILLIMETER;
-                }
-                if (name.equals("cm")) {
-                    return ConstantSize.CENTIMETER;
-                }
-                throw new IllegalArgumentException("Invalid unit name '" + name + "'. Must be one of: " + "px, dlu, pt, mm, cm, in");
-            }
-        }
-        
-        public String toString() {
-            return this.name;
-        }
-        
-        public String encode() {
-            return (this.parseAbbreviation != null) ? this.parseAbbreviation : this.abbreviation;
-        }
-        
-        public String abbreviation() {
-            return this.abbreviation;
-        }
-        
-        private Object readResolve() {
-            return ConstantSize.VALUES[this.ordinal];
-        }
-        
-        static {
-            Unit.nextOrdinal = 0;
-        }
-    }
+         } else if (name.equals("px")) {
+            return ConstantSize.PIXEL;
+         } else if (name.equals("dlu")) {
+            return horizontal ? ConstantSize.DIALOG_UNITS_X : ConstantSize.DIALOG_UNITS_Y;
+         } else if (name.equals("pt")) {
+            return ConstantSize.POINT;
+         } else if (name.equals("in")) {
+            return ConstantSize.INCH;
+         } else if (name.equals("mm")) {
+            return ConstantSize.MILLIMETER;
+         } else if (name.equals("cm")) {
+            return ConstantSize.CENTIMETER;
+         } else {
+            throw new IllegalArgumentException("Invalid unit name '" + name + "'. Must be one of: " + "px, dlu, pt, mm, cm, in");
+         }
+      }
+
+      public String toString() {
+         return this.name;
+      }
+
+      public String encode() {
+         return this.parseAbbreviation != null ? this.parseAbbreviation : this.abbreviation;
+      }
+
+      public String abbreviation() {
+         return this.abbreviation;
+      }
+
+      private Object readResolve() {
+         return ConstantSize.VALUES[this.ordinal];
+      }
+   }
 }

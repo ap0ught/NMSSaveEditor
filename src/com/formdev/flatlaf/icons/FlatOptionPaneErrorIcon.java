@@ -1,30 +1,24 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.icons;
 
-import java.awt.geom.RoundRectangle2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.Shape;
+import java.awt.geom.Path2D;
+import java.awt.geom.Ellipse2D.Float;
 
-public class FlatOptionPaneErrorIcon extends FlatOptionPaneAbstractIcon
-{
-    public FlatOptionPaneErrorIcon() {
-        super("OptionPane.icon.errorColor", "Actions.Red");
-    }
-    
-    @Override
-    protected Shape createOutside() {
-        return new Ellipse2D.Float(2.0f, 2.0f, 28.0f, 28.0f);
-    }
-    
-    @Override
-    protected Shape createInside() {
-        final Path2D inside = new Path2D.Float(0);
-        inside.append(new RoundRectangle2D.Float(14.0f, 7.0f, 4.0f, 12.0f, 4.0f, 4.0f), false);
-        inside.append(new Ellipse2D.Float(14.0f, 21.0f, 4.0f, 4.0f), false);
-        return inside;
-    }
+public class FlatOptionPaneErrorIcon extends FlatOptionPaneAbstractIcon {
+   public FlatOptionPaneErrorIcon() {
+      super("OptionPane.icon.errorColor", "Actions.Red");
+   }
+
+   @Override
+   protected Shape createOutside() {
+      return new Float(2.0F, 2.0F, 28.0F, 28.0F);
+   }
+
+   @Override
+   protected Shape createInside() {
+      Path2D inside = new java.awt.geom.Path2D.Float(0);
+      inside.append(new java.awt.geom.RoundRectangle2D.Float(14.0F, 7.0F, 4.0F, 12.0F, 4.0F, 4.0F), false);
+      inside.append(new Float(14.0F, 21.0F, 4.0F, 4.0F), false);
+      return inside;
+   }
 }

@@ -1,80 +1,68 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.formdev.flatlaf.json;
 
-import java.util.LinkedHashMap;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Json
-{
-    public static Object parse(final Reader reader) throws IOException, ParseException {
-        final DefaultHandler handler = new DefaultHandler();
-        new JsonParser(handler).parse(reader);
-        return handler.getValue();
-    }
-    
-    static class DefaultHandler extends JsonHandler<List<Object>, Map<String, Object>>
-    {
-        private Object value;
-        
-        @Override
-        public List<Object> startArray() {
-            return new ArrayList<Object>();
-        }
-        
-        @Override
-        public Map<String, Object> startObject() {
-            return new LinkedHashMap<String, Object>();
-        }
-        
-        @Override
-        public void endNull() {
-            this.value = "null";
-        }
-        
-        @Override
-        public void endBoolean(final boolean bool) {
-            this.value = (bool ? "true" : "false");
-        }
-        
-        @Override
-        public void endString(final String string) {
-            this.value = string;
-        }
-        
-        @Override
-        public void endNumber(final String string) {
-            this.value = string;
-        }
-        
-        @Override
-        public void endArray(final List<Object> array) {
-            this.value = array;
-        }
-        
-        @Override
-        public void endObject(final Map<String, Object> object) {
-            this.value = object;
-        }
-        
-        @Override
-        public void endArrayValue(final List<Object> array) {
-            array.add(this.value);
-        }
-        
-        @Override
-        public void endObjectValue(final Map<String, Object> object, final String name) {
-            object.put(name, this.value);
-        }
-        
-        Object getValue() {
-            return this.value;
-        }
-    }
+public class Json {
+   public static Object parse(Reader reader) throws IOException, ParseException {
+      Json.DefaultHandler handler = new Json.DefaultHandler();
+      new JsonParser(handler).parse(reader);
+      return handler.getValue();
+   }
+
+   static class DefaultHandler extends JsonHandler<List<Object>, Map<String, Object>> {
+      private Object value;
+
+      public List<Object> startArray() {
+         return new ArrayList<>();
+      }
+
+      public Map<String, Object> startObject() {
+         return new LinkedHashMap<>();
+      }
+
+      @Override
+      public void endNull() {
+         this.value = "null";
+      }
+
+      @Override
+      public void endBoolean(boolean bool) {
+         this.value = bool ? "true" : "false";
+      }
+
+      @Override
+      public void endString(String string) {
+         this.value = string;
+      }
+
+      @Override
+      public void endNumber(String string) {
+         this.value = string;
+      }
+
+      public void endArray(List<Object> array) {
+         this.value = array;
+      }
+
+      public void endObject(Map<String, Object> object) {
+         this.value = object;
+      }
+
+      public void endArrayValue(List<Object> array) {
+         array.add(this.value);
+      }
+
+      public void endObjectValue(Map<String, Object> object, String name) {
+         object.put(name, this.value);
+      }
+
+      Object getValue() {
+         return this.value;
+      }
+   }
 }

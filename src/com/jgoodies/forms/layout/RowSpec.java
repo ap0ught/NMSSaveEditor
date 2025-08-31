@@ -1,78 +1,67 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.jgoodies.forms.layout;
 
+import com.jgoodies.forms.util.FormUtils;
 import java.util.HashMap;
 import java.util.Locale;
-import com.jgoodies.forms.util.FormUtils;
 import java.util.Map;
 
-public final class RowSpec extends FormSpec
-{
-    public static final DefaultAlignment TOP;
-    public static final DefaultAlignment CENTER;
-    public static final DefaultAlignment BOTTOM;
-    public static final DefaultAlignment FILL;
-    public static final DefaultAlignment DEFAULT;
-    private static final Map CACHE;
-    
-    public RowSpec(final DefaultAlignment defaultAlignment, final Size size, final double resizeWeight) {
-        super(defaultAlignment, size, resizeWeight);
-    }
-    
-    public RowSpec(final Size size) {
-        super(RowSpec.DEFAULT, size, 0.0);
-    }
-    
-    public RowSpec(final String encodedDescription) {
-        super(RowSpec.DEFAULT, encodedDescription);
-    }
-    
-    public static RowSpec createGap(final ConstantSize gapHeight) {
-        return new RowSpec(RowSpec.DEFAULT, gapHeight, 0.0);
-    }
-    
-    public static RowSpec decode(final String encodedRowSpec) {
-        return decode(encodedRowSpec, LayoutMap.getRoot());
-    }
-    
-    public static RowSpec decode(final String encodedRowSpec, final LayoutMap layoutMap) {
-        FormUtils.assertNotBlank(encodedRowSpec, "encoded row specification");
-        FormUtils.assertNotNull(layoutMap, "LayoutMap");
-        final String trimmed = encodedRowSpec.trim();
-        final String lower = trimmed.toLowerCase(Locale.ENGLISH);
-        return decodeExpanded(layoutMap.expand(lower, false));
-    }
-    
-    static RowSpec decodeExpanded(final String expandedTrimmedLowerCaseSpec) {
-        RowSpec spec = RowSpec.CACHE.get(expandedTrimmedLowerCaseSpec);
-        if (spec == null) {
-            spec = new RowSpec(expandedTrimmedLowerCaseSpec);
-            RowSpec.CACHE.put(expandedTrimmedLowerCaseSpec, spec);
-        }
-        return spec;
-    }
-    
-    public static RowSpec[] decodeSpecs(final String encodedRowSpecs) {
-        return decodeSpecs(encodedRowSpecs, LayoutMap.getRoot());
-    }
-    
-    public static RowSpec[] decodeSpecs(final String encodedRowSpecs, final LayoutMap layoutMap) {
-        return FormSpecParser.parseRowSpecs(encodedRowSpecs, layoutMap);
-    }
-    
-    protected boolean isHorizontal() {
-        return false;
-    }
-    
-    static {
-        TOP = FormSpec.TOP_ALIGN;
-        CENTER = FormSpec.CENTER_ALIGN;
-        BOTTOM = FormSpec.BOTTOM_ALIGN;
-        FILL = FormSpec.FILL_ALIGN;
-        DEFAULT = RowSpec.CENTER;
-        CACHE = new HashMap();
-    }
+public final class RowSpec extends FormSpec {
+   // $VF: renamed from: TOP com.jgoodies.forms.layout.FormSpec$DefaultAlignment
+   public static final FormSpec.DefaultAlignment field_43 = FormSpec.TOP_ALIGN;
+   public static final FormSpec.DefaultAlignment CENTER = FormSpec.CENTER_ALIGN;
+   public static final FormSpec.DefaultAlignment BOTTOM = FormSpec.BOTTOM_ALIGN;
+   public static final FormSpec.DefaultAlignment FILL = FormSpec.FILL_ALIGN;
+   public static final FormSpec.DefaultAlignment DEFAULT = CENTER;
+   private static final Map CACHE = new HashMap();
+
+   public RowSpec(FormSpec.DefaultAlignment defaultAlignment, Size size, double resizeWeight) {
+      super(defaultAlignment, size, resizeWeight);
+   }
+
+   public RowSpec(Size size) {
+      super(DEFAULT, size, 0.0);
+   }
+
+   /** @deprecated */
+   public RowSpec(String encodedDescription) {
+      super(DEFAULT, encodedDescription);
+   }
+
+   public static RowSpec createGap(ConstantSize gapHeight) {
+      return new RowSpec(DEFAULT, gapHeight, 0.0);
+   }
+
+   public static RowSpec decode(String encodedRowSpec) {
+      return decode(encodedRowSpec, LayoutMap.getRoot());
+   }
+
+   public static RowSpec decode(String encodedRowSpec, LayoutMap layoutMap) {
+      FormUtils.assertNotBlank(encodedRowSpec, "encoded row specification");
+      FormUtils.assertNotNull(layoutMap, "LayoutMap");
+      String trimmed = encodedRowSpec.trim();
+      String lower = trimmed.toLowerCase(Locale.ENGLISH);
+      return decodeExpanded(layoutMap.expand(lower, false));
+   }
+
+   static RowSpec decodeExpanded(String expandedTrimmedLowerCaseSpec) {
+      RowSpec spec = (RowSpec)CACHE.get(expandedTrimmedLowerCaseSpec);
+      if (spec == null) {
+         spec = new RowSpec(expandedTrimmedLowerCaseSpec);
+         CACHE.put(expandedTrimmedLowerCaseSpec, spec);
+      }
+
+      return spec;
+   }
+
+   public static RowSpec[] decodeSpecs(String encodedRowSpecs) {
+      return decodeSpecs(encodedRowSpecs, LayoutMap.getRoot());
+   }
+
+   public static RowSpec[] decodeSpecs(String encodedRowSpecs, LayoutMap layoutMap) {
+      return FormSpecParser.parseRowSpecs(encodedRowSpecs, layoutMap);
+   }
+
+   protected boolean isHorizontal() {
+      return false;
+   }
 }

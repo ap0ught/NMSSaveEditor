@@ -1,17 +1,12 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.jgoodies.forms.factories;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public interface ComponentFactory
-{
-    JLabel createLabel(final String p0);
-    
-    JLabel createTitle(final String p0);
-    
-    JComponent createSeparator(final String p0, final int p1);
+public interface ComponentFactory {
+   JLabel createLabel(String var1);
+
+   JLabel createTitle(String var1);
+
+   JComponent createSeparator(String var1, int var2);
 }

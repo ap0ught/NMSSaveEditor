@@ -1,17 +1,12 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.jgoodies.forms.layout;
 
-import java.util.List;
 import java.awt.Container;
+import java.util.List;
 
-public interface Size
-{
-    int maximumSize(final Container p0, final List p1, final FormLayout.Measure p2, final FormLayout.Measure p3, final FormLayout.Measure p4);
-    
-    boolean compressible();
-    
-    String encode();
+public interface Size {
+   int maximumSize(Container var1, List var2, FormLayout.Measure var3, FormLayout.Measure var4, FormLayout.Measure var5);
+
+   boolean compressible();
+
+   String encode();
 }

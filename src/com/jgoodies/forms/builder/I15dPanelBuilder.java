@@ -1,37 +1,31 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package com.jgoodies.forms.builder;
 
-import java.util.MissingResourceException;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import javax.swing.JPanel;
 
-public class I15dPanelBuilder extends AbstractI15dPanelBuilder
-{
-    private final ResourceBundle bundle;
-    
-    public I15dPanelBuilder(final FormLayout layout, final ResourceBundle bundle) {
-        this(layout, bundle, new JPanel(null));
-    }
-    
-    public I15dPanelBuilder(final FormLayout layout, final ResourceBundle bundle, final JPanel panel) {
-        super(layout, panel);
-        this.bundle = bundle;
-    }
-    
-    protected String getI15dString(final String resourceKey) {
-        if (this.bundle == null) {
-            throw new IllegalStateException("You must specify a ResourceBundle before using the internationalization support.");
-        }
-        try {
+public class I15dPanelBuilder extends AbstractI15dPanelBuilder {
+   private final ResourceBundle bundle;
+
+   public I15dPanelBuilder(FormLayout layout, ResourceBundle bundle) {
+      this(layout, bundle, new JPanel(null));
+   }
+
+   public I15dPanelBuilder(FormLayout layout, ResourceBundle bundle, JPanel panel) {
+      super(layout, panel);
+      this.bundle = bundle;
+   }
+
+   protected String getI15dString(String resourceKey) {
+      if (this.bundle == null) {
+         throw new IllegalStateException("You must specify a ResourceBundle before using the internationalization support.");
+      } else {
+         try {
             return this.bundle.getString(resourceKey);
-        }
-        catch (final MissingResourceException mre) {
+         } catch (MissingResourceException var3) {
             return resourceKey;
-        }
-    }
+         }
+      }
+   }
 }

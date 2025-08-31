@@ -1,5 +1,5 @@
-[DEBUG] Java Vendor: Private Build
-[DEBUG] Java Version: 1.8.0_462
+[DEBUG] Java Vendor: Eclipse Adoptium
+[DEBUG] Java Version: 17.0.16
 [DEBUG] Java Architecture: amd64
 [DEBUG] Operating System: Linux
 [DEBUG] Working Dir: /home/runner/work/NMSSaveEditor/NMSSaveEditor
@@ -9,6 +9,6 @@
 [DEBUG] Path not found: MainFrame.Y
 [DEBUG] Path not found: MainFrame.Width
 [DEBUG] Path not found: MainFrame.Height
-[DEBUG] Mem Usage: 203/3729 MB
-[STDERR] Exception in thread "Thread-4" java.lang.NegativeArraySizeException
+[DEBUG] Mem Usage: 266/4295 MB
+[STDERR] Exception in thread "Thread-2" java.lang.NegativeArraySizeException: -1
 [STDERR] 	at nomanssave.x.run(Unknown Source)

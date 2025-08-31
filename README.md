@@ -105,6 +105,13 @@ These scripts automatically configure the application to avoid network-related s
 This tool will always be released publicly for free, and I intend to continue maintaining it for as long as there is interest in the game. If this tool has been useful and you want to contribute to it's further development, feel free to visit me on Patreon:
 https://www.patreon.com/goatfungus
 
+### For Developers
+
+If you're contributing to this project:
+- Review the [Branch Protection Guide](docs/BRANCH_PROTECTION.md) for information about repository security
+- Follow the established pull request workflow
+- Ensure all status checks pass before requesting review
+
 ## Previous Releases
 
 - [Atlas Rises (1.3)](../atlasRises/README.md)

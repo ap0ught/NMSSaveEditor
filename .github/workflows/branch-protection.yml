@@ -1,0 +1,99 @@
+name: Setup Branch Protection
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/branch-protection.yml'
+
+jobs:
+  setup-branch-protection:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Branch Protection Rules
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            
+            try {
+              // Setup branch protection for master branch
+              await github.rest.repos.updateBranchProtection({
+                owner,
+                repo,
+                branch: 'master',
+                required_status_checks: {
+                  strict: true,
+                  contexts: ['build-and-test']
+                },
+                enforce_admins: false,
+                required_pull_request_reviews: {
+                  required_approving_review_count: 1,
+                  dismiss_stale_reviews: true,
+                  require_code_owner_reviews: false,
+                  require_last_push_approval: true
+                },
+                restrictions: null,
+                allow_force_pushes: false,
+                allow_deletions: false,
+                block_creations: false,
+                required_conversation_resolution: true
+              });
+              
+              console.log('✅ Branch protection rules applied successfully');
+              
+              // Log current protection status
+              const protection = await github.rest.repos.getBranchProtection({
+                owner,
+                repo,
+                branch: 'master'
+              });
+              
+              console.log('Current protection settings:', JSON.stringify(protection.data, null, 2));
+              
+            } catch (error) {
+              console.error('❌ Failed to setup branch protection:', error.message);
+              
+              // If the error is due to missing required status checks, set up basic protection
+              if (
+                error.status === 422 &&
+                error.response &&
+                error.response.data &&
+                Array.isArray(error.response.data.errors) &&
+                error.response.data.errors.some(e =>
+                  typeof e.message === 'string' && e.message.includes('required_status_checks')
+                )
+              ) {
+                console.log('Setting up basic branch protection without status checks...');
+                
+                await github.rest.repos.updateBranchProtection({
+                  owner,
+                  repo,
+                  branch: 'master',
+                  required_status_checks: null,
+                  enforce_admins: false,
+                  required_pull_request_reviews: {
+                    required_approving_review_count: 1,
+                    dismiss_stale_reviews: true,
+                    require_code_owner_reviews: false
+                  },
+                  restrictions: null,
+                  allow_force_pushes: false,
+                  allow_deletions: false,
+                  block_creations: false,
+                  required_conversation_resolution: true
+                });
+                
+                console.log('✅ Basic branch protection rules applied');
+              } else {
+                throw error;
+              }
+            }

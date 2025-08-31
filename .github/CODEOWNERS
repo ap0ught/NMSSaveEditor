@@ -1,0 +1,19 @@
+# This file defines code ownership for the NMSSaveEditor repository
+# Code owners are automatically requested for review when someone opens a pull request that modifies code they own
+
+# Global owner - repository maintainer
+* @ap0ught
+
+# Critical configuration files
+/.github/ @ap0ught
+/scripts/ @ap0ught
+/docs/BRANCH_PROTECTION.md @ap0ught
+
+# Core application files
+/NMSSaveEditor.jar @ap0ught
+/VERSION.txt @ap0ught
+
+# Documentation that affects end users
+/README.md @ap0ught
+/FAQ.md @ap0ught
+/CHANGELOG.md @ap0ught

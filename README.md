@@ -55,7 +55,20 @@ Requirements:
 
 ## Installation
 
-### Option 1 - Self-Extracting Zip Archive
+### Option 1 - Git Clone (For Developers)
+
+1. Clone this repository: `git clone https://github.com/ap0ught/NMSSaveEditor.git`
+2. Run the jar file directly: `java -jar NMSSaveEditor.jar`
+3. Or use the provided batch files: `NMSSaveEditor.bat` (or `NMSSaveEditor-4G.bat` for high memory)
+4. When the main window opens, locate the folder that your saves are in, and choose the most recent.
+5. Start tinkering!
+
+**For editing the source code:**
+- The decompiled source code is available in the `src/` directory
+- Run `./build.sh` to attempt compilation (requires manual fixes to decompiled code)
+- See the "Development" section below for more details
+
+### Option 2 - Self-Extracting Zip Archive
 
 1. Download the [latest version](../../raw/master/NMSSaveEditor.exe).
 2. Run the exe and extract the contents of the zip file to an empty folder somewhere.
@@ -63,9 +76,9 @@ Requirements:
 4. When the main window opens, locate the folder that your saves are in, and choose the most recent.
 5. Start tinkering!
 
-_NOTE: Some antivirus solutions actually falsely flag the above EXE file as a "virus". If this happens for you, try option 2 instead._
+_NOTE: Some antivirus solutions actually falsely flag the above EXE file as a "virus". If this happens for you, try option 3 instead._
 
-### Option 2 - Manual Zip Download
+### Option 3 - Manual Zip Download
 
 1. Download the zip file manually from here: [https://github.com/goatfungus/NMSSaveEditor/raw/master/NMSSaveEditor.zip](../../raw/master/NMSSaveEditor.zip).
 2. Open the zip file with 7-Zip / WinRar (or equivalent).
@@ -79,6 +92,36 @@ _NOTE: Some antivirus solutions actually falsely flag the above EXE file as a "v
 ## Frequently Asked Questions
 
 Frequently asked questions can be found [here](FAQ.md).
+
+## Development
+
+This repository now includes the decompiled source code for developers who want to modify the application.
+
+### Repository Structure
+- `NMSSaveEditor.jar` - The main application (ready to run)
+- `NMSSaveEditor.bat` / `NMSSaveEditor-4G.bat` - Batch files to run the application
+- `src/` - Decompiled Java source code
+- `build.sh` - Build script for compiling from source
+- `README-jar.txt` - Original README from the JAR archive
+
+### Editing the Source Code
+
+1. The source code is available in the `src/` directory and can be edited with any IDE (VS Code, IntelliJ, Eclipse, etc.)
+2. The decompiled code has some issues that need manual fixing before it can be compiled:
+   - Class named 'do' conflicts with Java keyword (needs renaming)
+   - Some method names use Java keywords
+   - Some enum constant issues in dependency libraries
+3. Run `./build.sh` to attempt compilation and see specific error messages
+4. Once fixed, the build script will create `NMSSaveEditor-compiled.jar`
+
+### Known Decompilation Issues
+
+The decompiled source code is provided for reference and modification, but requires manual fixes:
+- **Keyword conflicts**: Some class and method names use Java reserved keywords
+- **Obfuscated names**: Many classes have single-letter names (typical for obfuscated code)
+- **Third-party libraries**: Some dependencies may have decompilation artifacts
+
+The original `NMSSaveEditor.jar` remains fully functional regardless of source code compilation status.
 
 ## Contribution
 

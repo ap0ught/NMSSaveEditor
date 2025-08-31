@@ -1,0 +1,20 @@
+# Build outputs
+build/
+*.class
+*.jar.bak
+~NMSSaveEditor.dl
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+/tmp/

@@ -7,6 +7,10 @@ on:
       - master
     paths:
       - '.github/workflows/branch-protection.yml'
+      
+env:
+  # Prevent potential ESM repository access issues
+  DEBIAN_FRONTEND: noninteractive
 
 jobs:
   setup-branch-protection:
@@ -16,6 +20,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Check network connectivity
+        run: |
+          echo "Checking network status for GitHub API access..."
+          # Test GitHub API connectivity (required for branch protection)
+          if curl -s -o /dev/null -w "%{http_code}" https://api.github.com | grep -q "200"; then
+            echo "✅ GitHub API accessible"
+          else
+            echo "⚠️ GitHub API may have restricted access"
+          fi
         
       - name: Setup Branch Protection Rules
         uses: actions/github-script@v7

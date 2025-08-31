@@ -131,21 +131,41 @@ The original `NMSSaveEditor.jar` remains fully functional regardless of source c
 
 If you experience issues with the application forcefully exiting or "forceExit" problems, see the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
+For firewall and network restriction issues, see the [Firewall Guide](docs/FIREWALL_GUIDE.md).
+
 ### Quick Start Scripts
 
 For a more reliable startup experience that avoids common issues, use the provided scripts:
 
-**Linux/macOS:**
+**Standard Mode (Recommended):**
+
+*Linux/macOS:*
 ```bash
 ./start-editor.sh
 ```
 
-**Windows:**
+*Windows:*
 ```batch
 start-editor.bat
 ```
 
 These scripts automatically configure the application to avoid network-related shutdown issues.
+**Firewall-Restricted Mode:**
+
+For environments with strict firewall restrictions (corporate networks, restricted GitHub Actions), use the offline-capable scripts:
+
+*Linux/macOS:*
+```bash
+./start-editor-offline.sh
+```
+
+*Windows:*
+```batch
+start-editor-offline.bat
+```
+
+These scripts automatically configure the application to avoid network-related shutdown issues and firewall conflicts.
+
 ## Contribution
 
 This tool will always be released publicly for free, and I intend to continue maintaining it for as long as there is interest in the game. If this tool has been useful and you want to contribute to it's further development, feel free to visit me on Patreon:

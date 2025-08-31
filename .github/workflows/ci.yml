@@ -5,6 +5,10 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+    
+env:
+  # Disable automatic apt updates to prevent ESM repository access
+  DEBIAN_FRONTEND: noninteractive
 
 jobs:
   build-and-test:
@@ -19,6 +23,27 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
+        # Removed cache: 'maven' since this is not a Maven project
+      env:
+        # Avoid potential ESM repository access issues
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: false
+        
+    - name: Fallback Java Setup (if network restricted)
+      if: failure()
+      run: |
+        echo "Primary Java setup failed, attempting fallback..."
+        # Check if Java is already available from runner pre-installed tools
+        if command -v java >/dev/null 2>&1; then
+          echo "Java already available from system:"
+          java -version
+          # Ensure JAVA_HOME is set for any pre-installed Java
+          export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "✅ Using pre-installed Java"
+        else
+          echo "❌ No Java available, workflow may fail"
+          exit 1
+        fi
         
     - name: Verify Java installation
       run: |

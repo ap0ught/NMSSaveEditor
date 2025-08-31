@@ -23,7 +23,7 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        cache: 'maven'
+        # Removed cache: 'maven' since this is not a Maven project
       env:
         # Avoid potential ESM repository access issues
         ACTIONS_ALLOW_UNSECURE_COMMANDS: false

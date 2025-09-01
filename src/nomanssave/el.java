@@ -5,6 +5,7 @@ import javax.swing.Icon;
 import javax.swing.filechooser.FileView;
 
 class el extends FileView {
+   ej is;
    el(ej var1) {
       this.is = var1;
    }

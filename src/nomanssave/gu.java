@@ -1,6 +1,7 @@
 package nomanssave;
 
 public class gu implements gQ {
+   private final gt qE;
    private final eY qD;
 
    private gu(gt var1, eY var2) {

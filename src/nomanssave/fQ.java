@@ -16,6 +16,7 @@ class fQ {
    final String filename;
    final int lO;
    fI mx;
+   fJ mt;
 
    fQ(fJ var1, String var2, int var3, boolean var4) {
       this.mt = var1;
@@ -182,7 +183,7 @@ class fQ {
    }
 
    byte[] ah(int var1) {
-      Object var2 = new FileInputStream(new File(fJ.a(this.mt), this.filename));
+      InputStream var2 = new FileInputStream(new File(fJ.a(this.mt), this.filename));
 
       byte[] var7;
       try {

@@ -1,6 +1,7 @@
 package nomanssave;
 
 abstract class fc {
+   final eY kL;
    final fc kN;
 
    fc(eY var1, fc var2) {

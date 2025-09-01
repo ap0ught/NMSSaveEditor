@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class gf {
+   final ge nk;
    final eY nj;
 
    private gf(ge var1, eY var2) {

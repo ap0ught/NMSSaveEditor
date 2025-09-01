@@ -64,4 +64,37 @@ public class ej extends JFileChooser {
 
       return ir.showOpenDialog(null) == 0 ? ir.getSelectedFile() : null;
    }
+
+   // Static methods for accessing icons
+   public static ImageIcon as() {
+      return im;
+   }
+
+   public static ImageIcon au() {
+      return io;
+   }
+
+   public static ImageIcon aR() {
+      return ip;
+   }
+
+   // Static method for platform/directory detection
+   public static String a(ej instance, File directory) {
+      // This method appears to detect game platform based on directory structure
+      // Returns null if platform cannot be determined
+      if (directory == null || !directory.isDirectory()) {
+         return null;
+      }
+      
+      String path = directory.getAbsolutePath().toLowerCase();
+      if (path.contains("steam")) {
+         return "Steam";
+      } else if (path.contains("xbox") || path.contains("microsoft")) {
+         return "Xbox";
+      } else if (path.contains("gamepass")) {
+         return "Game Pass";
+      }
+      
+      return null;
+   }
 }

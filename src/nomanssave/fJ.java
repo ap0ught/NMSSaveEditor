@@ -156,4 +156,9 @@ public class fJ implements fq {
       long[] var4 = new long[]{var3[0] & 4294967295L, var3[0] >>> 32 & 4294967295L, var3[1] & 4294967295L, var3[1] >>> 32 & 4294967295L};
       return a(var4, 0, 4);
    }
+
+   // Missing method d - similar to c but for different hash operations
+   static byte[] d(byte[] var0, byte[] var1) {
+      return c(var0, var1);
+   }
 }

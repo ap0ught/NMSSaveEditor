@@ -1,6 +1,7 @@
 package nomanssave;
 
 class bH implements bK {
+   bE ey;
    bH(bE var1) {
       this.ey = var1;
    }

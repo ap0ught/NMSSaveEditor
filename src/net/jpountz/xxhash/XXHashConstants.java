@@ -1,6 +1,6 @@
 package net.jpountz.xxhash;
 
-enum XXHashConstants {
+final class XXHashConstants {
    static final int PRIME1 = -1640531535;
    static final int PRIME2 = -2048144777;
    static final int PRIME3 = -1028477379;

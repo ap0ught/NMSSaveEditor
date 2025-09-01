@@ -1,6 +1,6 @@
 package net.jpountz.lz4;
 
-enum LZ4Constants {
+final class LZ4Constants {
    static final int DEFAULT_COMPRESSION_LEVEL = 9;
    static final int MAX_COMPRESSION_LEVEL = 17;
    static final int MEMORY_USAGE = 14;

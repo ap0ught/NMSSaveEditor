@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 import sun.misc.Unsafe;
 
-public enum UnsafeUtils {
+public final class UnsafeUtils {
    private static final Unsafe UNSAFE;
    private static final long BYTE_ARRAY_OFFSET;
    private static final int BYTE_ARRAY_SCALE;

@@ -4,7 +4,7 @@ import java.nio.ByteOrder;
 import net.jpountz.util.UnsafeUtils;
 import net.jpountz.util.Utils;
 
-enum LZ4UnsafeUtils {
+final class LZ4UnsafeUtils {
    static void safeArraycopy(byte[] src, int srcOff, byte[] dest, int destOff, int len) {
       int fastLen = len & -8;
       wildArraycopy(src, srcOff, dest, destOff, fastLen);

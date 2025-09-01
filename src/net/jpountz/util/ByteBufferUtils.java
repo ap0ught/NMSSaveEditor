@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ReadOnlyBufferException;
 
-public enum ByteBufferUtils {
+public final class ByteBufferUtils {
    public static void checkRange(ByteBuffer buf, int off, int len) {
       SafeUtils.checkLength(len);
       if (len > 0) {

@@ -6,7 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 
-public enum Native {
+public final class Native {
    private static boolean loaded = false;
 
    private static String arch() {

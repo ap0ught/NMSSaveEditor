@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import net.jpountz.util.Native;
 
 enum LZ4JNI {
+   ;
    static native void init();
 
    static native int LZ4_compress_limitedOutput(byte[] var0, ByteBuffer var1, int var2, int var3, byte[] var4, ByteBuffer var5, int var6, int var7);

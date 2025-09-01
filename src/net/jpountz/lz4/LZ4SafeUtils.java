@@ -2,7 +2,7 @@ package net.jpountz.lz4;
 
 import net.jpountz.util.SafeUtils;
 
-enum LZ4SafeUtils {
+final class LZ4SafeUtils {
    static int hash(byte[] buf, int i) {
       return LZ4Utils.hash(SafeUtils.readInt(buf, i));
    }

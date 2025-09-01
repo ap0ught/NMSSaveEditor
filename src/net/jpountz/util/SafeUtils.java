@@ -2,7 +2,7 @@ package net.jpountz.util;
 
 import java.nio.ByteOrder;
 
-public enum SafeUtils {
+public final class SafeUtils {
    public static void checkRange(byte[] buf, int off) {
       if (off < 0 || off >= buf.length) {
          throw new ArrayIndexOutOfBoundsException(off);

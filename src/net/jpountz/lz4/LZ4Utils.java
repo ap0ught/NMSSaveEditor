@@ -1,6 +1,6 @@
 package net.jpountz.lz4;
 
-enum LZ4Utils {
+final class LZ4Utils {
    private static final int MAX_INPUT_SIZE = 2113929216;
 
    static int maxCompressedLength(int length) {

@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import net.jpountz.util.ByteBufferUtils;
 
-enum LZ4ByteBufferUtils {
+final class LZ4ByteBufferUtils {
    static int hash(ByteBuffer buf, int i) {
       return LZ4Utils.hash(ByteBufferUtils.readInt(buf, i));
    }

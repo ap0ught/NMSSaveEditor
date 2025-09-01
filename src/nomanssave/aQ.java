@@ -23,7 +23,7 @@ public class aQ extends JDialog {
    private Dimension dl;
    private Dimension dm;
    private Dimension dn = null;
-   private JTextField do;
+   private JTextField doField;
    private JTextField dp;
    private static aQ dq;
 
@@ -57,9 +57,9 @@ public class aQ extends JDialog {
       );
       JLabel var4 = new JLabel("Width:");
       var3.add(var4, "2, 2, left, center");
-      this.do = new JTextField();
-      this.do.addFocusListener(new aR(this));
-      var3.add(this.do, "4, 2, fill, default");
+      this.doField = new JTextField();
+      this.doField.addFocusListener(new aR(this));
+      var3.add(this.doField, "4, 2, fill, default");
       JLabel var5 = new JLabel("Height:");
       var3.add(var5, "2, 4, left, center");
       this.dp = new JTextField();
@@ -84,7 +84,7 @@ public class aQ extends JDialog {
       this.dk = var1;
       this.dl = var2;
       this.dm = var3;
-      this.do.setText(Integer.toString(var1.width));
+      this.doField.setText(Integer.toString(var1.width));
       this.dp.setText(Integer.toString(var1.height));
       this.dn = null;
       this.setLocationRelativeTo(this.getParent());
@@ -99,5 +99,26 @@ public class aQ extends JDialog {
       }
 
       return dq.a(var1, var2, var3);
+   }
+
+   // Static accessor methods for the listener classes
+   static JTextField a(aQ instance) {
+      return instance.doField;
+   }
+
+   static Dimension b(aQ instance) {
+      return instance.dk;
+   }
+
+   static Dimension c(aQ instance) {
+      return instance.dl;
+   }
+
+   static Dimension d(aQ instance) {
+      return instance.dm;
+   }
+
+   static JTextField e(aQ instance) {
+      return instance.dp;
    }
 }

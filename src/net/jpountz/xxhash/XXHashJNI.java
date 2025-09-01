@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import net.jpountz.util.Native;
 
 enum XXHashJNI {
+   ;
    private static native void init();
 
    static native int XXH32(byte[] var0, int var1, int var2, int var3);

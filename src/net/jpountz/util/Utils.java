@@ -2,7 +2,7 @@ package net.jpountz.util;
 
 import java.nio.ByteOrder;
 
-public enum Utils {
+public final class Utils {
    public static final ByteOrder NATIVE_BYTE_ORDER = ByteOrder.nativeOrder();
    private static final boolean unalignedAccessAllowed;
 

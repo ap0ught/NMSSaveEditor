@@ -1,6 +1,8 @@
 package nomanssave;
 
 class bN extends ba {
+   bE ey;
+
    bN(bE var1) {
       super(aH.cJ, 0);
       this.ey = var1;

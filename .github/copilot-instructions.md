@@ -31,9 +31,13 @@ This is a **binary distribution repository** containing pre-built Java applicati
   ```
 
 ### Running the Application
-- **Standard memory**: `java -jar NMSSaveEditor.jar`
-- **Large save files**: `java -Xmx4G -jar NMSSaveEditor.jar` (recommended for complex saves)
-- **With auto-update**: `java -jar NMSSaveEditor.jar -autoupdate`
+- **Recommended startup scripts**:
+  - Standard mode: `./start-editor.sh` (Linux/macOS) or `start-editor.bat` (Windows)
+  - Firewall-restricted mode: `./start-editor-offline.sh` (Linux/macOS) or `start-editor-offline.bat` (Windows)
+- **Direct JAR execution**:
+  - Standard memory: `java -jar NMSSaveEditor.jar`
+  - Large save files: `java -Xmx4G -jar NMSSaveEditor.jar` (recommended for complex saves)
+  - With auto-update: `java -jar NMSSaveEditor.jar -autoupdate`
 - **Startup time**: ~10-15 seconds to initialize. NEVER CANCEL - wait for "Starting Editor..." message
 - **Expected startup sequence**:
   ```
@@ -45,6 +49,8 @@ This is a **binary distribution repository** containing pre-built Java applicati
 - **Thread-4 NegativeArraySizeException**: This is a known minor exception that occurs during startup but does not prevent normal operation. Document but do not attempt to fix.
 - **Memory usage**: Application uses ~150-200MB RAM, can grow with large save files
 - **Log file**: Application creates `NMSSaveEditor.log` in working directory
+- **Firewall restrictions**: Use firewall-safe startup scripts if experiencing network-related shutdown issues
+- **Corporate networks**: Use `start-editor-offline.sh` to avoid ESM repository access blocks
 
 ## Validation and Testing
 
@@ -85,6 +91,25 @@ After making any changes to the repository, ALWAYS run these validation steps:
    # Should contain startup messages and system info
    ```
 
+5. **Validation Script Test**:
+   ```bash
+   # Run comprehensive validation suite
+   export DISPLAY=:99
+   chmod +x validate-binary.sh
+   timeout 300 ./validate-binary.sh
+   # NEVER CANCEL - validation takes ~60-90 seconds
+   ```
+
+6. **Startup Script Test**:
+   ```bash
+   # Test standard startup script
+   export DISPLAY=:99
+   timeout 60 ./start-editor.sh &
+   sleep 20
+   scrot /tmp/startup_test.png
+   pkill -f java
+   ```
+
 ### Manual Testing Requirements
 - **ALWAYS** take screenshots of the running application to verify GUI functionality
 - Test application startup and ensure main window displays properly
@@ -115,6 +140,18 @@ After making any changes to the repository, ALWAYS run these validation steps:
   - `base.png` - Base building tools
   - `jsoneditor.png` - Raw save file JSON editing
   - `darkmode.png` - Dark theme option
+- `docs/` - Additional documentation:
+  - `FIREWALL_GUIDE.md` - Network restriction solutions
+  - `BRANCH_PROTECTION.md` - Repository security information
+- `scripts/` - Utility scripts for repository management
+- `src/` - Decompiled source code (DO NOT USE for builds)
+
+### Startup Scripts
+- `start-editor.sh` - Standard startup script (Linux/macOS)
+- `start-editor.bat` - Standard startup script (Windows)
+- `start-editor-offline.sh` - Firewall-safe startup (Linux/macOS)
+- `start-editor-offline.bat` - Firewall-safe startup (Windows)
+- `validate-binary.sh` - Comprehensive validation testing script
 
 ## Application Features and Testing Focus
 
@@ -147,9 +184,22 @@ After making any changes to the repository, ALWAYS run these validation steps:
 - Fix Java exceptions or bugs in the application
 - Change application behavior or add new features to the JAR
 
+### Source Code Status
+- **Decompiled Source Available**: The `src/` directory contains decompiled Java source code from the JAR
+- **Compilation Issues**: Source has multiple compilation errors:
+  - Duplicate class definitions
+  - Java keyword conflicts
+  - Obfuscated variable names (single letters)
+  - Generic type erasure issues
+- **Maven Configuration**: `pom.xml` exists but compilation fails due to decompiled code issues
+- **DO NOT ATTEMPT**: Do not try to fix compilation errors or build from source
+- **Use JAR**: Always use the pre-built `NMSSaveEditor.jar` for all functionality
+
 ### CI/CD Information
-- **No GitHub Actions**: This repository has no automated build/test workflows
-- **No Build System**: No Maven, Gradle, or Ant build files present
+- **GitHub Actions**: Repository includes CI workflows (`.github/workflows/ci.yml`)
+- **No Compilation**: CI validates JAR files and documentation, does not compile source
+- **Maven Present**: Maven configuration exists but has compilation errors due to decompiled code
+- **Validation Focus**: CI focuses on JAR integrity, documentation completeness, and file structure
 - **Manual Distribution**: Updates are released by manually committing new binaries
 - **Version Control**: Only tracks final distribution files, not source code changes
 
@@ -177,8 +227,32 @@ scrot /tmp/app_test.png
 # Memory stress test
 java -Xmx4G -jar NMSSaveEditor.jar &
 
+# Test startup scripts
+./start-editor.sh &
+sleep 20
+pkill -f java
+
+# Test firewall-safe mode
+./start-editor-offline.sh &
+sleep 20
+pkill -f java
+
 # Check application logs
 cat NMSSaveEditor.log
+```
+
+### Validation Testing
+```bash
+# Run full validation suite (NEVER CANCEL - takes 60-90 seconds)
+export DISPLAY=:99
+chmod +x validate-binary.sh
+timeout 300 ./validate-binary.sh
+
+# Manual validation steps
+java -jar NMSSaveEditor.jar &
+sleep 15
+scrot /tmp/validation.png
+pkill -f java
 ```
 
 ### Screenshot Validation
@@ -195,5 +269,34 @@ ls -la /tmp/validation_screenshot.png
 - **GUI response**: 2-5 seconds for menu actions
 - **File operations**: 5-30 seconds depending on save file size
 - **Memory allocation**: Instantaneous with proper Java heap settings
+- **Validation script**: 60-90 seconds total (NEVER CANCEL)
+- **Screenshot capture**: 1-2 seconds with scrot
+- **Log file creation**: Immediate during startup
 
 **CRITICAL**: Always use appropriate timeouts for GUI operations. NEVER CANCEL application startup or file operations prematurely.
+
+## Troubleshooting and Common Issues
+
+### Application Won't Start
+1. Check Java installation: `java -version`
+2. Verify Java 8+ is available
+3. Ensure DISPLAY is set for GUI: `export DISPLAY=:99`
+4. Check if Xvfb is running: `ps aux | grep Xvfb`
+5. Try firewall-safe startup: `./start-editor-offline.sh`
+
+### Network Issues
+1. Use offline startup scripts: `./start-editor-offline.sh`
+2. See `docs/FIREWALL_GUIDE.md` for comprehensive solutions
+3. Avoid auto-update options in restricted environments
+
+### Performance Issues
+1. Increase memory allocation: `java -Xmx4G -jar NMSSaveEditor.jar`
+2. Close other Java applications
+3. Check available system memory: `free -h`
+
+## Required Environment Variables
+```bash
+# Always set these for GUI testing
+export DISPLAY=:99
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64  # Optional but recommended
+```

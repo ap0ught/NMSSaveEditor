@@ -16,94 +16,43 @@ public class fj implements Closeable {
    private final OutputStream lh;
    private final int flags;
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] j(Object var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
-
+   public static byte[] j(Object var0) throws IOException {
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      fj writer = new fj(outputStream, 0);
       try {
-         fj var4 = new fj(var1, 0);
-
-         try {
-            var4.k(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
+         writer.k(var0);
+      } finally {
+         if (writer != null) {
+            writer.close();
          }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
-         }
-
-         throw var2;
       }
-
-      return var1.toByteArray();
+      return outputStream.toByteArray();
    }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] g(eY var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
-
+   public static byte[] g(eY var0) throws IOException {
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      fj writer = new fj(outputStream, 0);
       try {
-         fj var4 = new fj(var1, 0);
-
-         try {
-            var4.h(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
+         writer.h(var0);
+      } finally {
+         if (writer != null) {
+            writer.close();
          }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
-         }
-
-         throw var2;
       }
-
-      return var1.toByteArray();
+      return outputStream.toByteArray();
    }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] b(eV var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
-
+   public static byte[] b(eV var0) throws IOException {
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      fj writer = new fj(outputStream, 0);
       try {
-         fj var4 = new fj(var1, 0);
-
-         try {
-            var4.c(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
+         writer.c(var0);
+      } finally {
+         if (writer != null) {
+            writer.close();
          }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
-         }
-
-         throw var2;
       }
-
-      return var1.toByteArray();
+      return outputStream.toByteArray();
    }
 
    public fj(OutputStream var1) {

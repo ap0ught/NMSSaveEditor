@@ -7,8 +7,17 @@ echo "=== NMS Save Editor Validation Test ==="
 echo "Starting automated validation..."
 
 # Setup
-export DISPLAY=:99
-Xvfb :99 -screen 0 1024x768x24 >/dev/null 2>&1 &
+# Find a free X display number (starting from :99)
+XVFB_DISPLAY_NUM=99
+while [ -e "/tmp/.X11-unix/X${XVFB_DISPLAY_NUM}" ] || pgrep -f "Xvfb :${XVFB_DISPLAY_NUM}" >/dev/null; do
+    XVFB_DISPLAY_NUM=$((XVFB_DISPLAY_NUM + 1))
+    if [ $XVFB_DISPLAY_NUM -gt 109 ]; then
+        echo "No free X display numbers found (tried :99 to :109)"
+        exit 1
+    fi
+done
+export DISPLAY=:${XVFB_DISPLAY_NUM}
+Xvfb :${XVFB_DISPLAY_NUM} -screen 0 1024x768x24 >/dev/null 2>&1 &
 XVFB_PID=$!
 sleep 2
 

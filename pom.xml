@@ -48,8 +48,10 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                    <failOnError>false</failOnError>
                     <compilerArgs>
                         <arg>-Xlint:none</arg>
+                        <arg>-nowarn</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

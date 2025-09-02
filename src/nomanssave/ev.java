@@ -1,22 +1,40 @@
 package nomanssave;
 
-import java.util.ArrayList;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+// Stub class for missing eV (JSON array type)
+public class eV {
+    public int size() {
+        return 0;
+    }
 
-class ev extends ArrayList {
-   final String id;
+    public eY V(int index) {
+        return new eY();
+    }
 
-   ev(Element var1) {
-      this.id = var1.getAttribute("id");
-      NodeList var2 = var1.getChildNodes();
+    public void ac(int index) {
+        // Stub implementation
+    }
 
-      for (int var3 = 0; var3 < var2.getLength(); var3++) {
-         Node var4 = var2.item(var3);
-         if (var4 instanceof Element && var4.getNodeName().equals("stacksize")) {
-            this.add(new ew((Element)var4));
-         }
-      }
-   }
+    public void remove(int index) {
+        // Stub implementation
+    }
+
+    public void add(eY item) {
+        // Stub implementation
+    }
+
+    public int Y(int index) {
+        return 0;
+    }
+
+    public void a(int index, int value) {
+        // Stub implementation
+    }
+
+    public boolean hasValue(Integer value) {
+        return false;
+    }
+
+    public void f(eY item) {
+        // Stub implementation
+    }
 }

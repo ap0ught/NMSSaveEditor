@@ -3,18 +3,18 @@
 ## 1.19.0 - Update (30 August 2025)
 
 - Updated name mappings for NMS 6.0 (Voyagers).
-- Added new items / rewards
-- Added new Corvette ship type
+- Added new items and rewards
+- Added a new Corvette ship type
 
 ## 1.18.1 - Update (29 March 2025)
 
 - Updated name mappings for NMS 5.6 (Relics).
-- Added new items / rewards
+- Added new items and rewards
 
 ## 1.18.0 - Update (1 February 2025)
 
 - Updated name mappings for NMS 5.5 (Worlds II).
-- Added new items / rewards
+- Added new items and rewards
 
 ## 1.17.7 - Update (28 October 2024)
 
@@ -23,13 +23,13 @@
 
 ## 1.17.6 - Update (26 October 2024)
 
-- Added new items / rewards for NMS 5.21 (Cursed).
-- Fix for Steam save file format
+- Added new items and rewards for NMS 5.21 (Cursed).
+- Fixed Steam save file format
 
 ## 1.17.5 - Update (15 September 2024)
 
 - Added missing name mappings.
-- Fix for WGS / XBox Game Pass save file format.
+- Fixed WGS/Xbox Game Pass save file format.
 - Added Skiff to vehicles section
 - Added Fish items
 
@@ -52,21 +52,21 @@
 
 ## 1.15.6 - Update (04 April 2024)
 
-- More fixes for the WGS / XBox Game Pass meta data format.
+- Additional fixes for the WGS/Xbox Game Pass metadata format.
 
 ## 1.15.5 - Update (03 April 2024)
 
-- Fixes for the WGS / XBox Game Pass meta data format.
+- Fixes for the WGS/Xbox Game Pass metadata format.
 
 ## 1.15.4 - Update (02 April 2024)
 
-- Overhaul of the WGS / XBox Game Pass save file format.
+- Overhauled the WGS/Xbox Game Pass save file format.
 
 ## 1.15.3 - Update (02 April 2024)
 
 - Updated items and name mappings for NMS 4.63 (Orbital).
 - Fixed directory issues with file open/save dialogs
-- Added customisation parts to add item dialogs
+- Added customization parts to add item dialogs
 
 ## 1.15.2 - Update (17 February 2024)
 
@@ -79,7 +79,7 @@
 ## 1.15.0 - Update (17 February 2024)
 
 - Updated name mappings for NMS 4.51 (Omega).
-- Added new season rewards, items, etc.
+- Added new season rewards and items.
 - Updated to new save file format.
 
 ## 1.14.4 - Update (01 September 2023)
@@ -92,8 +92,8 @@
 
 - Updated name mappings for NMS 4.40 (Echoes).
 - Added new Autophage language to discovery tab.
-- Added new Multitool types (Staff, etc).
-- Added new season rewards, items, etc.
+- Added new Multitool types (Staff, etc.).
+- Added new season rewards and items.
 
 ## 1.14.2 - Update (5 June 2023)
 
@@ -101,7 +101,7 @@
 - Updated settlement perks to allow any number of perks (determined by save file).
 - Fixed issue where non-technology items were showing up as broken due to damage factor.
 - Fixed highlight color in JSON editor so that it works in dark mode.
-- Updated UI colors for positive and negative traits / perks.
+- Updated UI colors for positive and negative traits and perks.
 - Updated coordinate viewer to allow any first glyph (warp still only goes to space).
 - Updated mappings for NMS 4.26
 - Removed buildable parts from add item dialog.
@@ -124,7 +124,7 @@
 - Improved Add Item dialog search feature
 - Implemented archived technology packages properly in UI
 - Removed unused inventory containers from UI
-- Updated Move Item dialog to show names of multitool/ship where possible
+- Updated Move Item dialog to show names of multitools/ships where possible
 - Fixed issue with sorters on discovery tab
 
 ## 1.13.8 - Update (29 April 2023)
@@ -154,7 +154,7 @@
 ## 1.13.3 - Update (24 April 2023)
 
 - Added base storage container names
-- Fixed issues with multitool updates / deletions
+- Fixed issues with multitool updates and deletions
 - Added support for extended JS string formats in import/export
 - Reduced the number of property change events caused by array changes
 - Fixed NPE in steam storage
@@ -166,14 +166,14 @@
 ## 1.13.1 - Update (23 April 2023)
 
 - Fixed "invalid token" issue caused by mixed character encodings
-- Changed JSON Editor to start from first tree node (PlayerStateData / UserSettingsData)
+- Changed JSON Editor to start from first tree node (PlayerStateData/UserSettingsData)
 
 ## 1.13.0 - Update (23 April 2023)
 
-- Overhaul of JSON reader/writer functionality to improve support for unicode
+- Overhaul of JSON reader/writer functionality to improve support for Unicode
 - Improved responsiveness of all file open/save dialogs
 - Added missing name mappings
-- Added save name / description fields to main UI
+- Added save name and description fields to main UI
 - Fixed issue where consumable products were defaulting to stack size 1
 - Added platform rewards to Account tab
 - Changed NMSSaveEditor.conf format to JSON
@@ -188,7 +188,7 @@
 
 - Added maneuverability stat for all ship types
 - Updated bases list to include newer base versions
-- Re-enabled backup/restore function for bases / freighter bases
+- Re-enabled backup/restore function for bases and freighter bases
 - Updated inventory stack sizes to reflect the real container settings
 
 ## 1.11.8 - Update (8 April 2023)
@@ -206,7 +206,7 @@
 - Updated name mappings for NMS 4.2 (Interceptor).
 - Added new items
 - Added new sentinel ship type
-- Added missing creature types (spider quads & mini robo)
+- Added missing creature types (spider quads and mini robo)
 - Added supercharge feature for tech inventories
 - Added sentinel and switch multitools
 
@@ -226,7 +226,7 @@
 
 - Increased technology inventory sizes for Suit/Ship/Freighter to 10x6.
 - Added fix for corrupted account data files.
-- Implemented more fixes for save format including metadata.
+- Implemented additional fixes for save format including metadata.
 
 ## 1.11.1 - Update (9 October 2022)
 
@@ -296,7 +296,7 @@
 ## 1.9.7 - Update (31 October 2021)
 
 - Updated name mappings for Expedition 4.
-- Added new zip archive for when self-extracting exe is blocked by anti-virus.
+- Added new zip archive for when self-extracting exe is blocked by antivirus.
 
 ## 1.9.6 - Update (21 October 2021)
 
@@ -322,7 +322,7 @@
 
 - Major overhaul of storage system, which should improve performance and allow the addition of other storage types.
 - Added support for MS Game Pass saves.
-- Updated frigates tab, and linked stats & traits.
+- Updated frigates tab, and linked stats and traits.
 - Increased ship technology max size to 8x6.
 - Added ability to add freighter technology to the general slots.
 
@@ -351,7 +351,7 @@
 
 ## 1.8.2 - Update (08 September 2021)
 
-- Added ability to modify account data & unlocks.
+- Added ability to modify account data and unlocks.
 
 ## 1.8.1 - Update (07 September 2021)
 
@@ -462,7 +462,7 @@
 
 - Updated items database for NMS 1.09.
 - Fixed NullPointerException in inventory panel that affected some users.
-- Fixed issue where partially-built technology was being reset when moved to another inventory (ie: ships).
+- Fixed issue where partially-built technology was being reset when moved to another inventory (i.e., ships).
 
 ## 1.6.2 - Update (21 August 2019)
 

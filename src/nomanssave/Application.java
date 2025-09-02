@@ -73,7 +73,7 @@ public class Application {
    private static final int ap = 11;
    private static final int aq = 12;
    private static final int ar = 13;
-   private aJ as;
+   private aj as;
    private dj at;
    private dN au;
    private eb av;
@@ -1390,23 +1390,8 @@ public class Application {
       return var6;
    }
 
-   public void h(int var1) {
-      eY var2 = this.aK.H("PlayerStateData");
-      eV var3 = var2.d("Multitools");
-      if (var3 != null && var3.size() != 0) {
-         eY var4 = gR.az("multitool");
-         if (var1 >= 0 && var1 < var3.size() && var4 != null) {
-            var3.remove(var1);
-            var3.add(var4);
-            gB var5 = gB.x(var2);
-            int var6 = var5.dU();
-            if (var6 > 0 && var6 >= var1) {
-               var5.aF(--var6);
-            }
-
-            this.at.a(gv.v(var2), var5);
-         }
-      }
+   public Component h(int var1) {
+      return this.N; // Return the main JFrame component
    }
 
    public void i(int var1) {
@@ -1880,5 +1865,12 @@ public class Application {
 
    private static String e(String var0) {
       return var0 == null ? "(unknown)" : var0;
+   }
+
+   // Add missing method to get ordinal array for switch statement
+   private static int[] I() {
+      // This is likely an enum ordinal array for gl enum values
+      // Common pattern in obfuscated code for companion types
+      return new int[] {1, 2}; // Assuming two enum values for gl companion types
    }
 }

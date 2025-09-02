@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-## ForceExit Issue - Application Shutting Down
+## ForceExit Issue—Application Shutting Down
 
 ### Problem
 The NMS Save Editor may forcefully exit with the message "forceExit is shutting down the process" when auto-update features are enabled and network connections are blocked by firewalls or security policies.
@@ -62,7 +62,7 @@ After applying a solution:
 3. Test basic functionality like opening the File menu
 
 ### Additional Notes
-- The application works perfectly for save editing without auto-update
+- The application works perfectly for save editing without an auto-update
 - This issue only affects the update mechanism, not core functionality
 - Manual updates are often safer and more reliable anyway
 
@@ -80,7 +80,7 @@ GitHub Actions workflows may encounter firewall restrictions when accessing cert
 - Workflow failures during Java setup or package installation
 - DNS resolution errors for `esm.ubuntu.com`
 - Timeout errors in `/usr/lib/apt/methods/https`
-- Failed GitHub Actions runs with network-related errors
+- Failed GitHub Actions run with network-related errors
 
 ### Root Cause
 Some corporate firewalls or network policies block access to Ubuntu's Extended Security Maintenance (ESM) repositories, which are accessed during package installation operations.
@@ -96,6 +96,8 @@ Repository administrators can add the following domains to their Copilot coding 
 - `security.ubuntu.com`
 - `archive.ubuntu.com`
 
+For detailed configuration guidance, see [Copilot coding agent tips](https://gh.io/copilot-coding-agent-tips).
+
 #### Solution 3: Alternative Setup Actions
 Use Actions setup steps that run before firewall restrictions are enabled, as suggested in the GitHub Copilot documentation.
 
@@ -107,6 +109,6 @@ After applying solutions:
 
 ### Additional Notes
 - The CI workflows include automatic fallbacks for network restrictions
-- Core application functionality is not affected by these network issues
+- These network issues do not affect Core application functionality
 - Manual local development is unaffected by GitHub Actions firewall restrictions
 - For comprehensive firewall solutions, see [Firewall Guide](docs/FIREWALL_GUIDE.md)

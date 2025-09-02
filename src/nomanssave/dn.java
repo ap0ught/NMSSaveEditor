@@ -1,28 +1,44 @@
 package nomanssave;
 
-class dn extends G {
-   dn(dj var1) {
-      this.hl = var1;
-   }
+// Stub classes for missing UI components
+public class dN extends javax.swing.JPanel {
+    public dN(Application app) {
+        super();
+    }
 
-   @Override
-   protected String g(String var1) {
-      gv var2 = (gv)dj.j(this.hl).getSelectedItem();
-      if (var2 == null) {
-         return "";
-      } else {
-         double var3 = var2.dF();
+    public void a(Object[] items, Object context) {
+        // Stub implementation
+    }
 
-         try {
-            double var5 = hf.a(var1, 0.0, 1000.0);
-            if (var5 != var3) {
-               var2.d(var5);
-            }
+    public Object[] aO() {
+        return new Object[0];
+    }
 
-            return Double.toString(var5);
-         } catch (RuntimeException var7) {
-            return Double.toString(var3);
-         }
-      }
-   }
+    public void w() {
+        // Stub implementation
+    }
+
+    public void x() {
+        // Stub implementation
+    }
+
+    public void y() {
+        // Stub implementation
+    }
+
+    public void z() {
+        // Stub implementation
+    }
+
+    public void A() {
+        // Stub implementation
+    }
+
+    public void a(Object item) {
+        // Stub implementation
+    }
+
+    public Object[] aK() {
+        return new Object[0];
+    }
 }

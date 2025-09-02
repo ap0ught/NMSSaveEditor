@@ -2,6 +2,24 @@
 
 This guide provides solutions for running the NMS Save Editor in environments with firewall restrictions, corporate networks, or when GitHub Actions encounter network blocks.
 
+## Quick Reference - Common Firewall Issues
+
+### 🚨 ESM Repository Access Blocked (Most Common)
+**Error Pattern:** `esm.ubuntu.com` DNS blocks, `/usr/lib/apt/methods/https` failures
+
+**Quick Solutions:**
+- **GitHub Actions**: Use pre-installed Java fallbacks (already configured in workflows)
+- **Local Development**: Use `start-editor-offline.sh` or `start-editor-offline.bat`
+- **Administrators**: Add `esm.ubuntu.com` to allowlist ([Copilot coding agent tips](https://gh.io/copilot-coding-agent-tips))
+
+### 🔧 Application Network Issues
+**Error Pattern:** ForceExit shutdowns, network connection failures
+
+**Quick Solutions:**
+- Avoid `-autoupdate` flag
+- Use offline startup scripts
+- See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed guidance
+
 ## Common Firewall Issues
 
 ### ESM Repository Access Blocked
@@ -122,6 +140,11 @@ export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dhttps.proxyPort=8080"
 
 ### Repository-Specific Settings
 Repository administrators can configure Copilot coding agent settings to allow specific domains and reduce firewall conflicts.
+
+**For GitHub Copilot Enhancement:**
+- Configure custom allowlists for blocked domains
+- Set up custom instructions for development environment
+- See [Copilot coding agent tips](https://gh.io/copilot-coding-agent-tips) for advanced configuration options
 
 ## Related Documentation
 

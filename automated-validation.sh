@@ -64,6 +64,7 @@ else
 fi
 
 # Cleanup
-kill $XVFB_PID 2>/dev/null
 
+# Kill any remaining Java processes started by this script
+pkill -f 'java -jar NMSSaveEditor.jar' 2>/dev/null
 echo "=== Validation Complete ==="

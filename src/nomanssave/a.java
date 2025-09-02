@@ -1,17 +1,11 @@
 package nomanssave;
 
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.Dialog.ModalExclusionType;
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import java.awt.*;
 
 public class a extends JDialog {
    private static a a = null;
@@ -44,11 +38,11 @@ public class a extends JDialog {
 
       var2.setEditable(false);
       this.getContentPane().add(var2, "Center");
-      this.getRootPane().registerKeyboardAction(new b(this), KeyStroke.getKeyStroke(27, 0), 2);
+      this.getRootPane().registerKeyboardAction(new b(this), KeyStroke.getKeyStroke(27, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
       this.pack();
    }
 
-   public static void a(Container var0) {
+   public a(Container var0) {
       if (a == null) {
          Frame var1 = JOptionPane.getFrameForComponent(var0);
          a = new a(var1);

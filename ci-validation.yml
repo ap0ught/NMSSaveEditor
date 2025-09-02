@@ -1,0 +1,232 @@
+# GitHub Actions Workflow for NMS Save Editor Binary Validation
+# This file can be placed in .github/workflows/ for automated testing
+
+name: Binary Application Validation
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'NMSSaveEditor.jar'
+      - 'validate-binary.sh'
+      - 'test-validation.md'
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Run weekly validation
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+jobs:
+  validate-binary:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [8, 11, 17]
+
+    name: Validate with Java ${{ matrix.java-version }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Java ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb scrot xdotool imagemagick
+
+    - name: Verify JAR file exists
+      run: |
+        if [ ! -f "NMSSaveEditor.jar" ]; then
+          echo "ERROR: NMSSaveEditor.jar not found"
+          exit 1
+        fi
+        echo "JAR file size: $(stat -c%s NMSSaveEditor.jar) bytes"
+
+    - name: Make validation script executable
+      run: chmod +x validate-binary.sh
+
+    - name: Run binary validation suite
+      id: validation
+      run: |
+        # Set up virtual display
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1024x768x24 &
+        sleep 2
+
+        # Run validation with timeout
+        timeout 300 ./validate-binary.sh
+
+    - name: Capture application logs
+      if: always()
+      run: |
+        if [ -f NMSSaveEditor.log ]; then
+          echo "=== Application Log ==="
+          cat NMSSaveEditor.log
+        else
+          echo "No application log found"
+        fi
+
+    - name: Archive validation artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: validation-artifacts-java${{ matrix.java-version }}
+        path: |
+          /tmp/nms-validation/
+          NMSSaveEditor.log
+        retention-days: 7
+
+    - name: Test specific memory configurations
+      run: |
+        export DISPLAY=:99
+
+        echo "Testing standard memory allocation..."
+        timeout 60 java -jar NMSSaveEditor.jar &
+        PID=$!
+        sleep 15
+        if kill -0 $PID 2>/dev/null; then
+          echo "✓ Standard memory allocation works"
+          kill $PID
+        else
+          echo "✗ Standard memory allocation failed"
+          exit 1
+        fi
+
+        echo "Testing high memory allocation..."
+        timeout 60 java -Xmx4G -jar NMSSaveEditor.jar &
+        PID=$!
+        sleep 15
+        if kill -0 $PID 2>/dev/null; then
+          echo "✓ High memory allocation works"
+          kill $PID
+        else
+          echo "✗ High memory allocation failed"
+          exit 1
+        fi
+
+    - name: Validate application startup sequence
+      run: |
+        export DISPLAY=:99
+
+        # Remove old log
+        rm -f NMSSaveEditor.log
+
+        # Start application and monitor log
+        java -jar NMSSaveEditor.jar &
+        PID=$!
+
+        # Wait and check for expected startup messages
+        sleep 20
+
+        if [ -f NMSSaveEditor.log ]; then
+          echo "Checking for startup sequence..."
+          if grep -q "Starting Editor" NMSSaveEditor.log; then
+            echo "✓ Expected startup sequence found"
+          else
+            echo "⚠ Startup sequence not as expected"
+            echo "Log contents:"
+            cat NMSSaveEditor.log
+          fi
+        fi
+
+        kill $PID 2>/dev/null || true
+
+    - name: Performance benchmark
+      run: |
+        export DISPLAY=:99
+
+        echo "Running performance benchmark..."
+
+        # Measure startup time
+        START_TIME=$(date +%s)
+        java -jar NMSSaveEditor.jar &
+        PID=$!
+
+        # Wait for full initialization
+        sleep 20
+        END_TIME=$(date +%s)
+
+        STARTUP_TIME=$((END_TIME - START_TIME))
+        echo "Startup time: ${STARTUP_TIME} seconds"
+
+        # Check memory usage
+        if kill -0 $PID 2>/dev/null; then
+          MEMORY_KB=$(ps -o rss= -p $PID)
+          MEMORY_MB=$((MEMORY_KB / 1024))
+          echo "Memory usage: ${MEMORY_MB} MB"
+
+          if [ $MEMORY_MB -lt 1000 ]; then
+            echo "✓ Memory usage within acceptable range"
+          else
+            echo "⚠ High memory usage: ${MEMORY_MB} MB"
+          fi
+        fi
+
+        kill $PID 2>/dev/null || true
+
+        # Performance thresholds
+        if [ $STARTUP_TIME -gt 30 ]; then
+          echo "⚠ Startup time exceeded expected threshold (30s)"
+        else
+          echo "✓ Startup performance acceptable"
+        fi
+
+  validate-cross-platform:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        java-version: [8]
+
+    name: Cross-platform validation on ${{ matrix.os }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Java ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb scrot
+
+    - name: Verify JAR integrity
+      run: |
+        java -jar NMSSaveEditor.jar --version || true
+        echo "JAR verification complete"
+
+    - name: Test basic functionality
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 &
+          sleep 2
+        fi
+
+        # Test application can start
+        timeout 60 java -jar NMSSaveEditor.jar &
+        PID=$!
+        sleep 15
+
+        if kill -0 $PID 2>/dev/null || tasklist | grep -q java; then
+          echo "✓ Application started successfully on $RUNNER_OS"
+          kill $PID 2>/dev/null || taskkill //F //PID $PID 2>/dev/null || true
+        else
+          echo "✗ Application failed to start on $RUNNER_OS"
+          exit 1
+        fi

@@ -313,63 +313,23 @@ public class fh {
       }
    }
 
-   // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   static eY Q(String var0) {
-      Throwable var1 = null;
-      Object var2 = null;
-
+   static eY Q(String var0) throws IOException {
+      fi parser = new fi(var0);
       try {
-         fi var3 = new fi(var0);
-
-         Throwable var10000;
-         label157: {
-            try {
-               if (var3.bI() != 123) {
-                  throw new eX("Invalid object string", var3.kF, var3.kG);
-               }
-
-               eY var4 = a(var3);
-               if (var3.bI() >= 0) {
-                  throw new eX("Invalid trailing data", var3.kF, var3.kG);
-               }
-
-               var17 = var4;
-            } catch (Throwable var15) {
-               var10000 = var15;
-               boolean var10001 = false;
-               break label157;
-            }
-
-            if (var3 != null) {
-               var3.close();
-            }
-
-            label140:
-            try {
-               return var17;
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var18 = false;
-               break label140;
-            }
+         if (parser.bI() != 123) {
+            throw new eX("Invalid object string", parser.kF, parser.kG);
          }
-
-         var1 = var10000;
-         if (var3 != null) {
-            var3.close();
+         
+         eY result = a(parser);
+         if (parser.bI() >= 0) {
+            throw new eX("Invalid trailing data", parser.kF, parser.kG);
          }
-
-         throw var1;
-      } catch (Throwable var16) {
-         if (var1 == null) {
-            var1 = var16;
-         } else if (var1 != var16) {
-            var1.addSuppressed(var16);
+         
+         return result;
+      } finally {
+         if (parser != null) {
+            parser.close();
          }
-
-         throw var1;
       }
    }
 
@@ -406,63 +366,23 @@ public class fh {
       return var1;
    }
 
-   // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   static eV R(String var0) {
-      Throwable var1 = null;
-      Object var2 = null;
-
+   static eV R(String var0) throws IOException {
+      fi parser = new fi(var0);
       try {
-         fi var3 = new fi(var0);
-
-         Throwable var10000;
-         label157: {
-            try {
-               if (var3.bI() != 91) {
-                  throw new eX("Invalid array string", var3.kF, var3.kG);
-               }
-
-               eV var4 = b(var3);
-               if (var3.bI() >= 0) {
-                  throw new eX("Invalid trailing data", var3.kF, var3.kG);
-               }
-
-               var17 = var4;
-            } catch (Throwable var15) {
-               var10000 = var15;
-               boolean var10001 = false;
-               break label157;
-            }
-
-            if (var3 != null) {
-               var3.close();
-            }
-
-            label140:
-            try {
-               return var17;
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var18 = false;
-               break label140;
-            }
+         if (parser.bI() != 91) {
+            throw new eX("Invalid array string", parser.kF, parser.kG);
          }
-
-         var1 = var10000;
-         if (var3 != null) {
-            var3.close();
+         
+         eV result = b(parser);
+         if (parser.bI() >= 0) {
+            throw new eX("Invalid trailing data", parser.kF, parser.kG);
          }
-
-         throw var1;
-      } catch (Throwable var16) {
-         if (var1 == null) {
-            var1 = var16;
-         } else if (var1 != var16) {
-            var1.addSuppressed(var16);
+         
+         return result;
+      } finally {
+         if (parser != null) {
+            parser.close();
          }
-
-         throw var1;
       }
    }
 

@@ -134,6 +134,11 @@ public class fJ implements fq {
       return this.ms[var1 * 2].filename;
    }
 
+   // Static method to get directory from fJ instance
+   static File a(fJ var0) {
+      return var0.bS();
+   }
+
    private static byte[] a(long[] var0, int var1, int var2) {
       byte[] var3 = new byte[var2 * 4];
 

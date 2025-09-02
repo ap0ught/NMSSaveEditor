@@ -3,6 +3,7 @@ package nomanssave;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
@@ -22,155 +23,36 @@ public class ff implements Closeable {
    private final CharsetDecoder kS;
 
    // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static Object a(byte[] var0) {
-      Throwable var1 = null;
-      Object var2 = null;
-
+   public static Object a(byte[] var0) throws IOException {
+      ff reader = new ff(new ByteArrayInputStream(var0), 0);
       try {
-         ff var3 = new ff(new ByteArrayInputStream(var0), 0);
-
-         Throwable var10000;
-         label125: {
-            try {
-               var10000 = (Throwable)var3.bJ();
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var10001 = false;
-               break label125;
-            }
-
-            if (var3 != null) {
-               var3.close();
-            }
-
-            label114:
-            try {
-               return var10000;
-            } catch (Throwable var13) {
-               var10000 = var13;
-               boolean var17 = false;
-               break label114;
-            }
+         return reader.bJ();
+      } finally {
+         if (reader != null) {
+            reader.close();
          }
-
-         var1 = var10000;
-         if (var3 != null) {
-            var3.close();
-         }
-
-         throw var1;
-      } catch (Throwable var15) {
-         if (var1 == null) {
-            var1 = var15;
-         } else if (var1 != var15) {
-            var1.addSuppressed(var15);
-         }
-
-         throw var1;
       }
    }
 
-   // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static eY b(byte[] var0) {
-      Throwable var1 = null;
-      Object var2 = null;
-
+   public static eY b(byte[] var0) throws IOException {
+      ff reader = new ff(new ByteArrayInputStream(var0), 0);
       try {
-         ff var3 = new ff(new ByteArrayInputStream(var0), 0);
-
-         Throwable var10000;
-         label125: {
-            try {
-               var16 = var3.bK();
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var10001 = false;
-               break label125;
-            }
-
-            if (var3 != null) {
-               var3.close();
-            }
-
-            label114:
-            try {
-               return var16;
-            } catch (Throwable var13) {
-               var10000 = var13;
-               boolean var17 = false;
-               break label114;
-            }
+         return reader.bK();
+      } finally {
+         if (reader != null) {
+            reader.close();
          }
-
-         var1 = var10000;
-         if (var3 != null) {
-            var3.close();
-         }
-
-         throw var1;
-      } catch (Throwable var15) {
-         if (var1 == null) {
-            var1 = var15;
-         } else if (var1 != var15) {
-            var1.addSuppressed(var15);
-         }
-
-         throw var1;
       }
    }
 
-   // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static eV c(byte[] var0) {
-      Throwable var1 = null;
-      Object var2 = null;
-
+   public static eV c(byte[] var0) throws IOException {
+      ff reader = new ff(new ByteArrayInputStream(var0), 0);
       try {
-         ff var3 = new ff(new ByteArrayInputStream(var0), 0);
-
-         Throwable var10000;
-         label125: {
-            try {
-               var16 = var3.bL();
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var10001 = false;
-               break label125;
-            }
-
-            if (var3 != null) {
-               var3.close();
-            }
-
-            label114:
-            try {
-               return var16;
-            } catch (Throwable var13) {
-               var10000 = var13;
-               boolean var17 = false;
-               break label114;
-            }
+         return reader.bL();
+      } finally {
+         if (reader != null) {
+            reader.close();
          }
-
-         var1 = var10000;
-         if (var3 != null) {
-            var3.close();
-         }
-
-         throw var1;
-      } catch (Throwable var15) {
-         if (var1 == null) {
-            var1 = var15;
-         } else if (var1 != var15) {
-            var1.addSuppressed(var15);
-         }
-
-         throw var1;
       }
    }
 

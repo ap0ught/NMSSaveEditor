@@ -13,6 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 abstract class fX {
+   final fT mN;
    final fW mO;
    final File mX;
    final File mY;
@@ -156,152 +157,70 @@ abstract class fX {
       }
    }
 
-   // $VF: Inserted dummy exception handlers to handle obfuscated exceptions
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   eY a(eG var1) {
-      Throwable var2 = null;
-      Object var3 = null;
-
+   eY a(eG var1) throws IOException {
+      ff reader = new ff(this.getInputStream(), 2);
       try {
-         ff var4 = new ff(this.getInputStream(), 2);
-
-         Throwable var10000;
-         label125: {
-            try {
-               var17 = var4.a(var1);
-            } catch (Throwable var15) {
-               var10000 = var15;
-               boolean var10001 = false;
-               break label125;
-            }
-
-            if (var4 != null) {
-               var4.close();
-            }
-
-            label114:
-            try {
-               return var17;
-            } catch (Throwable var14) {
-               var10000 = var14;
-               boolean var18 = false;
-               break label114;
-            }
+         return reader.a(var1);
+      } finally {
+         if (reader != null) {
+            reader.close();
          }
-
-         var2 = var10000;
-         if (var4 != null) {
-            var4.close();
-         }
-
-         throw var2;
-      } catch (Throwable var16) {
-         if (var2 == null) {
-            var2 = var16;
-         } else if (var2 != var16) {
-            var2.addSuppressed(var16);
-         }
-
-         throw var2;
       }
    }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   byte[] ah(int var1) {
-      ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-      Throwable var3 = null;
-      Object var4 = null;
-
+   byte[] ah(int var1) throws IOException {
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      InputStream inputStream = this.getInputStream();
+      
       try {
-         InputStream var5 = this.getInputStream();
-
-         try {
-            byte[] var6 = new byte[4096];
-
-            int var7;
-            while ((var7 = var5.read(var6)) >= 0) {
-               var2.write(var6, 0, var7);
-               if (var2.size() >= var1) {
-                  break;
-               }
-            }
-         } finally {
-            if (var5 != null) {
-               var5.close();
+         byte[] buffer = new byte[4096];
+         int bytesRead;
+         while ((bytesRead = inputStream.read(buffer)) >= 0) {
+            outputStream.write(buffer, 0, bytesRead);
+            if (outputStream.size() >= var1) {
+               break;
             }
          }
-      } catch (Throwable var13) {
-         if (var3 == null) {
-            var3 = var13;
-         } else if (var3 != var13) {
-            var3.addSuppressed(var13);
+      } finally {
+         if (inputStream != null) {
+            inputStream.close();
          }
-
-         throw var3;
       }
-
-      return var2.toByteArray();
+      
+      return outputStream.toByteArray();
    }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   void h(eY var1) {
-      boolean var2 = this.mode == fT.cw();
-      ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-      Throwable var4 = null;
-      Throwable var5 = null;
-
+   void h(eY var1) throws IOException {
+      boolean useCompression = this.mode == fT.cw();
+      ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+      
+      // Write data to stream
+      fj writer = new fj(byteStream, useCompression ? 0 : 2);
       try {
-         fj var6 = new fj(var3, var2 ? 0 : 2);
-
-         try {
-            var6.h(var1);
-         } finally {
-            if (var6 != null) {
-               var6.close();
-            }
+         writer.h(var1);
+      } finally {
+         if (writer != null) {
+            writer.close();
          }
-      } catch (Throwable var25) {
-         if (var4 == null) {
-            var4 = var25;
-         } else if (var4 != var25) {
-            var4.addSuppressed(var25);
-         }
-
-         throw var4;
       }
-
-      byte[] var28 = var3.toByteArray();
-      this.mZ.aj(var28.length);
-      var5 = null;
-      Object var30 = null;
-
+      
+      byte[] data = byteStream.toByteArray();
+      this.mZ.aj(data.length);
+      
+      // Write to output
+      OutputStream outputStream = this.getOutputStream();
       try {
-         OutputStream var7 = this.getOutputStream();
-
-         try {
-            var7.write(var28);
-            if (var2) {
-               var7.flush();
-               var7.write(0);
-            }
-         } finally {
-            if (var7 != null) {
-               var7.close();
-            }
+         outputStream.write(data);
+         if (useCompression) {
+            outputStream.flush();
+            outputStream.write(0);
          }
-      } catch (Throwable var27) {
-         if (var5 == null) {
-            var5 = var27;
-         } else if (var5 != var27) {
-            var5.addSuppressed(var27);
+      } finally {
+         if (outputStream != null) {
+            outputStream.close();
          }
-
-         throw var5;
       }
-
+      
       this.mZ.ak((int)this.mY.length());
       this.mZ.write();
       this.mO.timestamp = System.currentTimeMillis();

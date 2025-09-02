@@ -55,6 +55,16 @@ src/
 - **Generic Type Issues**: Some type erasure compilation errors
 - **Variable Names**: Cryptic single/double letter variable names
 - **Code Structure**: Original obfuscation impacts readability
+- **Decompiler Limitations**: 23 remaining "$VF:" comments (down from 42 - 45% improvement)
+
+### Fixed Decompile Issues ✅
+- **Major Save File Operations**: Core loading/parsing methods (fQ, fL, fV)
+- **Stream Processing**: Abstract save file operations (fX) 
+- **Data Parsing Utilities**: Static methods for JSON/binary processing (ff, fh)
+- **JSON Serialization**: Output formatting methods (fj)
+- **File Access Methods**: Added missing fJ.a() static method
+- **Resource Management**: Fixed inconsistent finally blocks with proper try-with-resources
+- **Exception Handling**: Improved error propagation and cleanup
 
 ## Compilation Status
 - **Basic Structure**: ✅ Compiles with warnings

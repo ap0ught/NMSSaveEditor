@@ -1,0 +1,26 @@
+{
+    "folders": [
+        {
+            "name": "NMS Save Editor",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "java.compile.nullAnalysis.mode": "disabled",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.project.sourcePaths": ["src"],
+        "java.project.outputPath": "target/classes",
+        "java.project.referencedLibraries": [
+            "lib/**/*.jar"
+        ],
+        "java.debug.logLevel": "warn",
+        "java.errors.incompleteClasspath.severity": "ignore"
+    },
+    "extensions": {
+        "recommendations": [
+            "vscjava.vscode-java-pack",
+            "redhat.java",
+            "vscjava.vscode-maven"
+        ]
+    }
+}

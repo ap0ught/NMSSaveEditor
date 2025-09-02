@@ -1,0 +1,28 @@
+package nomanssave;
+
+class dn extends G {
+   dn(dj var1) {
+      this.hl = var1;
+   }
+
+   @Override
+   protected String g(String var1) {
+      gv var2 = (gv)dj.j(this.hl).getSelectedItem();
+      if (var2 == null) {
+         return "";
+      } else {
+         double var3 = var2.dF();
+
+         try {
+            double var5 = hf.a(var1, 0.0, 1000.0);
+            if (var5 != var3) {
+               var2.d(var5);
+            }
+
+            return Double.toString(var5);
+         } catch (RuntimeException var7) {
+            return Double.toString(var3);
+         }
+      }
+   }
+}

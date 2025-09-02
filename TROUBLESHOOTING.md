@@ -96,6 +96,8 @@ Repository administrators can add the following domains to their Copilot coding 
 - `security.ubuntu.com`
 - `archive.ubuntu.com`
 
+For detailed configuration guidance, see [Copilot coding agent tips](https://gh.io/copilot-coding-agent-tips).
+
 #### Solution 3: Alternative Setup Actions
 Use Actions setup steps that run before firewall restrictions are enabled, as suggested in the GitHub Copilot documentation.
 

@@ -1,5 +1,6 @@
 package nomanssave;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 class fV implements fs {
+   final fT mN;
    final fW mO;
    final int mb;
    final File mc;
@@ -95,29 +97,46 @@ class fV implements fs {
 
    @Override
    public eY M() {
-      // $VF: Couldn't be decompiled
-      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-      // java.lang.RuntimeException: parsing failure!
-      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.parseGraph(DomHelper.java:211)
-      //   at org.jetbrains.java.decompiler.main.rels.MethodProcessor.codeToJava(MethodProcessor.java:166)
-      //
-      // Bytecode:
-      // 00: aconst_null
-      // 01: astore 1
-      // 02: aconst_null
-      // 03: astore 2
-      // 04: new java/util/zip/ZipFile
-      // 07: dup
-      // 08: aload 0
-      // 09: getfield nomanssave/fV.mc Ljava/io/File;
-      // 0c: invokespecial java/util/zip/ZipFile.<init> (Ljava/io/File;)V
-      // 0f: astore 3
-      // 10: aload 3
-      // 11: aload 0
-      // 12: getfield nomanssave/fV.mR Ljava/lang/String;
-      // 15: invokevirtual java/util/zip/ZipFile.getEntry (Ljava/lang/String;)Ljava/util/zip/ZipEntry;
-      // 18: astore 4
-      // 1a: aload 4
+      ZipFile zipFile = new ZipFile(this.mc);
+      try {
+         ZipEntry entry = zipFile.getEntry(this.mR);
+         if (entry == null) {
+            throw new IOException("Invalid backup file");
+         }
+         
+         InputStream inputStream = new BufferedInputStream(
+            zipFile.getInputStream(entry)
+         );
+         
+         try {
+            // Check for compression signature
+            byte[] header = new byte[16];
+            inputStream.mark(header.length);
+            hk.readFully(inputStream, header);
+            
+            // Check magic bytes for compression: 0xE5, 0xA1, 0xED, 0xFE
+            if ((header[0] & 0xFF) == 0xE5 && 
+                (header[1] & 0xFF) == 0xA1 && 
+                (header[2] & 0xFF) == 0xED && 
+                (header[3] & 0xFF) == 0xFE) {
+               inputStream = new gX(inputStream, header);
+            } else {
+               inputStream.reset();
+            }
+            
+            // Create stream reader 
+            ff reader = new ff(inputStream, this.mb);
+            try {
+               return reader.bK();
+            } finally {
+               reader.close();
+            }
+         } finally {
+            inputStream.close();
+         }
+      } finally {
+         zipFile.close();
+      }
       // 1c: ifnonnull 29
       // 1f: new java/io/IOException
       // 22: dup

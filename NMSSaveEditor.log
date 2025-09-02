@@ -5,28 +5,10 @@
 [DEBUG] Working Dir: /home/runner/work/NMSSaveEditor/NMSSaveEditor
 [DEBUG] Look and Feel: FlatLaf Light
 [INFO] Starting Editor...
-[STDERR] java.awt.HeadlessException: 
-[STDERR] No X11 DISPLAY variable was set,
-[STDERR] 11 DISPLAY variable was set,
-[STDERR] No X11 DISPLAY variable was se	at java.desktop/java.awt.GraphicsEnvironment.checkHeadless(GraphicsEnvironment.java:164)
-[STDERR] 	at java.desktop/java.awt.Window.<init>(Window.java:553)
-[STDERR] 	at java.desktop/java.awt.Frame.<init>(Frame.java:428)
-[STDERR] 	at java.desktop/java.awt.Frame.<init>(Frame.java:393)
-[STDERR] 	at java.desktop/javax.swing.JFrame.<init>(JFrame.java:180)
-[STDERR] 	at nomanssave.Application.initialize(Unknown Source)
-[STDERR] 	at nomanssave.Application.<init>(Unknown Source)
-[STDERR] 	at nomanssave.Application.<init>(Unknown Source)
-[STDERR] 	at nomanssave.w.run(Unknown Source)
-[STDERR] 	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
-[STDERR] 	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
-[STDERR] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
-[STDERR] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
-[STDERR] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-[STDERR] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-[STDERR] 	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+[DEBUG] Path not found: MainFrame.X
+[DEBUG] Path not found: MainFrame.Y
+[DEBUG] Path not found: MainFrame.Width
+[DEBUG] Path not found: MainFrame.Height
+[DEBUG] Mem Usage: 266/4194 MB
+[STDERR] Exception in thread "Thread-2" java.lang.NegativeArraySizeException: -1
+[STDERR] 	at nomanssave.x.run(Unknown Source)

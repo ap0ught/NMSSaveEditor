@@ -1,18 +1,27 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-class dw implements ActionListener {
-   dw(du var1, gF var2) {
-      this.hp = var1;
-      this.hq = var2;
+class dW extends G {
+   dW(dN var1) {
+      this.ia = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      if (this.hq != null) {
-         dt.a(du.d(this.hp), this.hp);
+   protected String g(String var1) {
+      if (dN.o(this.ia) == null) {
+         return "";
+      } else {
+         int var2 = dN.o(this.ia).dM();
+
+         try {
+            int var3 = hf.b(var1, 1, 500);
+            if (var3 != var2) {
+               dN.o(this.ia).aB(var3);
+            }
+
+            return Integer.toString(var3);
+         } catch (RuntimeException var4) {
+            return Integer.toString(var2);
+         }
       }
    }
 }

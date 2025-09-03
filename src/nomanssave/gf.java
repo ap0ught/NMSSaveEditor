@@ -1,58 +1,47 @@
 package nomanssave;
 
-import java.util.ArrayList;
-import java.util.List;
+public class gF implements gQ {
+   private final eY kM;
 
-public class gf {
-   final ge nk;
-   final eY nj;
-
-   private gf(ge var1, eY var2) {
-      this.nk = var1;
-      this.nj = var2;
+   private gF(gE var1, eY var2) {
+      this.rf = var1;
+      this.kM = var2;
    }
 
-   public String cF() {
-      Object var1 = this.nj.getValue("GalacticAddress");
-      if (var1 instanceof String) {
-         return (String)var1;
-      } else {
-         return var1 instanceof Number ? "0x" + Long.toHexString(((Number)var1).longValue()) : null;
-      }
-   }
-
-   public String getName() {
-      return this.nj.getValueAsString("Name");
-   }
-
-   public void setName(String var1) {
-      this.nj.b("Name", var1);
-   }
-
-   public int cG() {
-      return this.nj.d("Objects").size();
-   }
-
-   public eY cH() {
-      return this.nj;
-   }
-
-   public List cI() {
-      ArrayList var1 = new ArrayList();
-
-      for (eY var2 : gV.G(this.nj)) {
-         var1.add(new gg(this, var2));
-      }
-
-      return var1;
-   }
-
-   public boolean a(gg var1) {
-      return gV.a(this.nj, var1.nl);
+   public boolean isValid() {
+      String var1 = this.kM.getValueAsString("ElementId");
+      return var1 != null && var1.length() > 1;
    }
 
    @Override
-   public String toString() {
-      return this.nj.getValueAsString("Name");
+   public String getType() {
+      return "Product";
+   }
+
+   @Override
+   public Object dz() {
+      return this.kM.getValue("ElementId");
+   }
+
+   @Override
+   public void m(Object var1) {
+      this.kM.b("ElementId", var1);
+      this.kM.b("LastChangeTimestamp", (int)(System.currentTimeMillis() / 1000L));
+   }
+
+   @Override
+   public int dA() {
+      return this.kM.J("Amount");
+   }
+
+   @Override
+   public void aA(int var1) {
+      this.kM.b("Amount", var1);
+      this.kM.b("LastChangeTimestamp", (int)(System.currentTimeMillis() / 1000L));
+   }
+
+   @Override
+   public int dB() {
+      return 999;
    }
 }

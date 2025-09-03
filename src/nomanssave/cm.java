@@ -1,23 +1,20 @@
 package nomanssave;
 
 import java.io.File;
-import javax.swing.Icon;
-import javax.swing.filechooser.FileView;
+import javax.swing.filechooser.FileFilter;
 
-class cm extends FileView {
-   cm(cl var1) {
-      this.fI = var1;
+class cM extends FileFilter {
+   cM(cK var1) {
+      this.gl = var1;
    }
 
    @Override
-   public Icon getIcon(File var1) {
-      String var2 = var1.getName();
-      return (Icon)(!var2.endsWith(".pb3") && !var2.endsWith(".pb0") ? super.getIcon(var1) : cl.as());
+   public String getDescription() {
+      return "JSON File";
    }
 
    @Override
-   public String getName(File var1) {
-      String var2 = var1.getName();
-      return !var2.endsWith(".pb3") && !var2.endsWith(".pb0") ? var2 : var2.substring(0, var2.length() - 4);
+   public boolean accept(File var1) {
+      return var1.isDirectory() ? !var1.isHidden() : var1.getName().endsWith(".json");
    }
 }

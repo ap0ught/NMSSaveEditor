@@ -1,15 +1,19 @@
 package nomanssave;
 
-import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class z implements Runnable {
-   z(Application var1, String var2) {
-      this.aZ = var1;
-      this.bc = var2;
+class Z implements ActionListener {
+   Z(X var1, Application var2) {
+      this.bV = var1;
+      this.bv = var2;
    }
 
    @Override
-   public void run() {
-      JOptionPane.showOptionDialog(Application.h(this.aZ), this.bc, "Error", 0, 0, null, new Object[]{"Cancel"}, null);
+   public void actionPerformed(ActionEvent var1) {
+      gj var2 = (gj)X.k(this.bV).getSelectedItem();
+      if (var2 != null) {
+         this.bv.a(var2);
+      }
    }
 }

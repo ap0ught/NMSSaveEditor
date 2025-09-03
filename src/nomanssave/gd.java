@@ -1,7 +1,5 @@
 package nomanssave;
 
-public enum gd {
-   nd,
-   ne,
-   nf;
+public interface gD {
+   String K();
 }

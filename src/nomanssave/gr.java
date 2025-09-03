@@ -1,41 +1,31 @@
 package nomanssave;
 
-public enum gr {
-   pf("Combat", false),
-   pg("Exploration", false),
-   ph("Mining", false),
-   pi("Diplomacy", false),
-   pj("Support", false),
-   pk("Normandy", true),
-   pl("DeepSpace", true),
-   pm("DeepSpaceCommon", true),
-   pn("Pirate", false),
-   po("GhostShip", true);
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-   private String name;
-   private boolean special;
+public class gR {
+   private static Map rR = new HashMap();
 
-   private gr(String var3, boolean var4) {
-      this.name = var3;
-      this.special = var4;
-   }
-
-   public boolean isSpecial() {
-      return this.special;
-   }
-
-   @Override
-   public String toString() {
-      return this.name;
-   }
-
-   public static gr an(String var0) {
-      for (int var1 = 0; var1 < values().length; var1++) {
-         if (var0.equalsIgnoreCase(values()[var1].name)) {
-            return values()[var1];
+   public static eY az(String var0) {
+      eY var1 = null;
+      if (rR.containsKey(var0)) {
+         var1 = (eY)rR.get(var0);
+      } else {
+         InputStream var2 = Application.class.getResourceAsStream("templates/" + var0 + ".json");
+         if (var2 != null) {
+            try {
+               byte[] var3 = hk.g(var2);
+               var1 = ff.b(var3);
+            } catch (IOException var4) {
+               hc.a("Cannot load template: " + var0, var4);
+            }
          }
+
+         rR.put(var0, var1);
       }
 
-      return null;
+      return var1 == null ? null : var1.bE();
    }
 }

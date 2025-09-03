@@ -1,33 +1,26 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
-
-class am implements ActionListener {
-   am(aj var1) {
-      this.cg = var1;
+class aM extends G {
+   aM(aJ var1) {
+      this.dj = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      int var2 = aj.b(this.cg).getSelectedIndex();
-      if (var2 < 0) {
-         JOptionPane.showOptionDialog(this.cg, "Invalid galaxy selected, please try again.", "Error", 0, 0, null, new Object[]{"Cancel"}, null);
+   protected String g(String var1) {
+      if (aJ.a(this.dj) == null) {
+         return "";
       } else {
-         if (JOptionPane.showOptionDialog(
-               this.cg,
-               "This will warp your character and ship to the specified system (not the portal itself).",
-               "Confirm",
-               2,
-               1,
-               null,
-               new String[]{"OK", "Cancel"},
-               null
-            )
-            == 0) {
-            aj.a(this.cg, true);
-            this.cg.setVisible(false);
+         int var2 = aJ.a(this.dj).dO();
+
+         try {
+            int var3 = hf.b(var1, 0, 100);
+            if (var3 != var2) {
+               aJ.a(this.dj).aD(var3);
+            }
+
+            return Integer.toString(var3);
+         } catch (RuntimeException var4) {
+            return Integer.toString(var2);
          }
       }
    }

@@ -1,22 +1,18 @@
 package nomanssave;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.AbstractAction;
 
-class cf implements ActionListener {
-   cf(bS var1, int var2, int var3) {
-      this.fk = var1;
-      this.fl = var2;
-      this.fm = var3;
+class cF extends AbstractAction {
+   cF(cy var1) {
+      this.gg = var1;
    }
 
    @Override
    public void actionPerformed(ActionEvent var1) {
-      gu var2 = bO.a(bS.j(this.fk)).f(this.fl, this.fm);
-      if (var2 != null) {
-         var2.c(0.0);
-         var2.e(true);
-         bS.c(this.fk);
-      }
+      int var2 = cy.c(this.gg).getSelectionStart();
+      int var3 = cy.c(this.gg).getSelectionEnd();
+      String var4 = var3 > var2 ? cy.c(this.gg).getText().substring(var2, var3) : null;
+      aW.a(this.gg, var4);
    }
 }

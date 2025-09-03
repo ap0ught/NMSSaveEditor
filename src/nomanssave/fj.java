@@ -1,266 +1,164 @@
 package nomanssave;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class fj implements Closeable {
-   public static final int kP = 2;
-   public static final int kQ = 8;
-   private static final byte[] le = "null".getBytes();
-   private static final byte[] lf = "true".getBytes();
-   private static final byte[] lg = "false".getBytes();
-   private final OutputStream lh;
-   private final int flags;
+public class fJ implements fq {
+   private static final Pattern lV = Pattern.compile("save(\\d*)\\.hg");
+   private static final Pattern lW = Pattern.compile("backup(\\d*)\\.\\d*\\.zip");
+   private final File lX;
+   private final fR lE;
+   private fK mr;
+   private fM[] ms;
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] j(Object var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
+   fJ(File var1, fR var2) {
+      this.lX = var1;
+      this.lE = var2;
 
       try {
-         fj var4 = new fj(var1, 0);
+         this.mr = new fK(this);
+      } catch (FileNotFoundException var5) {
+      } catch (IOException var6) {
+         hc.a("cannot read file metadata: mf_accountdata.hg", var6);
+      }
+
+      this.ms = new fM[30];
+
+      for (int var3 = 0; var3 < this.ms.length; var3++) {
+         try {
+            this.ms[var3] = new fM(this, var3);
+         } catch (FileNotFoundException var7) {
+         } catch (IOException var8) {
+            hc.a("cannot read file metadata: mf_save" + (var3 == 0 ? "" : Integer.toString(var3 + 1)) + ".hg", var8);
+         }
+      }
+
+      fl.a(this, var1);
+   }
+
+   @Override
+   protected void finalize() {
+      fl.b(this);
+   }
+
+   @Override
+   public void X(String var1) {
+      if (var1.equals("accountdata.hg")) {
+         try {
+            this.mr = new fK(this);
+            hc.info("Account data reloaded from storage.");
+         } catch (FileNotFoundException var5) {
+            this.mr = null;
+            hc.info("Account data deleted from storage.");
+         } catch (IOException var6) {
+            this.mr = null;
+            hc.a("cannot read file metadata: mf_accountdata.hg", var6);
+         }
+
+         this.lE.a(this);
+      }
+
+      Matcher var2 = lV.matcher(var1);
+      if (var2.matches()) {
+         int var3 = var2.group(1).length() == 0 ? 0 : Integer.parseInt(var2.group(1)) - 1;
 
          try {
-            var4.k(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
-         }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
+            this.ms[var3] = new fM(this, var3);
+            hc.info("Save file reloaded from storage: " + var1);
+         } catch (FileNotFoundException var7) {
+            this.ms[var3] = null;
+            hc.info("Save file deleted from storage: " + var1);
+         } catch (IOException var8) {
+            this.ms[var3] = null;
+            hc.a("cannot read file metadata: mf_save" + (var3 == 0 ? "" : Integer.toString(var3 + 1)) + ".hg", var8);
          }
 
-         throw var2;
-      }
-
-      return var1.toByteArray();
-   }
-
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] g(eY var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
-
-      try {
-         fj var4 = new fj(var1, 0);
-
-         try {
-            var4.h(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
-         }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
-         }
-
-         throw var2;
-      }
-
-      return var1.toByteArray();
-   }
-
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static byte[] b(eV var0) {
-      ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-      Throwable var2 = null;
-      Object var3 = null;
-
-      try {
-         fj var4 = new fj(var1, 0);
-
-         try {
-            var4.c(var0);
-         } finally {
-            if (var4 != null) {
-               var4.close();
-            }
-         }
-      } catch (Throwable var10) {
-         if (var2 == null) {
-            var2 = var10;
-         } else if (var2 != var10) {
-            var2.addSuppressed(var10);
-         }
-
-         throw var2;
-      }
-
-      return var1.toByteArray();
-   }
-
-   public fj(OutputStream var1) {
-      this(var1, 0);
-   }
-
-   public fj(OutputStream var1, int var2) {
-      this.lh = var1;
-      this.flags = var2;
-   }
-
-   public void k(Object var1) {
-      if (var1 == null) {
-         this.lh.write(le);
-      } else if (var1.equals(Boolean.TRUE)) {
-         this.lh.write(lf);
-      } else if (var1.equals(Boolean.FALSE)) {
-         this.lh.write(lg);
-      } else if (var1 instanceof String) {
-         this.writeString((String)var1);
-      } else if (var1 instanceof fg) {
-         this.c((fg)var1);
-      } else if (var1 instanceof fk) {
-         this.a((eY)var1, ((fk)var1).li);
-      } else if (var1 instanceof eY) {
-         this.a((eY)var1, null);
-      } else if (var1 instanceof eV) {
-         this.a((eV)var1, null);
-      } else {
-         if (!(var1 instanceof Number)) {
-            throw new IOException("Cannot write value");
-         }
-
-         this.a((Number)var1);
-      }
-   }
-
-   private void a(Object var1, eC var2) {
-      if (var1 == null) {
-         this.lh.write(le);
-      } else if (var1.equals(Boolean.TRUE)) {
-         this.lh.write(lf);
-      } else if (var1.equals(Boolean.FALSE)) {
-         this.lh.write(lg);
-      } else if (var1 instanceof String) {
-         this.writeString((String)var1);
-      } else if (var1 instanceof fg) {
-         this.c((fg)var1);
-      } else if (var1 instanceof eY) {
-         this.a((eY)var1, var2);
-      } else if (var1 instanceof eV) {
-         this.a((eV)var1, var2);
-      } else {
-         if (!(var1 instanceof Number)) {
-            throw new IOException("Cannot write value");
-         }
-
-         this.a((Number)var1);
-      }
-   }
-
-   private void writeString(String var1) {
-      this.lh.write(fh.O(var1).getBytes(StandardCharsets.UTF_8));
-   }
-
-   private void c(fg var1) {
-      this.lh.write(34);
-
-      byte[] var5;
-      for (byte var2 : var5 = var1.toByteArray()) {
-         int var6 = var2 & 255;
-         if (var6 == 13) {
-            this.lh.write("\\r".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 10) {
-            this.lh.write("\\n".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 9) {
-            this.lh.write("\\t".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 12) {
-            this.lh.write("\\f".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 8) {
-            this.lh.write("\\b".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 34) {
-            this.lh.write("\\\"".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 == 92) {
-            this.lh.write("\\\\".getBytes(StandardCharsets.UTF_8));
-         } else if (var6 >= 32) {
-            this.lh.write(var6);
-         } else {
-            StringBuffer var7 = new StringBuffer();
-            var7.append("\\u00");
-            var7.append("0123456789ABCDEFabcdef".charAt(var6 >> 4 & 15));
-            var7.append("0123456789ABCDEFabcdef".charAt(var6 & 15));
-            this.lh.write(var7.toString().getBytes(StandardCharsets.UTF_8));
-         }
-      }
-
-      this.lh.write(34);
-   }
-
-   public void h(eY var1) {
-      this.a(var1, var1 instanceof fk ? ((fk)var1).li : null);
-   }
-
-   private void a(eY var1, eC var2) {
-      this.lh.write(123);
-      if (var1.length > 0) {
-         for (int var3 = 0; var3 < var1.length; var3++) {
-            if (var3 > 0) {
-               this.lh.write(44);
-            }
-
-            this.writeString(var2 == null ? var1.names[var3] : var2.r(var1.names[var3]));
-            this.lh.write(58);
-            this.a(var1.values[var3], var2);
-         }
-      }
-
-      this.lh.write(125);
-   }
-
-   public void c(eV var1) {
-      this.a(var1, null);
-   }
-
-   private void a(eV var1, eC var2) {
-      this.lh.write(91);
-      if (var1.length > 0) {
-         for (int var3 = 0; var3 < var1.length; var3++) {
-            if (var3 > 0) {
-               this.lh.write(44);
-            }
-
-            this.a(var1.values[var3], var2);
-         }
-      }
-
-      this.lh.write(93);
-   }
-
-   private void a(Number var1) {
-      if (var1 instanceof BigDecimal) {
-         this.lh.write(((BigDecimal)var1).toString().replace('E', 'e').getBytes(StandardCharsets.UTF_8));
-      } else {
-         this.lh.write(var1.toString().getBytes(StandardCharsets.UTF_8));
+         this.lE.a(this, var3 / 2, var1);
       }
    }
 
    @Override
-   public void close() {
-      try {
-         if ((this.flags & 2) != 0) {
-            this.lh.write(0);
-         }
-      } finally {
-         if ((this.flags & 8) == 0) {
-            this.lh.close();
-         }
+   public File bS() {
+      return this.lX;
+   }
+
+   @Override
+   public fr bT() {
+      return this.mr;
+   }
+
+   @Override
+   public ft[] bU() {
+      ft[] var1 = new ft[15];
+
+      for (int var2 = 0; var2 < 15; var2++) {
+         var1[var2] = new fN(this, var2);
       }
+
+      return var1;
+   }
+
+   @Override
+   public int W(String var1) {
+      Matcher var2 = lV.matcher(var1);
+      if (!var2.matches()) {
+         return -1;
+      } else {
+         int var3 = var2.group(1).length() == 0 ? 0 : Integer.parseInt(var2.group(1)) - 1;
+         return var3 / 2;
+      }
+   }
+
+   @Override
+   public boolean bW() {
+      return true;
+   }
+
+   @Override
+   public String a(int var1, eY var2) {
+      if (this.ms[var1 * 2] != null) {
+         this.ms[var1 * 2].cm();
+         this.ms[var1 * 2] = null;
+      }
+
+      if (this.ms[var1 * 2 + 1] != null) {
+         this.ms[var1 * 2 + 1].cm();
+         this.ms[var1 * 2 + 1] = null;
+      }
+
+      this.ms[var1 * 2] = new fM(this, var1 * 2, var2);
+      return this.ms[var1 * 2].filename;
+   }
+
+   private static byte[] a(long[] var0, int var1, int var2) {
+      byte[] var3 = new byte[var2 * 4];
+
+      for (int var4 = 0; var4 < var2; var4++) {
+         var3[var4 * 4] = (byte)((int)(var0[var1 + var4] & 255L));
+         var3[var4 * 4 + 1] = (byte)((int)(var0[var1 + var4] >> 8 & 255L));
+         var3[var4 * 4 + 2] = (byte)((int)(var0[var1 + var4] >> 16 & 255L));
+         var3[var4 * 4 + 3] = (byte)((int)(var0[var1 + var4] >> 24 & 255L));
+      }
+
+      return var3;
+   }
+
+   private static byte[] c(byte[] var0, byte[] var1) {
+      ByteArrayOutputStream var2 = new ByteArrayOutputStream();
+      var2.write(var0, 0, var0.length);
+      var2.write(var1, 0, var1.length);
+      long[] var3 = new long[]{96176015842230784L, -8446744073709551617L};
+      hh.a(var2.toByteArray(), var3);
+      long[] var4 = new long[]{var3[0] & 4294967295L, var3[0] >>> 32 & 4294967295L, var3[1] & 4294967295L, var3[1] >>> 32 & 4294967295L};
+      return a(var4, 0, 4);
+   }
+
+   // Missing method d - similar to c but for different hash operations
+   static byte[] d(byte[] var0, byte[] var1) {
+      return c(var0, var1);
    }
 }

@@ -1,17 +1,31 @@
 package nomanssave;
 
-import java.awt.EventQueue;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class bt implements ListSelectionListener {
-   bt(bl var1, Application var2) {
-      this.er = var1;
-      this.bv = var2;
+class bT implements ActionListener {
+   bT(bS var1, int var2, int var3) {
+      this.fk = var1;
+      this.fl = var2;
+      this.fm = var3;
    }
 
    @Override
-   public void valueChanged(ListSelectionEvent var1) {
-      EventQueue.invokeLater(new bu(this, this.bv));
+   public void actionPerformed(ActionEvent var1) {
+      if (bO.a(bS.j(this.fk)).dp() || en.aS()) {
+         if (bS.b(this.fk).isSelected()) {
+            bO.a(bS.j(this.fk)).i(this.fl, this.fm);
+         } else {
+            if (bO.a(bS.j(this.fk)).f(this.fl, this.fm) != null) {
+               bS.b(this.fk).setSelected(true);
+               bO.b(bS.j(this.fk)).c("Cannot disable slots that are in use!");
+               return;
+            }
+
+            bO.a(bS.j(this.fk)).j(this.fl, this.fm);
+         }
+
+         bS.c(this.fk);
+      }
    }
 }

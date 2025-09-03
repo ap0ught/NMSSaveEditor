@@ -1,59 +1,104 @@
 package nomanssave;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-public class em extends JPanel {
-   private final ba it;
+public class eM {
+   final String id;
+   final String name;
+   final String description;
+   final boolean iE;
+   final boolean jY;
+   private static final List kl = new ArrayList();
 
-   em() {
-      GridBagLayout var1 = new GridBagLayout();
-      var1.columnWidths = new int[]{aH.cI, 0, 0};
-      var1.rowHeights = new int[1];
-      var1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-      var1.rowWeights = new double[]{1.0};
-      this.setLayout(var1);
-      this.it = new ba();
-      GridBagConstraints var2 = new GridBagConstraints();
-      var2.insets = new Insets(0, 0, 0, 0);
-      var2.fill = 1;
-      var2.gridx = 0;
-      var2.gridy = 0;
-      this.add(this.it, var2);
+   static {
+      InputStream var0 = Application.class.getResourceAsStream("db/settlements.xml");
+      if (var0 != null) {
+         try {
+            Document var1 = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(var0);
+            Element var2 = var1.getDocumentElement();
+            NodeList var3 = var2.getChildNodes();
+
+            for (int var4 = 0; var4 < var3.getLength(); var4++) {
+               Node var5 = var3.item(var4);
+               if (var5 instanceof Element && var5.getNodeName().equals("perk")) {
+                  kl.add(new eM((Element)var5));
+               }
+            }
+         } catch (ParserConfigurationException var6) {
+         } catch (SAXException var7) {
+         } catch (IOException var8) {
+         }
+      }
+
+      kl.sort(new eN());
    }
 
-   void b(JComponent var1) {
-      GridBagConstraints var2 = new GridBagConstraints();
-      var2.fill = 1;
-      var2.gridx = 1;
-      var2.gridy = 0;
-      this.add(var1, var2);
+   private eM(Element var1) {
+      this.id = var1.getAttribute("id");
+      this.name = var1.getAttribute("name");
+      this.description = var1.getAttribute("description");
+      this.iE = Boolean.parseBoolean(var1.getAttribute("beneficial"));
+      this.jY = Boolean.parseBoolean(var1.getAttribute("procedural"));
    }
 
-   void k(String var1) {
-      this.it.k(var1);
+   public String getID() {
+      return this.id;
    }
 
-   void a(String var1, G var2) {
-      this.it.a(var1, var2);
+   public String getName() {
+      return this.name;
    }
 
-   void a(String var1, JComponent var2) {
-      this.it.a(var1, var2);
+   public String getDescription() {
+      return this.description;
    }
 
-   void a(String var1, boolean var2, JComponent var3) {
-      this.it.a(var1, var2, var3);
+   public boolean aW() {
+      return this.iE;
    }
 
-   void a(JComponent var1) {
-      this.it.a(var1);
+   public boolean bb() {
+      return this.jY;
    }
 
-   void Y() {
-      this.it.Y();
+   @Override
+   public boolean equals(Object var1) {
+      if (var1 instanceof String) {
+         return this.jY ? ((String)var1).startsWith(this.id + "#") : ((String)var1).equals(this.id);
+      } else {
+         return super.equals(var1);
+      }
+   }
+
+   @Override
+   public String toString() {
+      return this.name;
+   }
+
+   public static int getCount() {
+      return kl.size();
+   }
+
+   public static eM S(int var0) {
+      return (eM)kl.get(var0);
+   }
+
+   public static int w(String var0) {
+      return kl.indexOf(new eO(var0));
+   }
+
+   public static eM x(String var0) {
+      int var1 = kl.indexOf(new eO(var0));
+      return var1 >= 0 ? (eM)kl.get(var1) : null;
    }
 }

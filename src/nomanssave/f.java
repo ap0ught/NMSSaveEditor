@@ -1,36 +1,48 @@
 package nomanssave;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
-import javax.swing.JTable;
-import javax.swing.table.TableRowSorter;
+import java.io.IOException;
 
-class f extends JTable {
-   eV g;
+class F implements fs {
+   final String filename;
+   final long bd;
+   final fn be;
+   final eY bf;
 
-   f(c var1, Application var2, Supplier var3, Function var4) {
-      this.h = var1;
-      this.g = null;
-      g var5 = new g(this, var3, var4);
-      this.setCellSelectionEnabled(false);
-      this.getColumnModel().setColumnMargin(2);
-      this.setModel(var5);
-      TableRowSorter var6 = new TableRowSorter<>(var5);
-      var6.setSortable(2, false);
-      this.setRowSorter(var6);
-      this.getTableHeader().getColumnModel().getColumn(0).setHeaderRenderer(new e(2));
-      this.getTableHeader().getColumnModel().getColumn(1).setHeaderRenderer(new e(2));
-      JCheckBox var7 = new JCheckBox();
-      var7.setHorizontalAlignment(0);
-      this.getColumnModel().getColumn(2).setMaxWidth(80);
-      this.getTableHeader().getColumnModel().getColumn(2).setHeaderRenderer(new e(0));
-      this.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(var7));
-      this.getColumnModel().getColumn(2).setCellRenderer(new d(null));
+   public F(Application var1, String var2, long var3, fn var5, eY var6) {
+      this.aZ = var1;
+      this.filename = var2;
+      this.bd = var3;
+      this.be = var5;
+      this.bf = var6;
    }
 
-   void a(eV var1) {
-      this.g = var1;
+   @Override
+   public String K() {
+      return this.filename;
+   }
+
+   @Override
+   public fn L() {
+      return this.be;
+   }
+
+   @Override
+   public long lastModified() {
+      return this.bd;
+   }
+
+   @Override
+   public eY M() {
+      return this.bf;
+   }
+
+   @Override
+   public String b(eY var1) {
+      throw new IOException("Save not supported!");
+   }
+
+   @Override
+   public String toString() {
+      return this.filename;
    }
 }

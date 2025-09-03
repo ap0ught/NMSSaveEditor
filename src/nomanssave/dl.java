@@ -1,23 +1,36 @@
 package nomanssave;
 
-class dl extends G {
-   dl(dj var1) {
-      this.hl = var1;
+import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.UIManager;
+
+class dL extends DefaultListCellRenderer {
+   dL(dJ var1) {
+      this.hG = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      gv var2 = (gv)dj.j(this.hl).getSelectedItem();
+   public Component getListCellRendererComponent(JList var1, Object var2, int var3, boolean var4, boolean var5) {
+      JLabel var6 = (JLabel)super.getListCellRendererComponent(var1, var2, var3, var4, var5);
       if (var2 == null) {
-         return "";
+         var6.setText("");
       } else {
-         var1 = var1.trim();
-         if (!var1.equals(var2.getName())) {
-            var2.setName(var1);
-            dj.b(this.hl).setText(var1);
+         eM var7 = (eM)var2;
+         if (var7.aW()) {
+            if (var4) {
+               var6.setBackground(UIManager.getColor("Settlement.positivePerkHighlight"));
+            } else {
+               var6.setForeground(UIManager.getColor("Settlement.positivePerkColor"));
+            }
+         } else if (var4) {
+            var6.setBackground(UIManager.getColor("Settlement.negativePerkHighlight"));
+         } else {
+            var6.setForeground(UIManager.getColor("Settlement.negativePerkColor"));
          }
-
-         return var1;
       }
+
+      return var6;
    }
 }

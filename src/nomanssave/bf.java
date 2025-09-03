@@ -1,26 +1,28 @@
 package nomanssave;
 
-class bf extends G {
-   bf(bd var1) {
-      this.dP = var1;
+class bF implements bK {
+   bF(bE var1) {
+      this.ey = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      if (bd.a(this.dP) == null) {
-         return "";
-      } else {
-         try {
-            var1 = var1.trim();
-            if (!var1.equals(bd.a(this.dP).cU())) {
-               bd.a(this.dP).ah(var1);
-               bd.c(this.dP).setText(var1);
-            }
+   public String getID() {
+      return "ExtremeSurvival";
+   }
 
-            return var1;
-         } catch (RuntimeException var3) {
-            return bd.a(this.dP).cU();
-         }
-      }
+   @Override
+   public boolean isSpecial() {
+      return false;
+   }
+
+   @Override
+   public String ab() {
+      return Double.toString(bE.a(this.ey).dT());
+   }
+
+   @Override
+   public void l(String var1) {
+      double var2 = Double.parseDouble(var1);
+      bE.a(this.ey).g(var2);
    }
 }

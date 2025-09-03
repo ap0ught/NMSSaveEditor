@@ -1,429 +1,85 @@
 package nomanssave;
 
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.Dialog.ModalExclusionType;
-import java.util.Arrays;
-import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.border.LineBorder;
+import java.util.Collections;
+import javax.swing.JComponent;
 
-public class aj extends JDialog {
-   private static final List bW = Arrays.asList(
-      "Euclid",
-      "Hilbert Dimension",
-      "Calypso",
-      "Hesperius Dimension",
-      "Hyades",
-      "Ickjamatew",
-      "Budullangr",
-      "Kikolgallr",
-      "Eltiensleen",
-      "Eissentam",
-      "Elkupalos",
-      "Aptarkaba",
-      "Ontiniangp",
-      "Odiwagiri",
-      "Ogtialabi",
-      "Muhacksonto",
-      "Hitonskyer",
-      "Rerasmutul",
-      "Isdoraijung",
-      "Doctinawyra",
-      "Loychazinq",
-      "Zukasizawa",
-      "Ekwathore",
-      "Yeberhahne",
-      "Twerbetek",
-      "Sivarates",
-      "Eajerandal",
-      "Aldukesci",
-      "Wotyarogii",
-      "Sudzerbal",
-      "Maupenzhay",
-      "Sugueziume",
-      "Brogoweldian",
-      "Ehbogdenbu",
-      "Ijsenufryos",
-      "Nipikulha",
-      "Autsurabin",
-      "Lusontrygiamh",
-      "Rewmanawa",
-      "Ethiophodhe",
-      "Urastrykle",
-      "Xobeurindj",
-      "Oniijialdu",
-      "Wucetosucc",
-      "Ebyeloofdud",
-      "Odyavanta",
-      "Milekistri",
-      "Waferganh",
-      "Agnusopwit",
-      "Teyaypilny",
-      "Zalienkosm",
-      "Ladgudiraf",
-      "Mushonponte",
-      "Amsentisz",
-      "Fladiselm",
-      "Laanawemb",
-      "Ilkerloor",
-      "Davanossi",
-      "Ploehrliou",
-      "Corpinyaya",
-      "Leckandmeram",
-      "Quulngais",
-      "Nokokipsechl",
-      "Rinblodesa",
-      "Loydporpen",
-      "Ibtrevskip",
-      "Elkowaldb",
-      "Heholhofsko",
-      "Yebrilowisod",
-      "Husalvangewi",
-      "Ovna'uesed",
-      "Bahibusey",
-      "Nuybeliaure",
-      "Doshawchuc",
-      "Ruckinarkh",
-      "Thorettac",
-      "Nuponoparau",
-      "Moglaschil",
-      "Uiweupose",
-      "Nasmilete",
-      "Ekdaluskin",
-      "Hakapanasy",
-      "Dimonimba",
-      "Cajaccari",
-      "Olonerovo",
-      "Umlanswick",
-      "Henayliszm",
-      "Utzenmate",
-      "Umirpaiya",
-      "Paholiang",
-      "Iaereznika",
-      "Yudukagath",
-      "Boealalosnj",
-      "Yaevarcko",
-      "Coellosipp",
-      "Wayndohalou",
-      "Smoduraykl",
-      "Apmaneessu",
-      "Hicanpaav",
-      "Akvasanta",
-      "Tuychelisaor",
-      "Rivskimbe",
-      "Daksanquix",
-      "Kissonlin",
-      "Aediabiel",
-      "Ulosaginyik",
-      "Roclaytonycar",
-      "Kichiaroa",
-      "Irceauffey",
-      "Nudquathsenfe",
-      "Getaizakaal",
-      "Hansolmien",
-      "Bloytisagra",
-      "Ladsenlay",
-      "Luyugoslasr",
-      "Ubredhatk",
-      "Cidoniana",
-      "Jasinessa",
-      "Torweierf",
-      "Saffneckm",
-      "Thnistner",
-      "Dotusingg",
-      "Luleukous",
-      "Jelmandan",
-      "Otimanaso",
-      "Enjaxusanto",
-      "Sezviktorew",
-      "Zikehpm",
-      "Bephembah",
-      "Broomerrai",
-      "Meximicka",
-      "Venessika",
-      "Gaiteseling",
-      "Zosakasiro",
-      "Drajayanes",
-      "Ooibekuar",
-      "Urckiansi",
-      "Dozivadido",
-      "Emiekereks",
-      "Meykinunukur",
-      "Kimycuristh",
-      "Roansfien",
-      "Isgarmeso",
-      "Daitibeli",
-      "Gucuttarik",
-      "Enlaythie",
-      "Drewweste",
-      "Akbulkabi",
-      "Homskiw",
-      "Zavainlani",
-      "Jewijkmas",
-      "Itlhotagra",
-      "Podalicess",
-      "Hiviusauer",
-      "Halsebenk",
-      "Puikitoac",
-      "Gaybakuaria",
-      "Grbodubhe",
-      "Rycempler",
-      "Indjalala",
-      "Fontenikk",
-      "Pasycihelwhee",
-      "Ikbaksmit",
-      "Telicianses",
-      "Oyleyzhan",
-      "Uagerosat",
-      "Impoxectin",
-      "Twoodmand",
-      "Hilfsesorbs",
-      "Ezdaranit",
-      "Wiensanshe",
-      "Ewheelonc",
-      "Litzmantufa",
-      "Emarmatosi",
-      "Mufimbomacvi",
-      "Wongquarum",
-      "Hapirajua",
-      "Igbinduina",
-      "Wepaitvas",
-      "Sthatigudi",
-      "Yekathsebehn",
-      "Ebedeagurst",
-      "Nolisonia",
-      "Ulexovitab",
-      "Iodhinxois",
-      "Irroswitzs",
-      "Bifredait",
-      "Beiraghedwe",
-      "Yeonatlak",
-      "Cugnatachh",
-      "Nozoryenki",
-      "Ebralduri",
-      "Evcickcandj",
-      "Ziybosswin",
-      "Heperclait",
-      "Sugiuniam",
-      "Aaseertush",
-      "Uglyestemaa",
-      "Horeroedsh",
-      "Drundemiso",
-      "Ityanianat",
-      "Purneyrine",
-      "Dokiessmat",
-      "Nupiacheh",
-      "Dihewsonj",
-      "Rudrailhik",
-      "Tweretnort",
-      "Snatreetze",
-      "Iwunddaracos",
-      "Digarlewena",
-      "Erquagsta",
-      "Logovoloin",
-      "Boyaghosganh",
-      "Kuolungau",
-      "Pehneldept",
-      "Yevettiiqidcon",
-      "Sahliacabru",
-      "Noggalterpor",
-      "Chmageaki",
-      "Veticueca",
-      "Vittesbursul",
-      "Nootanore",
-      "Innebdjerah",
-      "Kisvarcini",
-      "Cuzcogipper",
-      "Pamanhermonsu",
-      "Brotoghek",
-      "Mibittara",
-      "Huruahili",
-      "Raldwicarn",
-      "Ezdartlic",
-      "Badesclema",
-      "Isenkeyan",
-      "Iadoitesu",
-      "Yagrovoisi",
-      "Ewcomechio",
-      "Inunnunnoda",
-      "Dischiutun",
-      "Yuwarugha",
-      "Ialmendra",
-      "Reponudrle",
-      "Rinjanagrbo",
-      "Zeziceloh",
-      "Oeileutasc",
-      "Zicniijinis",
-      "Dugnowarilda",
-      "Neuxoisan",
-      "Ilmenhorn",
-      "Rukwatsuku",
-      "Nepitzaspru",
-      "Chcehoemig",
-      "Haffneyrin",
-      "Uliciawai",
-      "Tuhgrespod",
-      "Iousongola",
-      "Odyalutai",
-      "Yilsrussimil"
-   );
-   private JComboBox bX;
-   private JTextField bY;
-   private JTextField bZ;
-   private JLabel[] ca;
-   private JTextField m;
-   private ImageIcon[] cb;
-   private hl cc = null;
-   private boolean cd = false;
-   private static final String ce = "0123456789ABCDEF";
-   private static aj cf = null;
+public class aJ extends em {
+   private static final int cV = 200;
+   private static final int cW = 100;
+   private static final int cX = 100;
+   private static final long cY = 4294967295L;
+   private static final long cZ = 4294967295L;
+   private static final long da = 4294967295L;
+   private G db;
+   private G dc;
+   private G dd;
+   private G de;
+   private G df;
+   private G dg;
+   private bO dh;
+   private gz di;
 
-   private aj(Frame var1) {
-      super(var1);
-      this.setResizable(false);
-      this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-      this.setTitle("Coordinate Viewer");
-      this.setModal(true);
-      JPanel var2 = new JPanel();
-      this.setContentPane(var2);
-      var2.setLayout(new BorderLayout(0, 0));
-      JPanel var3 = new JPanel();
-      var3.setLayout(
-         new FormLayout(
-            new ColumnSpec[]{
-               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-               ColumnSpec.decode("100px"),
-               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-               ColumnSpec.decode("default:grow"),
-               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-               ColumnSpec.decode("100px"),
-               FormFactory.LABEL_COMPONENT_GAP_COLSPEC
-            },
-            new RowSpec[]{
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC,
-               RowSpec.decode("bottom:10px"),
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC,
-               FormFactory.DEFAULT_ROWSPEC,
-               FormFactory.LINE_GAP_ROWSPEC
-            }
-         )
-      );
-      JLabel var4 = new JLabel("Search:");
-      var4.putClientProperty("FlatLaf.styleClass", "semibold");
-      var3.add(var4, "2, 2, left, center");
-      this.m = new JTextField();
-      var3.add(this.m, "4, 2, fill, default");
-      JButton var5 = new JButton("Search");
-      var5.addActionListener(new ak(this));
-      var3.add(var5, "6, 2, fill, fill");
-      JLabel var6 = new JLabel("Coordinate Location:");
-      var6.putClientProperty("FlatLaf.styleClass", "semibold");
-      var3.add(var6, "2, 6, 5, 1, left, center");
-      JLabel var7 = new JLabel("Galaxy:");
-      var3.add(var7, "2, 8, left, center");
-      this.bX = new JComboBox();
-      this.bX.setModel(new al(this));
-      var3.add(this.bX, "4, 8, 3, 1, fill, default");
-      JLabel var8 = new JLabel("Galactic Addr:");
-      var3.add(var8, "2, 10, left, center");
-      this.bY = new JTextField();
-      this.bY.setEditable(false);
-      var3.add(this.bY, "4, 10, 3, 1, fill, default");
-      JLabel var9 = new JLabel("Portal Addr:");
-      var3.add(var9, "2, 12, left, center");
-      this.bZ = new JTextField();
-      this.bZ.setEditable(false);
-      var3.add(this.bZ, "4, 12, 3, 1, fill, default");
-      JPanel var10 = new JPanel();
-      var10.setBackground(Color.GRAY);
-      var10.setBorder(new LineBorder(Color.DARK_GRAY));
-      var10.setLayout(new FlowLayout(1, 5, 5));
-      var10.setMinimumSize(new Dimension(449, 42));
-      this.cb = new ImageIcon[16];
-
-      for (int var11 = 0; var11 < 16; var11++) {
-         this.cb[var11] = Application.a("UI-GLYPH" + (var11 + 1) + ".PNG");
-      }
-
-      this.ca = new JLabel[12];
-
-      for (int var14 = 0; var14 < 12; var14++) {
-         this.ca[var14] = new JLabel(this.cb[0]);
-         var10.add(this.ca[var14]);
-      }
-
-      var3.add(var10, "2, 14, 5, 1, fill, fill");
-      var2.add(var3);
-      JPanel var15 = new JPanel();
-      var15.setLayout(new FlowLayout(2));
-      var2.add(var15, "South");
-      JButton var12 = new JButton("Save / Warp");
-      var12.addActionListener(new am(this));
-      var15.add(var12);
-      this.getRootPane().setDefaultButton(var12);
-      JButton var13 = new JButton("Cancel");
-      var13.addActionListener(new an(this));
-      var15.add(var13);
-      this.getRootPane().registerKeyboardAction(new ao(this), KeyStroke.getKeyStroke(27, 0), 2);
-      this.pack();
+   aJ(Application var1) {
+      this.k("Main Stats");
+      this.de = new aK(this);
+      this.a("Health", (JComponent)this.de);
+      this.df = new aL(this);
+      this.a("Shield", (JComponent)this.df);
+      this.dg = new aM(this);
+      this.a("Energy", (JComponent)this.dg);
+      this.db = new aN(this, var1);
+      this.a("Units", (JComponent)this.db);
+      this.dc = new aO(this);
+      this.a("Nanites", (JComponent)this.dc);
+      this.dd = new aP(this);
+      this.a("Quicksilver", (JComponent)this.dd);
+      this.dh = new bO(var1);
+      this.b(this.dh);
    }
 
-   private void P() {
-      this.bX.setSelectedIndex(this.cc.es() >= bW.size() ? -1 : this.cc.es());
-      this.bX.updateUI();
-      this.bY.setText(this.cc.ez());
-      String var1 = this.cc.ey();
-      this.bZ.setText(var1);
-
-      for (int var2 = 0; var2 < 12; var2++) {
-         int var3 = "0123456789ABCDEF".indexOf(var1.charAt(var2));
-         this.ca[var2].setIcon(var3 < 0 ? null : this.cb[var3]);
-      }
+   void w() {
+      this.dh.w();
    }
 
-   private hl a(hl var1) {
-      this.cc = var1;
-      this.m.setText("");
-      this.P();
-      this.cd = false;
-      this.setLocationRelativeTo(this.getParent());
-      this.setVisible(true);
-      return this.cd ? this.cc : null;
+   void x() {
+      this.dh.x();
    }
 
-   public static hl a(Container var0, hl var1) {
-      if (cf == null) {
-         Frame var2 = JOptionPane.getFrameForComponent(var0);
-         cf = new aj(var2);
-      }
+   void y() {
+      this.dh.y();
+   }
 
-      return cf.a(var1);
+   void A() {
+      this.dh.A();
+   }
+
+   void a(gt var1) {
+      this.dh.a(var1);
+   }
+
+   gz X() {
+      return this.di;
+   }
+
+   void a(gz var1) {
+      if (var1 == null) {
+         this.di = null;
+         this.db.setText("");
+         this.dc.setText("");
+         this.dd.setText("");
+         this.de.setText("");
+         this.df.setText("");
+         this.dg.setText("");
+         this.dh.a(Collections.emptyList());
+      } else {
+         this.di = var1;
+         this.db.setText(Long.toString(var1.dJ()));
+         this.dc.setText(Long.toString(var1.dK()));
+         this.dd.setText(Long.toString(var1.dL()));
+         this.de.setText(Integer.toString(var1.dM()));
+         this.df.setText(Integer.toString(var1.dN()));
+         this.dg.setText(Integer.toString(var1.dO()));
+         this.dh.a(var1.cC());
+      }
    }
 }

@@ -1,25 +1,27 @@
 package nomanssave;
 
-class bg extends G {
-   bg(bd var1) {
-      this.dP = var1;
+class bG implements bK {
+   bG(bE var1) {
+      this.ey = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      if (bd.a(this.dP) == null) {
-         return "";
-      } else {
-         try {
-            var1 = hg.aB(var1).toString();
-            if (!var1.equals(bd.a(this.dP).cV())) {
-               bd.a(this.dP).ai(var1);
-            }
+   public String getID() {
+      return "TWordsLearnt";
+   }
 
-            return var1;
-         } catch (RuntimeException var3) {
-            return bd.a(this.dP).cV();
-         }
-      }
+   @Override
+   public boolean isSpecial() {
+      return true;
+   }
+
+   @Override
+   public String ab() {
+      return Integer.toString(bE.a(this.ey).b(eU.kr));
+   }
+
+   @Override
+   public void l(String var1) {
+      throw new RuntimeException("Cannot set words learnt");
    }
 }

@@ -1,27 +1,39 @@
 package nomanssave;
 
-class bp extends G {
-   bp(bl var1) {
-      this.er = var1;
+import javax.swing.ComboBoxModel;
+import javax.swing.event.ListDataListener;
+
+class bP implements ComboBoxModel {
+   bP(bO var1) {
+      this.eX = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      if (bl.b(this.er) < 0) {
-         return "";
-      } else {
-         int var2 = bl.c(this.er)[bl.b(this.er)].de();
+   public int getSize() {
+      return bO.d(this.eX).size();
+   }
 
-         try {
-            int var3 = hf.b(var1, 0, Integer.MAX_VALUE);
-            if (var3 != var2) {
-               bl.c(this.er)[bl.b(this.er)].au(var3);
-            }
+   public gt w(int var1) {
+      return (gt)bO.d(this.eX).get(var1);
+   }
 
-            return Integer.toString(var3);
-         } catch (RuntimeException var4) {
-            return Integer.toString(var2);
-         }
-      }
+   @Override
+   public void addListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void removeListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void setSelectedItem(Object var1) {
+      bO.a(this.eX, (gt)var1);
+      bO.e(this.eX).setVisible(bO.a(this.eX) == null ? false : en.aS() || bO.a(this.eX).dk());
+      bO.c(this.eX);
+   }
+
+   @Override
+   public Object getSelectedItem() {
+      return bO.a(this.eX);
    }
 }

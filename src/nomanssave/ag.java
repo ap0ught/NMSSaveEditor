@@ -1,23 +1,15 @@
 package nomanssave;
 
-class ag extends G {
-   ag(X var1) {
-      this.bV = var1;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+class aG implements ActionListener {
+   aG(aD var1) {
+      this.cB = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      gj var2 = (gj)X.k(this.bV).getSelectedItem();
-      if (var2 == null) {
-         return "";
-      } else {
-         var1 = var1.trim();
-         if (!var1.equals(var2.cP())) {
-            var2.ad(var1);
-            X.g(this.bV).setText(var1);
-         }
-
-         return var1;
-      }
+   public void actionPerformed(ActionEvent var1) {
+      this.cB.setVisible(false);
    }
 }

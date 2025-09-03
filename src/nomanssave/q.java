@@ -1,75 +1,106 @@
 package nomanssave;
 
-import javax.swing.ImageIcon;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
-class q implements TableModel {
-   q(p var1) {
-      this.I = var1;
+public class Q extends JDialog {
+   private W bw;
+   private int bx;
+   private int by;
+   private W bz = null;
+   private JTextField bA;
+   private JTextField bB;
+   private static Q bC;
+
+   private Q(Frame var1) {
+      super(var1);
+      this.setResizable(false);
+      this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+      this.setTitle("Change Stack Sizes");
+      this.setModal(true);
+      JPanel var2 = new JPanel();
+      this.setContentPane(var2);
+      var2.setLayout(new BorderLayout(0, 0));
+      JPanel var3 = new JPanel();
+      var3.setLayout(
+         new FormLayout(
+            new ColumnSpec[]{
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+               ColumnSpec.decode("100px"),
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+               ColumnSpec.decode("250px"),
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC
+            },
+            new RowSpec[]{
+               FormFactory.LINE_GAP_ROWSPEC,
+               FormFactory.DEFAULT_ROWSPEC,
+               FormFactory.LINE_GAP_ROWSPEC,
+               FormFactory.DEFAULT_ROWSPEC,
+               FormFactory.LINE_GAP_ROWSPEC,
+               RowSpec.decode("20dlu"),
+               FormFactory.LINE_GAP_ROWSPEC
+            }
+         )
+      );
+      JLabel var4 = new JLabel("Substances:");
+      var3.add(var4, "2, 2, left, center");
+      this.bA = new JTextField();
+      this.bA.addFocusListener(new R(this));
+      var3.add(this.bA, "4, 2, fill, default");
+      JLabel var5 = new JLabel("Products:");
+      var3.add(var5, "2, 4, left, center");
+      this.bB = new JTextField();
+      this.bB.addFocusListener(new S(this));
+      var3.add(this.bB, "4, 4, fill, default");
+      JLabel var6 = new JLabel("<html><font color=\"red\"><b>Please Note: No Man's Sky sometimes reverts these settings back to default.</b></font></html>");
+      var3.add(var6, "2, 6, 3, 1, fill, center");
+      var2.add(var3);
+      JPanel var7 = new JPanel();
+      var7.setLayout(new FlowLayout(2));
+      var2.add(var7, "South");
+      JButton var8 = new JButton("Save");
+      var8.addActionListener(new T(this));
+      var7.add(var8);
+      this.getRootPane().setDefaultButton(var8);
+      JButton var9 = new JButton("Cancel");
+      var9.addActionListener(new U(this));
+      var7.add(var9);
+      this.getRootPane().registerKeyboardAction(new V(this), KeyStroke.getKeyStroke(27, 0), 2);
+      this.pack();
    }
 
-   @Override
-   public void addTableModelListener(TableModelListener var1) {
+   private W a(W var1, int var2, int var3) {
+      this.bw = var1;
+      this.bx = var2;
+      this.by = var3;
+      this.bA.setText(Integer.toString(var1.bE));
+      this.bB.setText(Integer.toString(var1.bF));
+      this.bz = null;
+      this.setLocationRelativeTo(this.getParent());
+      this.setVisible(true);
+      return this.bz;
    }
 
-   @Override
-   public Class getColumnClass(int var1) {
-      return var1 == 0 ? ImageIcon.class : String.class;
-   }
-
-   @Override
-   public int getColumnCount() {
-      return 4;
-   }
-
-   @Override
-   public String getColumnName(int var1) {
-      switch (var1) {
-         case 0:
-            return "";
-         case 1:
-            return "Name";
-         case 2:
-            return "Category";
-         case 3:
-            return "ID";
-         default:
-            return null;
+   public static W a(Container var0, W var1, int var2, int var3) {
+      if (bC == null) {
+         Frame var4 = JOptionPane.getFrameForComponent(var0);
+         bC = new Q(var4);
       }
-   }
 
-   @Override
-   public int getRowCount() {
-      return p.a(this.I) == null ? 0 : p.a(this.I).size();
-   }
-
-   @Override
-   public Object getValueAt(int var1, int var2) {
-      switch (var2) {
-         case 0:
-            return ((ey)p.a(this.I).get(var1)).N(3);
-         case 1:
-            return ((ey)p.a(this.I).get(var1)).getName();
-         case 2:
-            return ((ey)p.a(this.I).get(var1)).bc().toString();
-         case 3:
-            return ((ey)p.a(this.I).get(var1)).getID();
-         default:
-            return null;
-      }
-   }
-
-   @Override
-   public boolean isCellEditable(int var1, int var2) {
-      return false;
-   }
-
-   @Override
-   public void removeTableModelListener(TableModelListener var1) {
-   }
-
-   @Override
-   public void setValueAt(Object var1, int var2, int var3) {
+      return bC.a(var1, var2, var3);
    }
 }

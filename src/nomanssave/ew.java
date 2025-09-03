@@ -1,23 +1,18 @@
 package nomanssave;
 
-import org.w3c.dom.Element;
+public class eW {
+   final eV kE = new eV();
 
-public class ew {
-   final String iI;
-   final int iJ;
-   final int iK;
-
-   ew(Element var1) {
-      this.iI = var1.getAttribute("group");
-      this.iJ = Integer.parseInt(var1.getAttribute("substance"));
-      this.iK = Integer.parseInt(var1.getAttribute("product"));
+   public eW h(Object var1) {
+      if (var1 != null && !fh.a(var1.getClass())) {
+         throw new RuntimeException("Unsupported type: " + var1.getClass().getSimpleName());
+      } else {
+         this.kE.e(var1);
+         return this;
+      }
    }
 
-   public int aX() {
-      return this.iJ;
-   }
-
-   public int aY() {
-      return this.iK;
+   public eV bC() {
+      return this.kE;
    }
 }

@@ -1,20 +1,24 @@
 package nomanssave;
 
-import java.io.File;
-import javax.swing.filechooser.FileFilter;
+import java.awt.Rectangle;
+import javax.swing.text.BadLocationException;
 
-class cx extends FileFilter {
-   cx(cv var1) {
-      this.fR = var1;
+class cX implements Runnable {
+   cX(cW var1) {
+      this.gL = var1;
    }
 
    @Override
-   public String getDescription() {
-      return "Weapon Export File";
-   }
-
-   @Override
-   public boolean accept(File var1) {
-      return var1.isDirectory() ? !var1.isHidden() : var1.getName().endsWith(".wp0");
+   public void run() {
+      try {
+         int var1 = cW.a(this.gL).getDocument().getLength();
+         Rectangle var2 = cW.a(this.gL).modelToView(var1);
+         if (var2 != null && var2.y != cW.b(this.gL)) {
+            cW.c(this.gL);
+            this.gL.repaint();
+            cW.a(this.gL, var2.y);
+         }
+      } catch (BadLocationException var3) {
+      }
    }
 }

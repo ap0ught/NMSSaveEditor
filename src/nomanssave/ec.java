@@ -1,54 +1,113 @@
 package nomanssave;
 
-import java.awt.Color;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.border.LineBorder;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-class ec extends ba {
-   private final int index;
-   private JCheckBox ifField;
-   private JComboBox ig;
-   private G bj;
-   private JComboBox ih;
-   private G hO;
-   private G ii;
+public class eC {
+   private static eD[] jS = new eD[2];
+   private final eD jT;
+   private final eE jU;
 
-   ec(eb var1, int var2) {
-      super(aH.cH, aH.cH * 2);
-      this.ij = var1;
-      this.index = var2;
-      this.k("Wingman " + (var2 + 1));
-      this.ifField = new JCheckBox("Enabled");
-      this.ifField.addActionListener(new ed(this, var2));
-      this.a(null, this.ifField);
-      this.setBorder(new LineBorder(Color.DARK_GRAY));
-      this.ig = new JComboBox();
-      this.ig.setModel(new ee(this, var2));
-      this.a("NPC Race", this.ig);
-      this.bj = new ef(this, var2);
-      this.a("NPC Seed", this.bj);
-      this.ih = new JComboBox();
-      this.ih.setModel(new eg(this, var2));
-      this.a("Ship Type", this.ih);
-      this.hO = new eh(this, var2);
-      this.a("Ship Seed", this.hO);
-      this.ii = new ei(this, var2);
-      this.a("Pilot Rank", (JComponent)this.ii);
+   static {
+      jS[0] = c("db/jsonmap.txt", "NMS 5.21 (savegame)");
+      jS[1] = c("db/jsonmapac.txt", "NMS 5.21 (account)");
    }
 
-   private void aQ() {
-      this.ifField.setSelected(eb.a(this.ij)[this.index].isEnabled());
-      this.ig.setEnabled(eb.a(this.ij)[this.index].isEnabled());
-      this.ig.setSelectedItem(eb.a(this.ij)[this.index].ed());
-      this.bj.setEnabled(eb.a(this.ij)[this.index].isEnabled());
-      this.bj.setText(eb.a(this.ij)[this.index].ee());
-      this.ih.setEnabled(eb.a(this.ij)[this.index].isEnabled());
-      this.ih.setSelectedItem(eb.a(this.ij)[this.index].ef());
-      this.hO.setEnabled(eb.a(this.ij)[this.index].isEnabled());
-      this.hO.setText(eb.a(this.ij)[this.index].eg());
-      this.ii.setEnabled(eb.a(this.ij)[this.index].isEnabled());
-      this.ii.setText(Integer.toString(eb.a(this.ij)[this.index].eh()));
+   public static void main(String[] var0) {
+      for (int var1 = 0; var1 < jS.length; var1++) {
+         if (jS[var1] != null) {
+            for (eF var2 : jS[var1]) {
+               String var4 = hashName(var2.name);
+               if (!var2.key.equals(var4)) {
+                  System.out.println(var2.name + " = " + var2.key + " incorrect, should be " + var4);
+               }
+            }
+         }
+      }
+   }
+
+   private static String hashName(String var0) {
+      long[] var1 = new long[]{8268756125562466087L, 8268756125562466087L};
+      hh.a(var0.getBytes("UTF-8"), var1);
+      String var2 = "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy";
+      long var3 = 4294967295L & var1[0] >> 32;
+      var3 = var3 % 68L << 32 | 4294967295L & var1[0];
+      int var5 = (int)(var3 % 68L);
+      int var6 = (int)((8796093022207L & var1[0] >> 21) % 68L);
+      int var7 = (int)((4194303L & var1[0] >> 42) % 68L);
+      return new String(new char[]{var2.charAt(var5), var2.charAt(var6), var2.charAt(var7)});
+   }
+
+   public static eC a(eG var0, String var1) {
+      eD var2 = jS[var0.ordinal()];
+      return var2 != null && var2.s(var1) ? new eC(var2) : null;
+   }
+
+   private static eD c(String var0, String var1) {
+      InputStream var2 = Application.class.getResourceAsStream(var0);
+      if (var2 == null) {
+         return null;
+      } else {
+         try {
+            return new eD(var2, var1, null);
+         } catch (IOException var4) {
+            hc.error("Could not load key mapping file: " + var0, var4);
+            return null;
+         }
+      }
+   }
+
+   private eC(eD var1) {
+      this.jT = var1;
+      this.jU = new eE(null, null);
+   }
+
+   public Map bp() {
+      return this.jU.stream().collect(Collectors.toMap(var0 -> var0.key, var0 -> var0.name));
+   }
+
+   public String q(String var1) {
+      String var2;
+      eF var3;
+      if ((var3 = this.jU.t(var1)) != null) {
+         var2 = var3.name;
+      } else if ((var3 = this.jT.t(var1)) != null) {
+         var2 = var3.name;
+      } else {
+         if ((var3 = this.jT.v(var1)) != null) {
+            var2 = var3.name;
+         } else {
+            hc.warn("  name mapping not found: " + var1);
+            var2 = var1;
+         }
+
+         this.jU.add(var1, var2);
+      }
+
+      return var2;
+   }
+
+   public String r(String var1) {
+      String var2;
+      eF var3;
+      if ((var3 = this.jU.u(var1)) != null) {
+         var2 = var3.key;
+      } else if ((var3 = this.jT.u(var1)) != null) {
+         var2 = var3.key;
+      } else {
+         var2 = var1;
+         if (this.jT.t(var1) == null) {
+            hc.warn("  reverse mapping not found: " + var1);
+         }
+      }
+
+      return var2;
+   }
+
+   @Override
+   public String toString() {
+      return this.jT.toString();
    }
 }

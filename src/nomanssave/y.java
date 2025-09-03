@@ -1,64 +1,77 @@
 package nomanssave;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import javax.swing.JOptionPane;
+import javax.swing.ComboBoxModel;
+import javax.swing.event.ListDataListener;
 
-class y implements Runnable {
-   y(x var1, boolean var2) {
-      this.bb = var1;
-      this.ba = var2;
+class Y implements ComboBoxModel {
+   private gj bU;
+
+   Y(X var1) {
+      this.bV = var1;
+      this.bU = null;
    }
 
    @Override
-   public void run() {
-      String var1 = "A newer version of the save editor is available.\n";
-      if (!this.ba) {
-         var1 = var1 + "Please visit https://github.com/goatfungus/NMSSaveEditor to download the latest release.";
-         JOptionPane.showOptionDialog(Application.h(x.a(this.bb)), var1, "New Version Available", 0, 1, null, new Object[]{"OK"}, null);
+   public int getSize() {
+      return X.a(this.bV) == null ? 0 : X.a(this.bV).length;
+   }
+
+   public gj q(int var1) {
+      return X.a(this.bV)[var1];
+   }
+
+   @Override
+   public void addListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void removeListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void setSelectedItem(Object var1) {
+      this.bU = (gj)var1;
+      if (this.bU == null) {
+         X.b(this.bV).setSelectedIndex(-1);
+         X.c(this.bV).setText("");
+         X.c(this.bV).setEnabled(false);
+         X.d(this.bV).setText("");
+         X.d(this.bV).setEnabled(false);
+         X.e(this.bV).setText("");
+         X.e(this.bV).setEnabled(false);
+         X.f(this.bV).setText("");
+         X.f(this.bV).setEnabled(false);
+         X.g(this.bV).setText("");
+         X.g(this.bV).setEnabled(false);
+         X.h(this.bV).setSelected(false);
+         X.h(this.bV).setEnabled(false);
+         X.i(this.bV).setSelectedIndex(-1);
+         X.i(this.bV).setEnabled(false);
+         X.j(this.bV).setSelectedIndex(-1);
+         X.j(this.bV).setEnabled(false);
       } else {
-         var1 = var1 + "Would you like to download and install? (will require app restart)";
-         int var2 = JOptionPane.showConfirmDialog(Application.h(x.a(this.bb)), var1, "New Version Available", 0);
-         if (var2 == 0) {
-            Application.h(x.a(this.bb)).dispose();
-            hc.info("Starting download...");
-            File var3 = new File("~NMSSaveEditor.dl");
-
-            try {
-               URL var4 = new URL("https://github.com/goatfungus/NMSSaveEditor/raw/master/NMSSaveEditor.jar");
-               URLConnection var5 = var4.openConnection();
-               int var6 = var5.getContentLength();
-               InputStream var7 = var5.getInputStream();
-               FileOutputStream var8 = new FileOutputStream(var3);
-
-               try {
-                  byte[] var9 = new byte[4096];
-
-                  int var10;
-                  while ((var10 = var7.read(var9)) > 0) {
-                     var8.write(var9, 0, var10);
-                     var6 -= var10;
-                  }
-
-                  if (var6 != 0) {
-                     throw new IOException("invalid file size");
-                  }
-               } finally {
-                  var8.close();
-               }
-
-               hc.info("Restarting editor...");
-               System.exit(2);
-            } catch (IOException var15) {
-               var15.printStackTrace();
-               var3.delete();
-               System.exit(1);
-            }
-         }
+         X.b(this.bV).setSelectedIndex(this.bU.cL().ordinal());
+         X.c(this.bV).setText(this.bU.getName());
+         X.c(this.bV).setEnabled(true);
+         X.d(this.bV).setText(this.bU.cK());
+         X.d(this.bV).setEnabled(true);
+         X.e(this.bV).setText(this.bU.cN());
+         X.e(this.bV).setEnabled(true);
+         X.f(this.bV).setText(this.bU.cO());
+         X.f(this.bV).setEnabled(true);
+         X.g(this.bV).setText(this.bU.cP());
+         X.g(this.bV).setEnabled(true);
+         X.h(this.bV).setSelected(this.bU.cQ());
+         X.h(this.bV).setEnabled(true);
+         X.i(this.bV).m(this.bU.cR());
+         X.i(this.bV).setEnabled(true);
+         X.j(this.bV).m(this.bU.cS());
+         X.j(this.bV).setEnabled(true);
       }
+   }
+
+   @Override
+   public Object getSelectedItem() {
+      return this.bU;
    }
 }

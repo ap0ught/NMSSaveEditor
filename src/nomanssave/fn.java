@@ -1,71 +1,94 @@
 package nomanssave;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
-public enum fn {
-   lm,
-   ln,
-   lo,
-   lp,
-   lq,
-   lr,
-   ls,
-   lt;
+class fN implements ft {
+   final int lT;
 
-   private static final Pattern lu = Pattern.compile("\"((?:XTp)|(?:ActiveContext))\":\"([^\"]+)\",");
-   private static final Pattern lv = Pattern.compile("\"((?:vLc)|(?:BaseContext))\":\\{\"((?:idA)|(?:GameMode))\":(\\d+)");
-   private static final Pattern lw = Pattern.compile("\"((?:2YS)|(?:ExpeditionContext))\":\\{\"((?:idA)|(?:GameMode))\":(\\d+)");
-   private static final Pattern lx = Pattern.compile("\"((?:7ND)|(?:DifficultyPresetType))\":\"(\\w+)\"");
-
-   private static fn S(String var0) {
-      fn[] var4;
-      for (fn var1 : var4 = values()) {
-         if (var0.equalsIgnoreCase(var1.name())) {
-            return var1;
-         }
-      }
-
-      return null;
+   fN(fJ var1, int var2) {
+      this.mt = var1;
+      this.lT = var2;
    }
 
-   public static fn T(String var0) {
-      Matcher var1 = lu.matcher(var0);
-      if (var1.find()) {
-         String var2 = var1.group(2);
-         if ("Main".equals(var2)) {
-            var1 = lv.matcher(var0);
-         } else if ("Season".equals(var2)) {
-            var1 = lw.matcher(var0);
-         }
-
-         if (var1.find()) {
-            int var3 = Integer.parseInt(var1.group(3));
-            if (var3 > 0 && var3 <= values().length) {
-               return values()[var3 - 1];
-            }
-         }
-      }
-
-      var1 = lx.matcher(var0);
-      return var1.find() ? S(var1.group(2)) : null;
+   @Override
+   public int getIndex() {
+      return this.lT;
    }
 
-   public static fn i(eY var0) {
-      String var1 = var0.getValueAsString("ActiveContext");
-      if ("Main".equals(var1)) {
-         int var2 = var0.J("BaseContext.GameMode");
-         if (var2 > 0 && var2 <= values().length) {
-            return values()[var2 - 1];
-         }
-      } else if ("Season".equals(var1)) {
-         int var3 = var0.J("ExpeditionContext.GameMode");
-         if (var3 > 0 && var3 <= values().length) {
-            return values()[var3 - 1];
+   @Override
+   public boolean isEmpty() {
+      return fJ.b(this.mt)[this.lT * 2] == null && fJ.b(this.mt)[this.lT * 2 + 1] == null;
+   }
+
+   @Override
+   public fs[] bX() {
+      hc.info("Loading saves for Slot " + (this.lT + 1) + "...");
+      ArrayList var1 = new ArrayList();
+      if (fJ.b(this.mt)[this.lT * 2] != null) {
+         var1.add(fJ.b(this.mt)[this.lT * 2]);
+      }
+
+      if (fJ.b(this.mt)[this.lT * 2 + 1] != null) {
+         var1.add(fJ.b(this.mt)[this.lT * 2 + 1]);
+      }
+
+      aH.cG.listFiles(new fO(this, var1));
+      var1.sort(new fP(this));
+      return var1.toArray(new fs[0]);
+   }
+
+   @Override
+   public fn L() {
+      long var1 = Long.MIN_VALUE;
+      fn var3 = null;
+      if (fJ.b(this.mt)[this.lT * 2] != null) {
+         var3 = fJ.b(this.mt)[this.lT * 2].L();
+         var1 = fJ.b(this.mt)[this.lT * 2].lastModified();
+      }
+
+      if (fJ.b(this.mt)[this.lT * 2 + 1] != null) {
+         long var4 = fJ.b(this.mt)[this.lT * 2 + 1].lastModified();
+         if (var4 > var1) {
+            var3 = fJ.b(this.mt)[this.lT * 2 + 1].L();
          }
       }
 
-      String var4 = var0.getValueAsString("PlayerStateData.DifficultyState.Preset.DifficultyPresetType");
-      return var4 != null ? S(var4) : null;
+      return var3;
+   }
+
+   @Override
+   public String toString() {
+      StringBuilder var1 = new StringBuilder();
+      var1.append("Slot " + (this.lT + 1) + " - ");
+      long var2 = Long.MIN_VALUE;
+      String var4 = null;
+      fn var5 = null;
+      if (fJ.b(this.mt)[this.lT * 2] != null) {
+         var5 = fJ.b(this.mt)[this.lT * 2].L();
+         var2 = fJ.b(this.mt)[this.lT * 2].lastModified();
+         var4 = fJ.b(this.mt)[this.lT * 2].getName();
+      }
+
+      if (fJ.b(this.mt)[this.lT * 2 + 1] != null) {
+         long var6 = fJ.b(this.mt)[this.lT * 2 + 1].lastModified();
+         if (var6 > var2) {
+            var5 = fJ.b(this.mt)[this.lT * 2 + 1].L();
+            var2 = var6;
+            var4 = fJ.b(this.mt)[this.lT * 2 + 1].getName();
+         }
+      }
+
+      if (var5 != null) {
+         var1.append(var5.toString());
+         if (var4 != null) {
+            var1.append(" - " + var4);
+         } else {
+            var1.append(" - " + Application.b(var2));
+         }
+      } else {
+         var1.append("[EMPTY]");
+      }
+
+      return var1.toString();
    }
 }

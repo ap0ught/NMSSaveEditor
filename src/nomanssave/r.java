@@ -1,24 +1,33 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-class r implements ActionListener {
-   r(p var1) {
-      this.I = var1;
+class R implements FocusListener {
+   R(Q var1) {
+      this.bD = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      int[] var2 = p.b(this.I).getSelectedRows();
-      p.a(this.I, new ArrayList());
+   public void focusGained(FocusEvent var1) {
+   }
 
-      for (int var4 = 0; var4 < var2.length; var4++) {
-         int var3 = p.b(this.I).convertRowIndexToModel(var2[var4]);
-         p.c(this.I).add((String)p.b(this.I).getModel().getValueAt(var3, 3));
+   @Override
+   public void focusLost(FocusEvent var1) {
+      int var2;
+      try {
+         var2 = Integer.parseInt(Q.a(this.bD).getText());
+         if (var2 % 250 != 0) {
+            var2 = (int)Math.round((double)var2 / 250.0);
+         }
+
+         if (var2 < Q.b(this.bD)) {
+            var2 = Q.b(this.bD);
+         }
+      } catch (RuntimeException var4) {
+         var2 = Q.c(this.bD).bE;
       }
 
-      this.I.setVisible(false);
+      Q.a(this.bD).setText(Integer.toString(var2));
    }
 }

@@ -1,18 +1,29 @@
 package nomanssave;
 
-import java.util.Comparator;
+public class gB {
+   private final eY oI;
 
-class gb implements Comparator {
-   gb(fZ var1) {
-      this.nb = var1;
+   public static gB x(eY var0) {
+      return new gB(var0);
    }
 
-   public int a(fs var1, fs var2) {
-      long var3 = var2.lastModified() - var1.lastModified();
-      if (var3 < -2147483648L) {
-         return Integer.MIN_VALUE;
+   private gB(eY var1) {
+      this.oI = var1;
+   }
+
+   public int dU() {
+      return this.oI.J("ActiveMultioolIndex");
+   }
+
+   public void aF(int var1) {
+      eY var2 = this.oI.H("Multitools[" + var1 + "]");
+      if (var2 != null && var2.M("Seed[0]")) {
+         this.oI.b("ActiveMultioolIndex", var1);
+         this.oI.b("WeaponInventory", var2.H("Store").bE());
+         this.oI.b("CurrentWeapon.GenerationSeed[1]", var2.I("Seed[1]"));
+         this.oI.b("CurrentWeapon.Filename", var2.getValueAsString("Resource.Filename"));
       } else {
-         return var3 > 2147483647L ? Integer.MAX_VALUE : (int)var3;
+         throw new RuntimeException("Cannot set current multitool");
       }
    }
 }

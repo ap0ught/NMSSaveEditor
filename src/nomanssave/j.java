@@ -3,21 +3,21 @@ package nomanssave;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
-class j implements ComboBoxModel {
-   private eB A;
+class J implements ComboBoxModel {
+   gh bs;
 
-   j(h var1) {
-      this.z = var1;
-      this.A = null;
+   J(I var1) {
+      this.bt = var1;
+      this.bs = null;
    }
 
    @Override
    public int getSize() {
-      return h.e(this.z).size();
+      return I.a(this.bt) == null ? 0 : I.a(this.bt).cD().size();
    }
 
-   public eB b(int var1) {
-      return (eB)h.e(this.z).get(var1);
+   public gh o(int var1) {
+      return I.a(this.bt) == null ? null : (gh)I.a(this.bt).cD().get(var1);
    }
 
    @Override
@@ -30,12 +30,21 @@ class j implements ComboBoxModel {
 
    @Override
    public void setSelectedItem(Object var1) {
-      this.A = (eB)var1;
-      h.f(this.z);
+      this.bs = (gh)var1;
+      if (this.bs == null) {
+         I.b(this.bt).setText("");
+         I.c(this.bt).setText("");
+         I.c(this.bt).setEnabled(false);
+      } else {
+         gy var2 = this.bs.cJ();
+         I.b(this.bt).setText(var2 == null ? "" : var2.toString());
+         I.c(this.bt).setText(this.bs.cK());
+         I.c(this.bt).setEnabled(true);
+      }
    }
 
    @Override
    public Object getSelectedItem() {
-      return this.A;
+      return this.bs;
    }
 }

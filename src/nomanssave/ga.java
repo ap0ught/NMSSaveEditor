@@ -1,31 +1,32 @@
 package nomanssave;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
+public class gA {
+   private final eS rd;
 
-class ga implements FileFilter {
-   ga(fZ var1, ArrayList var2) {
-      this.nb = var1;
-      this.mg = var2;
+   private gA(gz var1, eS var2) {
+      this.re = var1;
+      this.rd = var2;
    }
 
-   @Override
-   public boolean accept(File var1) {
-      Matcher var2 = fT.cu().matcher(var1.getName());
-      if (var2.matches()) {
-         int var3 = var2.group(1).length() == 0 ? 0 : Integer.parseInt(var2.group(1)) - 1;
-         if (var3 / 2 == this.nb.lT) {
-            try {
-               this.mg.add(new fV(fZ.a(this.nb), var1.getName(), var3));
-            } catch (IOException var5) {
-               hc.a("Cannot load " + var1.getName(), var5);
-            }
+   public String getID() {
+      return this.rd.getID();
+   }
+
+   public boolean c(eU var1) {
+      for (String var2 : this.rd.bw()) {
+         if (this.rd.z(var2) == var1) {
+            return gz.a(this.re, var2, var1.ordinal());
          }
       }
 
       return false;
+   }
+
+   public void a(eU var1, boolean var2) {
+      for (String var3 : this.rd.bw()) {
+         if (this.rd.z(var3) == var1) {
+            gz.a(this.re, var3, var1.ordinal(), var2);
+         }
+      }
    }
 }

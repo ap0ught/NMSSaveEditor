@@ -1,40 +1,27 @@
 package nomanssave;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.event.ListDataListener;
-
-class al implements ComboBoxModel {
-   String ch;
-
-   al(aj var1) {
-      this.cg = var1;
-      this.ch = null;
+class aL extends G {
+   aL(aJ var1) {
+      this.dj = var1;
    }
 
    @Override
-   public int getSize() {
-      return aj.Q().size();
-   }
+   protected String g(String var1) {
+      if (aJ.a(this.dj) == null) {
+         return "";
+      } else {
+         int var2 = aJ.a(this.dj).dN();
 
-   public String s(int var1) {
-      return (String)aj.Q().get(var1);
-   }
+         try {
+            int var3 = hf.b(var1, 0, 100);
+            if (var3 != var2) {
+               aJ.a(this.dj).aC(var3);
+            }
 
-   @Override
-   public void addListDataListener(ListDataListener var1) {
-   }
-
-   @Override
-   public void removeListDataListener(ListDataListener var1) {
-   }
-
-   @Override
-   public void setSelectedItem(Object var1) {
-      this.ch = (String)var1;
-   }
-
-   @Override
-   public Object getSelectedItem() {
-      return this.ch;
+            return Integer.toString(var3);
+         } catch (RuntimeException var4) {
+            return Integer.toString(var2);
+         }
+      }
    }
 }

@@ -1,38 +1,119 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
-class aw implements ActionListener {
-   aw(ap var1) {
-      this.cu = var1;
+public class aW extends JDialog {
+   private JTextField ds;
+   private JCheckBox dt;
+   private JCheckBox du;
+   private JRadioButton dv;
+   private JRadioButton dw;
+   private static aW dx;
+
+   private aW(cy var1) {
+      super((Dialog)var1);
+      this.setSize(400, 250);
+      this.setResizable(false);
+      this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+      this.setTitle("Find");
+      this.setModal(true);
+      JPanel var2 = new JPanel();
+      this.setContentPane(var2);
+      var2.setLayout(new BorderLayout(0, 0));
+      JPanel var3 = new JPanel();
+      var3.setLayout(
+         new FormLayout(
+            new ColumnSpec[]{
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+               ColumnSpec.decode("100px"),
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+               ColumnSpec.decode("250px"),
+               FormFactory.LABEL_COMPONENT_GAP_COLSPEC
+            },
+            new RowSpec[]{
+               FormFactory.LINE_GAP_ROWSPEC,
+               FormFactory.DEFAULT_ROWSPEC,
+               FormFactory.LINE_GAP_ROWSPEC,
+               FormFactory.DEFAULT_ROWSPEC,
+               FormFactory.LINE_GAP_ROWSPEC,
+               FormFactory.DEFAULT_ROWSPEC,
+               FormFactory.LINE_GAP_ROWSPEC
+            }
+         )
+      );
+      JLabel var4 = new JLabel("Find:");
+      var3.add(var4, "2, 2, left, center");
+      this.ds = new JTextField();
+      var3.add(this.ds, "4, 2, fill, default");
+      var2.add(var3);
+      JPanel var5 = new JPanel();
+      var5.setLayout(new GridLayout(1, 2));
+      var5.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Direction"), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+      this.dv = new JRadioButton("Forward");
+      this.dv.setSelected(true);
+      var5.add(this.dv);
+      this.dw = new JRadioButton("Backward");
+      var5.add(this.dw);
+      ButtonGroup var6 = new ButtonGroup();
+      var6.add(this.dv);
+      var6.add(this.dw);
+      var3.add(var5, "2, 4, 3, 1");
+      JPanel var7 = new JPanel();
+      var7.setLayout(new GridLayout(1, 2));
+      var7.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Options"), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+      this.dt = new JCheckBox("Case Sensitive");
+      this.dt.setSelected(true);
+      var7.add(this.dt);
+      this.du = new JCheckBox("Wrap Search");
+      var7.add(this.du);
+      var3.add(var7, "2, 6, 3, 1");
+      JPanel var8 = new JPanel();
+      var8.setLayout(new FlowLayout(2));
+      var2.add(var8, "South");
+      JButton var9 = new JButton("Find");
+      var9.setMnemonic(10);
+      var9.addActionListener(new aX(this, var1));
+      var8.add(var9);
+      this.getRootPane().setDefaultButton(var9);
+      JButton var10 = new JButton("Cancel");
+      var10.setMnemonic(27);
+      var10.addActionListener(new aY(this));
+      var8.add(var10);
+      this.getRootPane().registerKeyboardAction(new aZ(this), KeyStroke.getKeyStroke(27, 0), 2);
+      this.pack();
    }
 
-   @Override
-   public void actionPerformed(ActionEvent var1) {
-      int[] var2 = ap.h(this.cu).getSelectedRows();
-      boolean var3 = false;
-
-      for (int var4 = var2.length - 1; var4 >= 0; var4--) {
-         int var5 = ap.h(this.cu).convertRowIndexToModel(var2[var4]);
-         String var6 = (String)ap.d(this.cu).get(var5);
-         ap.d(this.cu).remove(var5);
-
-         while ((var5 = ap.e(this.cu).indexOf(var6)) >= 0) {
-            ap.e(this.cu).ac(var5);
-         }
-
-         while ((var5 = ap.f(this.cu).indexOf(var6)) >= 0) {
-            ap.f(this.cu).ac(var5);
-         }
-
-         var3 = true;
+   public static void a(cy var0, String var1) {
+      if (dx == null) {
+         dx = new aW(var0);
       }
 
-      if (var3) {
-         ap.h(this.cu).clearSelection();
-         ap.g(this.cu).sort();
-         ap.h(this.cu).updateUI();
+      dx.setLocationRelativeTo(var0);
+      if (var1 != null) {
+         dx.ds.setText(var1);
       }
+
+      dx.ds.setSelectionStart(0);
+      dx.ds.setSelectionEnd(dx.ds.getText().length());
+      dx.ds.requestFocus();
+      dx.setVisible(true);
    }
 }

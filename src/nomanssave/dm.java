@@ -1,25 +1,30 @@
 package nomanssave;
 
-class dm extends G {
-   dm(dj var1) {
-      this.hl = var1;
+class dM extends G {
+   private final gG hH;
+
+   private dM(dE var1, gG var2) {
+      this.hE = var1;
+      this.hH = var2;
    }
 
    @Override
    protected String g(String var1) {
-      gv var2 = (gv)dj.j(this.hl).getSelectedItem();
+      gE var2 = (gE)dE.a(this.hE).getSelectedItem();
       if (var2 == null) {
          return "";
       } else {
+         int var3 = var2.aq(this.hH.ordinal());
+
          try {
-            var1 = hg.aB(var1).toString();
-            if (!var1.equals(var2.cK())) {
-               var2.aa(var1);
+            int var4 = hf.b(var1, 0, this.hH.dY());
+            if (var4 != var3) {
+               var2.e(this.hH.ordinal(), var4);
             }
 
-            return var1;
-         } catch (RuntimeException var4) {
-            return var2.cK();
+            return Integer.toString(var4);
+         } catch (RuntimeException var5) {
+            return Integer.toString(var3);
          }
       }
    }

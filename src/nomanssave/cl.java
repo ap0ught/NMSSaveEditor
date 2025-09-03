@@ -1,34 +1,16 @@
 package nomanssave;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import java.io.File;
+import javax.swing.filechooser.FileView;
 
-public class cl extends JFileChooser {
-   private static cl fG = null;
-   private static final String name = "Planetary Base Backup File";
-   private static final ImageIcon fH = Application.a("UI-BASEICON.PNG", 16, 16);
-
-   public static cl ar() {
-      if (fG == null) {
-         fG = new cl();
-      }
-
-      return fG;
+class cL extends FileView {
+   cL(cK var1) {
+      this.gl = var1;
    }
 
-   private cl() {
-      this.setFileSelectionMode(0);
-      this.setAcceptAllFileFilterUsed(false);
-      this.setFileView(new cm(this));
-      this.setFileFilter(new cn(this));
-      this.addChoosableFileFilter(new co(this));
-      this.setDialogTitle("Choose Backup File");
-      UIManager.addPropertyChangeListener(var1 -> {
-         if ("lookAndFeel".equals(var1.getPropertyName())) {
-            SwingUtilities.updateComponentTreeUI(this);
-         }
-      });
+   @Override
+   public String getName(File var1) {
+      String var2 = var1.getName();
+      return var2.endsWith(".json") ? var2.substring(0, var2.length() - 5) : var2;
    }
 }

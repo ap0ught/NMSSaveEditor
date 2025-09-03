@@ -1,27 +1,20 @@
 package nomanssave;
 
-class bq extends G {
-   bq(bl var1) {
-      this.er = var1;
+import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+
+class bQ extends DefaultListCellRenderer {
+   bQ(bO var1) {
+      this.eX = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      if (bl.b(this.er) < 0) {
-         return "";
-      } else {
-         int var2 = bl.c(this.er)[bl.b(this.er)].df();
-
-         try {
-            int var3 = hf.b(var1, 0, Integer.MAX_VALUE);
-            if (var3 != var2) {
-               bl.c(this.er)[bl.b(this.er)].av(var3);
-            }
-
-            return Integer.toString(var3);
-         } catch (RuntimeException var4) {
-            return Integer.toString(var2);
-         }
+   public Component getListCellRendererComponent(JList var1, Object var2, int var3, boolean var4, boolean var5) {
+      if (var2 instanceof gt) {
+         var2 = ((gt)var2).getSimpleName();
       }
+
+      return super.getListCellRendererComponent(var1, var2, var3, var4, var5);
    }
 }

@@ -1,23 +1,24 @@
 package nomanssave;
 
-class ac extends G {
-   ac(X var1) {
-      this.bV = var1;
-   }
+import java.awt.Component;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+
+class aC extends JCheckBox implements TableCellRenderer {
+   final JLabel cv = new JLabel();
 
    @Override
-   protected String g(String var1) {
-      gj var2 = (gj)X.k(this.bV).getSelectedItem();
-      if (var2 == null) {
-         return "";
+   public Component getTableCellRendererComponent(JTable var1, Object var2, boolean var3, boolean var4, int var5, int var6) {
+      var5 = var1.convertRowIndexToModel(var5);
+      if (!var1.getModel().isCellEditable(var5, var6)) {
+         return this.cv;
       } else {
-         var1 = var1.trim();
-         if (!var1.equals(var2.getName())) {
-            var2.setName(var1);
-            X.c(this.bV).setText(var1);
-         }
-
-         return var1;
+         this.setBackground(var1.getBackground());
+         this.setHorizontalAlignment(0);
+         this.setSelected(Boolean.TRUE == var2);
+         return this;
       }
    }
 }

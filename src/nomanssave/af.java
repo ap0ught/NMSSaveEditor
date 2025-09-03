@@ -1,23 +1,36 @@
 package nomanssave;
 
-class af extends G {
-   af(X var1) {
-      this.bV = var1;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.stream.Stream;
+
+class aF implements ActionListener {
+   aF(aD var1) {
+      this.cB = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      gj var2 = (gj)X.k(this.bV).getSelectedItem();
-      if (var2 == null) {
-         return "";
-      } else {
-         var1 = var1.trim();
-         if (!var1.equals(var2.cO())) {
-            var2.ac(var1);
-            X.f(this.bV).setText(var1);
+   public void actionPerformed(ActionEvent var1) {
+      String var2 = aH.getProperty("LookAndFeel");
+      aI var3 = Stream.of(aI.values()).filter(var1x -> var1x.name().equalsIgnoreCase(var2)).findFirst().orElse(aI.cN);
+      aI var4 = (aI)aD.a(this.cB).getSelectedItem();
+      aD.a(this.cB, false);
+      if (var4 == null) {
+         if (var3 != null) {
+            aH.setProperty("LookAndFeel", null);
+            aD.a(this.cB, true);
          }
-
-         return var1;
+      } else if (var3 == null || var3 != var4) {
+         aH.setProperty("LookAndFeel", var4.name());
+         aD.a(this.cB, true);
       }
+
+      double var5 = Double.parseDouble(aD.b(this.cB).getText());
+      if (var5 != aH.a("InventoryScaling", 1.0)) {
+         aH.b("InventoryScaling", var5);
+         aD.a(this.cB, true);
+      }
+
+      this.cB.setVisible(false);
    }
 }

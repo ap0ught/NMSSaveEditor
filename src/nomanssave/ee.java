@@ -1,41 +1,51 @@
 package nomanssave;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.event.ListDataListener;
+import java.util.ArrayList;
 
-class ee implements ComboBoxModel {
-   ee(ec var1, int var2) {
-      this.ik = var1;
-      this.il = var2;
+class eE extends ArrayList {
+   private eE() {
    }
 
-   @Override
-   public int getSize() {
-      return eb.aP().length;
+   public boolean add(String var1, String var2) {
+      return this.add(new eF(var1, var2));
    }
 
-   public gy H(int var1) {
-      return eb.aP()[var1];
-   }
-
-   @Override
-   public void addListDataListener(ListDataListener var1) {
-   }
-
-   @Override
-   public void removeListDataListener(ListDataListener var1) {
-   }
-
-   @Override
-   public void setSelectedItem(Object var1) {
-      gy var2 = (gy)var1;
-      if (var2 != null && !var2.equals(eb.a(ec.h(this.ik))[this.il].ed())) {
-         eb.a(ec.h(this.ik))[this.il].a(var2);
+   public boolean s(String var1) {
+      if (this.size() == 0) {
+         return false;
+      } else {
+         eF var2 = (eF)this.get(0);
+         return var2.key.equals(var1) || var2.name.equals(var1);
       }
    }
 
-   @Override
-   public Object getSelectedItem() {
-      return eb.a(ec.h(this.ik))[this.il].ed();
+   public eF t(String var1) {
+      for (eF var2 : this) {
+         if (var2.key.equals(var1)) {
+            return var2;
+         }
+      }
+
+      return null;
+   }
+
+   public eF u(String var1) {
+      for (eF var2 : this) {
+         if (var2.name.equals(var1)) {
+            return var2;
+         }
+      }
+
+      return null;
+   }
+
+   public eF v(String var1) {
+      for (eF var2 : this) {
+         if (var2.name.equalsIgnoreCase(var1)) {
+            return var2;
+         }
+      }
+
+      return null;
    }
 }

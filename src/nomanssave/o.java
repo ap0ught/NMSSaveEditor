@@ -3,13 +3,17 @@ package nomanssave;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class o implements ActionListener {
-   o(h var1) {
-      this.z = var1;
+class O implements ActionListener {
+   O(I var1, Application var2) {
+      this.bt = var1;
+      this.bv = var2;
    }
 
    @Override
    public void actionPerformed(ActionEvent var1) {
-      this.z.setVisible(false);
+      gf var2 = (gf)I.j(this.bt).getSelectedItem();
+      if (var2 != null && this.bv.b(var2)) {
+         I.e(this.bt).setText(Integer.toString(var2.cG()));
+      }
    }
 }

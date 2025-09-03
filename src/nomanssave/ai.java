@@ -1,22 +1,21 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+public enum aI {
+   cN("Light"),
+   cO("Dark"),
+   cP("IntelliJ"),
+   cQ("Darcula"),
+   cR("macOS Light"),
+   cS("macOS Dark");
 
-class ai implements ActionListener {
-   ai(X var1, Application var2) {
-      this.bV = var1;
-      this.bv = var2;
+   final String cT;
+
+   private aI(String var3) {
+      this.cT = var3;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      int var2 = X.k(this.bV).getSelectedIndex();
-      if (var2 >= 0 && var2 < X.a(this.bV).length) {
-         if (JOptionPane.showConfirmDialog(this.bV, "Are you sure you want to delete this companion?", "Delete", 2) == 0) {
-            this.bv.a(X.a(this.bV)[var2].cL(), X.a(this.bV)[var2].getIndex());
-         }
-      }
+   public String toString() {
+      return this.cT;
    }
 }

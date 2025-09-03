@@ -1,346 +1,554 @@
 package nomanssave;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import javax.swing.ImageIcon;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-public abstract class ey {
-   public static final int jD = 0;
-   public static final int jE = 1;
-   public static final int jF = 2;
-   public static final int jG = 3;
-   final String id;
-   private static final Pattern jH = Pattern.compile("%(\\w+)%");
-   private static final List jI;
-   private static final List jJ;
+public class eY {
+   private static final int kB = 10;
+   private static final int kC = 10;
+   private static final Pattern kH = Pattern.compile("[^\"\\.\\[\\]]+");
+   int length = 0;
+   String[] names = new String[10];
+   Object[] values = new Object[10];
+   Object kD;
+   fe kI;
+   Map kJ = new HashMap();
+   private static final Pattern kK = Pattern.compile("([^\\.\\[\\]]+)|(?:\\.([^\\.\\[\\]]+))|(?:\\[(\\d+)\\])");
 
-   static {
-      Element var0 = null;
-      InputStream var1 = Application.class.getResourceAsStream("db/items.xml");
-      if (var1 != null) {
-         try {
-            Document var2 = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(var1);
-            var0 = var2.getDocumentElement();
-         } catch (ParserConfigurationException var7) {
-         } catch (SAXException var8) {
-         } catch (IOException var9) {
+   public static eY E(String var0) {
+      return fh.Q(var0);
+   }
+
+   public void b(String var1, Function var2) {
+      this.kJ.put(var1, var2);
+   }
+
+   void a(String var1, Object var2) {
+      for (int var3 = 0; var3 < this.length; var3++) {
+         if (this.names[var3].equals(var1)) {
+            throw new RuntimeException("duplicate key: " + var1);
          }
       }
 
-      ArrayList var10 = new ArrayList();
-      if (var0 != null) {
-         NodeList var3 = var0.getChildNodes();
-
-         for (int var4 = 0; var4 < var3.getLength(); var4++) {
-            Node var5 = var3.item(var4);
-            if (var5 instanceof Element && var5.getNodeName().equals("product-template")) {
-               var10.add(new eA((Element)var5));
-            }
-         }
+      if (this.values.length == this.length) {
+         String[] var5 = new String[this.length + 10];
+         Object[] var4 = new Object[this.length + 10];
+         System.arraycopy(this.names, 0, var5, 0, this.length);
+         System.arraycopy(this.values, 0, var4, 0, this.length);
+         this.names = var5;
+         this.values = var4;
       }
 
-      jI = Collections.unmodifiableList(var10);
-      ArrayList var11 = new ArrayList();
-      if (var0 != null) {
-         NodeList var12 = var0.getChildNodes();
-
-         for (int var14 = 0; var14 < var12.getLength(); var14++) {
-            Node var6 = var12.item(var14);
-            if (var6 instanceof Element && var6.getNodeName().equals("substance")) {
-               var11.add(new eP((Element)var6));
-            } else if (var6 instanceof Element && var6.getNodeName().equals("product")) {
-               var11.add(new eH((Element)var6, false));
-            } else if (var6 instanceof Element && var6.getNodeName().equals("procedural-product")) {
-               var11.add(new eH((Element)var6, true));
-            } else if (var6 instanceof Element && var6.getNodeName().equals("technology")) {
-               var11.add(new eQ((Element)var6, false));
-            } else if (var6 instanceof Element && var6.getNodeName().equals("procedural-technology")) {
-               var11.add(new eQ((Element)var6, true));
-            }
-         }
-      }
-
-      List var13 = var11.stream()
-         .filter(var0x -> var0x instanceof eQ)
-         .map(eQ.class::cast)
-         .map(var0x -> var0x.bv())
-         .filter(var0x -> var0x != null)
-         .collect(Collectors.toList());
-      var11.addAll(var13);
-      var13.sort((var0x, var1x) -> var0x.getName().compareTo(var1x.getName()));
-      jJ = Collections.unmodifiableList(var11);
+      this.names[this.length] = var1;
+      this.values[this.length] = var2;
+      fh.a(var2, this);
+      this.length++;
    }
 
-   ey(String var1) {
-      this.id = var1;
+   public String bz() {
+      return fh.a(this, System.lineSeparator(), true);
    }
-
-   public final String getID() {
-      return this.id;
-   }
-
-   private static String L(int var0) {
-      StringBuilder var1 = new StringBuilder();
-      var1.append(Integer.toString(var0));
-
-      while (var1.length() < 5) {
-         var1.insert(0, '0');
-      }
-
-      return var1.toString();
-   }
-
-   public Object aZ() {
-      if (this.id.length() < 2 || this.id.charAt(0) != '^') {
-         throw new RuntimeException("Cannot create ID: invalid string");
-      } else if (this.bb()) {
-         int var1 = (int)Math.floor(Math.random() * 100000.0);
-         return this.id + "#" + L(var1);
-      } else {
-         return this.id;
-      }
-   }
-
-   public Object M(int var1) {
-      if (this.id.length() < 2 || this.id.charAt(0) != '^') {
-         throw new RuntimeException("Cannot create ID: invalid string");
-      } else if (this.bb()) {
-         if (var1 >= 0 && var1 < 100000) {
-            return this.id + "#" + L(var1);
-         } else {
-            throw new RuntimeException("Cannot create ID: invalid proc");
-         }
-      } else if (var1 != 0) {
-         throw new RuntimeException("Cannot create ID: invalid proc");
-      } else {
-         return this.id;
-      }
-   }
-
-   public abstract eB ba();
-
-   public abstract boolean bb();
-
-   public abstract String getName();
-
-   public abstract ex bc();
-
-   public abstract boolean bd();
-
-   public abstract boolean be();
-
-   public abstract Integer bf();
-
-   public abstract String bg();
-
-   public abstract boolean bh();
-
-   public abstract String bi();
-
-   public final ImageIcon N(int var1) {
-      String var2 = this.bi();
-      switch (var1) {
-         case 0:
-            return var2 == null ? null : Application.a(var2);
-         case 1:
-            return var2 == null ? null : Application.a(var2, 40, 40);
-         case 2:
-            return var2 == null ? null : Application.a(var2, 80, 80);
-         case 3:
-            return var2 == null ? null : Application.a(var2, 20, 20);
-         default:
-            return null;
-      }
-   }
-
-   public final ImageIcon c(int var1, int var2) {
-      String var3 = this.bi();
-      return var3 == null ? null : Application.a(var3, var1, var2);
-   }
-
-   public abstract int bj();
-
-   public abstract String getDescription();
-
-   public abstract List bk();
 
    @Override
    public String toString() {
-      return this.id;
+      return fh.a(this, null, false);
    }
 
-   static String a(Element var0) {
-      if (var0 == null) {
-         throw new IllegalArgumentException();
-      } else {
-         NodeList var1 = var0.getChildNodes();
-         StringBuffer var2 = new StringBuffer();
-         boolean var3 = false;
+   public eY bE() {
+      eY var1 = new eY();
+      var1.names = new String[this.values.length];
+      var1.values = new Object[this.values.length];
+      System.arraycopy(this.names, 0, var1.names, 0, this.length);
 
-         for (int var5 = 0; var5 < var1.getLength(); var5++) {
-            Node var4 = var1.item(var5);
-            if (var4.getNodeType() == 3) {
-               var2.append(var4.getNodeValue());
-               var3 = true;
-            }
-         }
-
-         return !var3 ? null : var2.toString();
-      }
-   }
-
-   private static List O(int var0) {
-      ArrayList var1 = new ArrayList();
-      boolean var2 = (var0 & 16384) == 0;
-      if ((var0 & 4) == 4) {
-         var1.add(ex.je);
-         var1.add(ex.js);
-         var1.add(ex.jv);
-         if (var2) {
-            var1.add(ex.jw);
-         }
-      }
-
-      if ((var0 & 64) == 64) {
-         var1.add(ex.jq);
-         var1.add(ex.js);
-         if (var2) {
-            var1.add(ex.jr);
-         }
-      }
-
-      if ((var0 & 256) == 256) {
-         var1.add(ex.ju);
-         var1.add(ex.js);
-         var1.add(ex.jv);
-         if (var2) {
-            var1.add(ex.jw);
-         }
-      }
-
-      if ((var0 & 2) == 2) {
-         var1.add(ex.jf);
-         if (var2) {
-            var1.add(ex.jg);
-         }
-      }
-
-      if ((var0 & 1) == 1) {
-         var1.add(ex.jh);
-         if (var2) {
-            var1.add(ex.ji);
-         }
-      }
-
-      if ((var0 & 8) == 8) {
-         var1.add(ex.jk);
-         if (var2) {
-            var1.add(ex.jl);
-         }
-      }
-
-      if ((var0 & 16) == 16) {
-         var1.add(ex.jm);
-         var1.add(ex.jt);
-         if (var2) {
-            var1.add(ex.jn);
-         }
-      }
-
-      if ((var0 & 32) == 32) {
-         var1.add(ex.jo);
-         var1.add(ex.jt);
-         if (var2) {
-            var1.add(ex.jp);
-         }
-      }
-
-      if ((var0 & 128) == 128) {
-         var1.add(ex.jx);
-         var1.add(ex.jt);
-         if (var2) {
-            var1.add(ex.jy);
-         }
-      }
-
-      boolean var3 = (var0 & 32768) != 0;
-      if ((var0 & 1024) == 1024) {
-         if (var3) {
-            var1.add(ex.iL);
-            var1.add(ex.iP);
-            var1.add(ex.iQ);
-            var1.add(ex.iS);
+      for (int var2 = 0; var2 < this.length; var2++) {
+         if (this.values[var2] instanceof eY) {
+            var1.values[var2] = ((eY)this.values[var2]).bE();
+            fh.a(var1.values[var2], var1);
+         } else if (this.values[var2] instanceof eV) {
+            var1.values[var2] = ((eV)this.values[var2]).bA();
+            fh.a(var1.values[var2], var1);
          } else {
-            var1.add(ex.iL);
-            var1.add(ex.iM);
-            var1.add(ex.iN);
-            var1.add(ex.iO);
-            var1.add(ex.iP);
-            var1.add(ex.iQ);
-            var1.add(ex.iR);
-            var1.add(ex.iS);
+            var1.values[var2] = this.values[var2];
          }
       }
 
-      if ((var0 & 512) == 512) {
-         if (var3) {
-            var1.add(ex.iT);
-            var1.add(ex.iU);
-         } else {
-            var1.add(ex.iT);
-            var1.add(ex.iU);
-            var1.add(ex.iV);
-            var1.add(ex.iW);
-            var1.add(ex.iZ);
-            var1.add(ex.jb);
-            if (var2) {
-               var1.add(ex.iY);
-            }
-
-            if ((var0 & 8192) == 0) {
-               var1.add(ex.jd);
-            }
-         }
-      }
-
-      if ((var0 & 2048) == 2048) {
-         var1.add(ex.jc);
-      }
-
+      var1.length = this.length;
       return var1;
    }
 
-   public static List b(int var0, String var1) {
-      String var2 = var1.toUpperCase();
-      return jJ.stream().filter(var2x -> var2x.getName().toUpperCase().indexOf(var2) >= 0 && O(var0).contains(var2x.bc())).collect(Collectors.toList());
+   public int size() {
+      return this.length;
    }
 
-   public static List bl() {
-      return jJ.stream().filter(var0 -> var0 instanceof eQ && !var0.bb() && var0.bc() != ex.jz).collect(Collectors.toList());
+   public List names() {
+      String[] var1 = new String[this.length];
+      System.arraycopy(this.names, 0, var1, 0, this.length);
+      return Arrays.asList(var1);
    }
 
-   public static List bm() {
-      return jJ.stream().filter(var0 -> var0 instanceof eH && !var0.bb()).collect(Collectors.toList());
+   public boolean contains(String var1) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else if (!kH.matcher(var1).matches()) {
+         throw new RuntimeException("Invalid name: " + var1);
+      } else {
+         for (int var2 = 0; var2 < this.length; var2++) {
+            if (var1.equals(this.names[var2])) {
+               return true;
+            }
+         }
+
+         return false;
+      }
    }
 
-   public static ey d(Object var0) {
-      String var1 = var0 instanceof fg ? ((fg)var0).bP() : var0.toString();
-      return jJ.stream().filter(var2 -> !var2.bb() && !(var2 instanceof eR) ? var0.equals(var2.id) : var1.startsWith(var2.id + "#")).findFirst().orElse(null);
+   public Object get(String var1) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else if (!kH.matcher(var1).matches()) {
+         throw new RuntimeException("Invalid name: " + var1);
+      } else {
+         for (int var2 = 0; var2 < this.length; var2++) {
+            if (var1.equals(this.names[var2])) {
+               return this.values[var2];
+            }
+         }
+
+         return null;
+      }
    }
 
-   static eA p(String var0) {
-      return jI.stream().filter(var1 -> var0.equals(var1.id)).findFirst().orElse(null);
+   public Object put(String var1, Object var2) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else if (!kH.matcher(var1).matches()) {
+         throw new RuntimeException("Invalid name: " + var1);
+      } else if (var2 != null && !fh.a(var2.getClass())) {
+         throw new RuntimeException("Unsupported type: " + var2.getClass().getSimpleName());
+      } else {
+         for (int var3 = 0; var3 < this.length; var3++) {
+            if (var1.equals(this.names[var3])) {
+               Object var4 = this.values[var3];
+               fh.i(var4);
+               this.values[var3] = var2;
+               fh.a(var2, this);
+               this.firePropertyChange(var1, var4, var2);
+               return var4;
+            }
+         }
+
+         if (this.values.length == this.length) {
+            String[] var5 = new String[this.length + 10];
+            Object[] var6 = new Object[this.length + 10];
+            System.arraycopy(this.names, 0, var5, 0, this.length);
+            System.arraycopy(this.values, 0, var6, 0, this.length);
+            this.names = var5;
+            this.values = var6;
+         }
+
+         this.names[this.length] = var1;
+         this.values[this.length] = var2;
+         fh.a(var2, this);
+         this.length++;
+         this.firePropertyChange(var1, null, var2);
+         return null;
+      }
+   }
+
+   public Object F(String var1) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else if (!kH.matcher(var1).matches()) {
+         throw new RuntimeException("Invalid name: " + var1);
+      } else {
+         for (int var2 = 0; var2 < this.length; var2++) {
+            if (var1.equals(this.names[var2])) {
+               Object var3 = this.values[var2];
+               fh.i(var3);
+               var2++;
+
+               while (var2 < this.length) {
+                  this.names[var2 - 1] = this.names[var2];
+                  this.values[var2 - 1] = this.values[var2];
+                  var2++;
+               }
+
+               this.length--;
+               this.firePropertyChange(var1, var3, null);
+               return var3;
+            }
+         }
+
+         return null;
+      }
+   }
+
+   public void c(eY var1) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else {
+         for (int var2 = 0; var2 < var1.length; var2++) {
+            boolean var3 = false;
+
+            for (int var4 = 0; var4 < this.length; var4++) {
+               if (var1.names[var2].equals(this.names[var4])) {
+                  Object var5 = this.values[var4];
+                  fh.i(var5);
+                  if (var5 instanceof eY && var1.values[var2] instanceof eY) {
+                     ((eY)var5).c((eY)var1.values[var2]);
+                     this.values[var4] = var5;
+                  } else {
+                     this.values[var4] = var1.values[var2];
+                  }
+
+                  fh.a(this.values[var4], this);
+                  var3 = true;
+               }
+            }
+
+            if (!var3) {
+               if (this.values.length == this.length) {
+                  String[] var6 = new String[this.length + 10];
+                  Object[] var7 = new Object[this.length + 10];
+                  System.arraycopy(this.names, 0, var6, 0, this.length);
+                  System.arraycopy(this.values, 0, var7, 0, this.length);
+                  this.names = var6;
+                  this.values = var7;
+               }
+
+               this.names[this.length] = var1.names[var2];
+               this.values[this.length] = var1.values[var2];
+               fh.a(this.values[this.length], this);
+               this.length++;
+            }
+         }
+
+         this.firePropertyChange("", null, this);
+      }
+   }
+
+   int indexOf(String var1) {
+      for (int var2 = 0; var2 < this.length; var2++) {
+         if (var1.equals(this.names[var2])) {
+            return var2;
+         }
+      }
+
+      return -1;
+   }
+
+   Object set(int var1, Object var2) {
+      Object var3 = this.values[var1];
+      fh.i(var3);
+      this.values[var1] = var2;
+      fh.a(var2, this);
+      this.firePropertyChange(this.names[var1], var3, null);
+      return var3;
+   }
+
+   Object remove(int var1) {
+      String var2 = this.names[var1];
+      Object var3 = this.values[var1];
+      fh.i(var3);
+
+      for (int var4 = var1 + 1; var4 < this.length; var4++) {
+         this.names[var4 - 1] = this.names[var4];
+         this.values[var4 - 1] = this.values[var4];
+      }
+
+      this.length--;
+      this.firePropertyChange(var2, var3, null);
+      return var3;
+   }
+
+   public void clear() {
+      for (int var1 = 0; var1 < this.length; var1++) {
+         fh.i(this.values[var1]);
+         this.firePropertyChange(this.names[var1], this.values[var1], null);
+      }
+
+      this.length = 0;
+   }
+
+   public void a(fe var1) {
+      this.kI = var1;
+   }
+
+   void a(Object var1, String var2, Object var3, Object var4) {
+      for (int var5 = 0; var5 < this.length; var5++) {
+         if (var1 == this.values[var5]) {
+            this.firePropertyChange(this.names[var5] + var2, var3, var4);
+            return;
+         }
+      }
+   }
+
+   private void firePropertyChange(String var1, Object var2, Object var3) {
+      if (this.kI != null) {
+         EventQueue.invokeLater(() -> this.kI.propertyChanged(var1, var2, var3));
+      }
+
+      String var4 = var1.length() == 0 ? "" : "." + var1;
+      if (this.kD instanceof eY) {
+         ((eY)this.kD).a(this, var4, var2, var3);
+      }
+
+      if (this.kD instanceof eV) {
+         ((eV)this.kD).a(this, var4, var2, var3);
+      }
+   }
+
+   private fc G(String var1) {
+      for (Entry var2 : this.kJ.entrySet()) {
+         if (var1.equals(var2.getKey())) {
+            var1 = (String)((Function)var2.getValue()).apply(this);
+            break;
+         }
+
+         if (var1.startsWith((String)var2.getKey() + ".") || var1.startsWith((String)var2.getKey() + "[")) {
+            var1 = (String)((Function)var2.getValue()).apply(this) + var1.substring(((String)var2.getKey()).length());
+            break;
+         }
+      }
+
+      Matcher var5 = kK.matcher(var1);
+      if (var5.find() && var5.start() == 0) {
+         int var6 = var5.end();
+         Object var4;
+         if (var5.group(1) != null) {
+            var4 = new fb(this, var5.group(1), null);
+         } else {
+            if (var5.group(3) == null) {
+               throw new RuntimeException("Invalid path");
+            }
+
+            var4 = new eZ(this, Integer.parseInt(var5.group(3)), null);
+         }
+
+         while (var5.find() && var5.start() == var6) {
+            var6 = var5.end();
+            if (var5.group(2) != null) {
+               var4 = new fb(this, var5.group(2), (fc)var4);
+            } else {
+               if (var5.group(3) == null) {
+                  throw new RuntimeException("Invalid path");
+               }
+
+               var4 = new eZ(this, Integer.parseInt(var5.group(3)), (fc)var4);
+            }
+         }
+
+         if (var5.hitEnd()) {
+            return (fc)var4;
+         }
+      }
+
+      throw new RuntimeException("Invalid path");
+   }
+
+   public Object getValue(String var1) {
+      try {
+         return this.G(var1).getValue();
+      } catch (fd var3) {
+         hc.debug("Path not found: " + var1);
+         return null;
+      } catch (RuntimeException var4) {
+         hc.warn("Error getting value: " + var1 + ", " + var4.getMessage());
+         return null;
+      }
+   }
+
+   public eY H(String var1) {
+      return (eY)this.getValue(var1);
+   }
+
+   public eV d(String var1) {
+      return (eV)this.getValue(var1);
+   }
+
+   public String getValueAsString(String var1) {
+      Object var2 = this.getValue(var1);
+      return var2 instanceof fg ? var2.toString() : (String)var2;
+   }
+
+   public String I(String var1) {
+      Object var2 = this.getValue(var1);
+      if (var2 == null) {
+         return "";
+      } else if (!(var2 instanceof Number)) {
+         return (String)this.getValue(var1);
+      } else {
+         String var3 = Long.toHexString(((Number)var2).longValue());
+
+         while (var3.length() < 16) {
+            var3 = "0" + var3;
+         }
+
+         return "0x" + var3.toUpperCase();
+      }
+   }
+
+   public int J(String var1) {
+      Object var2 = this.getValue(var1);
+      return var2 == null ? 0 : ((Number)var2).intValue();
+   }
+
+   public int c(String var1, int var2) {
+      Object var3 = this.getValue(var1);
+      return var3 == null ? var2 : ((Number)var3).intValue();
+   }
+
+   public long K(String var1) {
+      Object var2 = this.getValue(var1);
+      return var2 == null ? 0L : ((Number)var2).longValue();
+   }
+
+   public long a(String var1, long var2) {
+      Object var4 = this.getValue(var1);
+      return var4 == null ? var2 : ((Number)var4).longValue();
+   }
+
+   public double L(String var1) {
+      Object var2 = this.getValue(var1);
+      return var2 == null ? 0.0 : ((Number)var2).doubleValue();
+   }
+
+   public double c(String var1, double var2) {
+      Object var4 = this.getValue(var1);
+      return var4 == null ? var2 : ((Number)var4).doubleValue();
+   }
+
+   public boolean M(String var1) {
+      Object var2 = this.getValue(var1);
+      return var2 == null ? false : (Boolean)var2;
+   }
+
+   public boolean a(String var1, boolean var2) {
+      Object var3 = this.getValue(var1);
+      return var3 == null ? var2 : (Boolean)var3;
+   }
+
+   public Object b(String var1, Object var2) {
+      return this.G(var1).a(var2, false);
+   }
+
+   public Object c(String var1, Object var2) {
+      return this.G(var1).a(var2, true);
+   }
+
+   public Object N(String var1) {
+      try {
+         return this.G(var1).bG();
+      } catch (fd var3) {
+         hc.debug("Path not found: " + var1);
+         return null;
+      } catch (RuntimeException var4) {
+         hc.warn("Error getting value: " + var1 + ", " + var4.getMessage());
+         return null;
+      }
+   }
+
+   public eY b(String var1, eY var2) {
+      return this.G(var1).e(var2);
+   }
+
+   public void d(eY var1) {
+      if (var1 == null) {
+         throw new NullPointerException();
+      } else if (var1.kD != null) {
+         throw new RuntimeException("Object must not have a parent");
+      } else {
+         this.clear();
+         this.length = var1.length;
+         this.names = new String[var1.length];
+         this.values = new Object[var1.length];
+         System.arraycopy(var1.names, 0, this.names, 0, this.length);
+
+         for (int var2 = 0; var2 < this.length; var2++) {
+            if (var1.values[var2] instanceof eY) {
+               this.values[var2] = ((eY)var1.values[var2]).bE();
+               fh.a(this.values[var2], this);
+            } else if (var1.values[var2] instanceof eV) {
+               this.values[var2] = ((eV)var1.values[var2]).bA();
+               fh.a(this.values[var2], this);
+            } else {
+               this.values[var2] = var1.values[var2];
+            }
+
+            this.firePropertyChange(this.names[var2], null, this.values[var2]);
+         }
+      }
+   }
+
+   // $VF: Could not inline inconsistent finally blocks
+   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+   public void c(File var1) {
+      Throwable var2 = null;
+      Object var3 = null;
+
+      try {
+         FileOutputStream var4 = new FileOutputStream(var1);
+
+         try {
+            String var5 = fh.b(this, true);
+            var4.write(var5.getBytes(StandardCharsets.UTF_8));
+         } finally {
+            if (var4 != null) {
+               var4.close();
+            }
+         }
+      } catch (Throwable var11) {
+         if (var2 == null) {
+            var2 = var11;
+         } else if (var2 != var11) {
+            var2.addSuppressed(var11);
+         }
+
+         throw var2;
+      }
+   }
+
+   // $VF: Could not inline inconsistent finally blocks
+   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+   public void d(File var1) {
+      Throwable var2 = null;
+      Object var3 = null;
+
+      try {
+         FileInputStream var4 = new FileInputStream(var1);
+
+         try {
+            String var5 = new String(hk.g(var4), StandardCharsets.UTF_8);
+            Object var6 = fh.P(var5);
+            if (!(var6 instanceof eY)) {
+               throw new eX("Object expected", 0, 0);
+            }
+
+            this.d((eY)var6);
+         } finally {
+            if (var4 != null) {
+               var4.close();
+            }
+         }
+      } catch (Throwable var12) {
+         if (var2 == null) {
+            var2 = var12;
+         } else if (var2 != var12) {
+            var2.addSuppressed(var12);
+         }
+
+         throw var2;
+      }
    }
 }

@@ -1,122 +1,139 @@
 package nomanssave;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-public class er {
-   final String id;
-   final String name;
-   final gq iB;
-   final int iC;
-   final gr iD;
-   final boolean iE;
-   final gr[] iF;
-   private static final List iG = new ArrayList();
+public class eR extends ey {
+   final String kc;
+   final eA kn;
 
-   static {
-      InputStream var0 = Application.class.getResourceAsStream("db/frigates.xml");
-      if (var0 != null) {
-         try {
-            Document var1 = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(var0);
-            Element var2 = var1.getDocumentElement();
-            NodeList var3 = var2.getChildNodes();
+   eR(eQ var1, Element var2) {
+      super(var2.getAttribute("id"));
+      this.ko = var1;
+      this.kc = var2.hasAttribute("icon") ? var2.getAttribute("icon") : null;
+      this.kn = ey.p(var2.getAttribute("template"));
+   }
 
-            for (int var4 = 0; var4 < var3.getLength(); var4++) {
-               Node var5 = var3.item(var4);
-               if (var5 instanceof Element && var5.getNodeName().equals("trait")) {
-                  iG.add(new er((Element)var5));
-               }
+   @Override
+   public Object aZ() {
+      return this.M(this.ko.jY ? (int)Math.floor(Math.random() * 100000.0) : 0);
+   }
+
+   @Override
+   public Object M(int var1) {
+      if (this.id.length() != 13 || this.id.charAt(0) != '^') {
+         throw new RuntimeException("Cannot create ID: invalid string");
+      } else if (var1 >= 0 && var1 < 100000) {
+         ByteArrayOutputStream var2 = new ByteArrayOutputStream();
+         var2.write(94);
+
+         for (int var3 = 0; var3 < 6; var3++) {
+            int var4 = "0123456789ABCDEFabcdef".indexOf(this.id.charAt(var3 * 2 + 1));
+            int var5 = "0123456789ABCDEFabcdef".indexOf(this.id.charAt(var3 * 2 + 2));
+            if (var4 < 0 || var5 < 0) {
+               throw new RuntimeException("Cannot create ID: invalid hex");
             }
-         } catch (ParserConfigurationException var6) {
-         } catch (SAXException var7) {
-         } catch (IOException var8) {
+
+            if (var4 >= 16) {
+               var4 -= 6;
+            }
+
+            if (var5 >= 16) {
+               var5 -= 6;
+            }
+
+            var2.write(var4 << 4 | var5);
          }
+
+         var2.write(35);
+
+         for (int var6 = 100000; var6 > 1; var6 /= 10) {
+            int var7 = var1 * 10 / var6 % 10;
+            var2.write("0123456789ABCDEFabcdef".charAt(var7));
+         }
+
+         return new fg(var2.toByteArray());
+      } else {
+         throw new RuntimeException("Cannot create ID: invalid proc");
       }
-
-      iG.sort(new es());
    }
 
-   private er(Element var1) {
-      this.id = var1.getAttribute("id");
-      this.name = var1.getAttribute("name");
-      String var2 = var1.getAttribute("type");
-      this.iB = var2 == null ? null : gq.valueOf(var2);
-      this.iC = Integer.parseInt(var1.getAttribute("strength"));
-      var2 = var1.getAttribute("primary");
-      this.iD = var2 == null ? null : gr.an(var2);
-      this.iE = Boolean.parseBoolean(var1.getAttribute("beneficial"));
-      this.iF = n(var1.getAttribute("secondary"));
+   @Override
+   public eB ba() {
+      return eB.jO;
    }
 
-   private static gr[] n(String var0) {
-      ArrayList var1 = new ArrayList();
-      int var2 = 0;
+   @Override
+   public boolean bb() {
+      return this.ko.jY;
+   }
 
-      while (var2 < var0.length()) {
-         int var4 = var0.indexOf(",", var2);
-         gr var3;
-         if (var4 >= 0) {
-            var3 = gr.an(var0.substring(var2, var4));
-            var2 = var4 + 1;
-         } else {
-            var3 = gr.an(var0.substring(var2));
-            var2 = var0.length();
-         }
-
-         if (var3 != null) {
-            var1.add(var3);
-         }
+   private String y(String var1) {
+      if ("NAME".equals(var1)) {
+         return this.ko.name;
+      } else {
+         return "TECH_DESC".equals(var1) ? this.ko.description : var1;
       }
-
-      return var1.toArray(new gr[0]);
    }
 
-   public String getID() {
-      return this.id;
-   }
-
+   @Override
    public String getName() {
-      return this.name;
+      return this.kn.a(this::y);
    }
 
-   public gq aU() {
-      return this.iB;
+   @Override
+   public ex bc() {
+      return ex.jd;
    }
 
-   public int aV() {
-      return this.iC * this.iB.di();
+   @Override
+   public boolean bd() {
+      return false;
    }
 
-   public boolean aW() {
-      return this.iE;
+   @Override
+   public boolean be() {
+      return false;
+   }
+
+   @Override
+   public Integer bf() {
+      return null;
+   }
+
+   @Override
+   public String bg() {
+      return this.kn.b(this::y);
+   }
+
+   @Override
+   public boolean bh() {
+      return false;
+   }
+
+   @Override
+   public String bi() {
+      return this.kc;
+   }
+
+   @Override
+   public int bj() {
+      return 0;
+   }
+
+   @Override
+   public String getDescription() {
+      return this.kn.c(this::y);
+   }
+
+   @Override
+   public List bk() {
+      return this.ko.ke;
    }
 
    @Override
    public String toString() {
-      String var1 = (this.iC > 0 ? "+" : "") + this.iC + (this.iB == gq.oY ? "%" : "");
-      return this.name + " (" + var1 + " " + this.iB + ")";
-   }
-
-   public static er[] a(gr var0) {
-      return iG.stream().filter(var1 -> var1.iD == var0).toArray(er[]::new);
-   }
-
-   public static er[] b(gr var0) {
-      return iG.stream().filter(var1 -> Arrays.stream(var1.iF).anyMatch(var1x -> var1x == var0)).toArray(er[]::new);
-   }
-
-   public static er o(String var0) {
-      int var1 = iG.indexOf(new et(var0));
-      return var1 >= 0 ? (er)iG.get(var1) : null;
+      return this.ko.name.length() == 0 ? this.id : this.ko.name;
    }
 }

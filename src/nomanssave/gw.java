@@ -1,68 +1,54 @@
 package nomanssave;
 
-public class gw extends gv {
-   private final eY oI;
+public class gW {
+   public static void i(byte[] var0) {
+      StringBuilder var1 = new StringBuilder();
+      var1.append("Data: " + var0.length);
+      var1.append(System.lineSeparator());
+      var1.append("  ");
+      StringBuilder var2 = new StringBuilder();
 
-   gw(eY var1, eY var2) {
-      super(0, null, var2);
-      this.oI = var1;
-   }
+      for (int var3 = 0; var3 < var0.length; var3++) {
+         var1.append(Integer.toString((var0[var3] & 240) >> 4, 16));
+         var1.append(Integer.toString(var0[var3] & 15, 16));
+         if (var0[var3] >= 32 && var0[var3] < 127) {
+            var2.append((char)(var0[var3] & 255));
+         } else {
+            var2.append('?');
+         }
 
-   @Override
-   public String getName() {
-      return this.oI.getValueAsString("PlayerWeaponName");
-   }
-
-   @Override
-   public void setName(String var1) {
-      this.oI.b("PlayerWeaponName", var1);
-   }
-
-   @Override
-   public String cT() {
-      return gx.qH.K();
-   }
-
-   @Override
-   public void ag(String var1) {
-      if (!gx.qH.K().equals(var1)) {
-         throw new RuntimeException("Only standard types allowed");
+         if (var3 % 16 == 15) {
+            var1.append("  ");
+            var1.append((CharSequence)var2);
+            var1.append(System.lineSeparator());
+            var1.append("  ");
+            var2 = new StringBuilder();
+         }
       }
-   }
 
-   public gx dI() {
-      return gx.qH;
-   }
+      if (var2.length() > 0) {
+         while (var2.length() < 16) {
+            var1.append("  ");
+            var2.append(" ");
+         }
 
-   public void a(gx var1) {
-      if (var1 != gx.qH) {
-         throw new RuntimeException("Only standard types allowed");
+         var1.append("  ");
+         var1.append((CharSequence)var2);
       }
+
+      System.out.println(var1.toString());
    }
 
-   @Override
-   public String cK() {
-      return this.oI.d("CurrentWeapon.GenerationSeed").X(1);
-   }
+   public static void a(long[] var0) {
+      byte[] var1 = new byte[var0.length * 4];
 
-   @Override
-   public void aa(String var1) {
-      this.oI.d("CurrentWeapon.GenerationSeed").a(1, var1);
-   }
+      for (int var2 = 0; var2 < var0.length; var2++) {
+         var1[var2 * 4 + 3] = (byte)((int)(var0[var2] >> 24 & 255L));
+         var1[var2 * 4 + 2] = (byte)((int)(var0[var2] >> 16 & 255L));
+         var1[var2 * 4 + 1] = (byte)((int)(var0[var2] >> 8 & 255L));
+         var1[var2 * 4] = (byte)((int)(var0[var2] & 255L));
+      }
 
-   @Override
-   public String cW() {
-      return this.oI.getValueAsString("WeaponInventory.Class.InventoryClass");
-   }
-
-   @Override
-   public void aj(String var1) {
-      this.oI.b("WeaponInventory.Class.InventoryClass", var1);
-   }
-
-   @Override
-   public String toString() {
-      String var1 = this.getName();
-      return var1 != null && var1.length() != 0 ? var1 : "Multitool";
+      i(var1);
    }
 }

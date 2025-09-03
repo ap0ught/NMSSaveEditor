@@ -1,9 +1,7 @@
 package nomanssave;
 
-public interface fr {
-   String K();
+public interface fR {
+   void a(fq var1);
 
-   eY M();
-
-   void k(eY var1);
+   void a(fq var1, int var2, String var3);
 }

@@ -1,33 +1,20 @@
 package nomanssave;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
 
-public class cv extends JFileChooser {
-   private static cv fQ = null;
-   private static final String name = "Weapon Export File";
-   private static final ImageIcon fH = Application.a("UI-WEAPONICON.PNG", 16, 16);
-
-   public static cv ax() {
-      if (fQ == null) {
-         fQ = new cv();
-      }
-
-      return fQ;
+class cV extends FileFilter {
+   cV(cT var1) {
+      this.gw = var1;
    }
 
-   private cv() {
-      this.setFileSelectionMode(0);
-      this.setAcceptAllFileFilterUsed(false);
-      this.setFileView(new cw(this));
-      this.setFileFilter(new cx(this));
-      this.setDialogTitle("Choose Weapon Export File");
-      UIManager.addPropertyChangeListener(var1 -> {
-         if ("lookAndFeel".equals(var1.getPropertyName())) {
-            SwingUtilities.updateComponentTreeUI(this);
-         }
-      });
+   @Override
+   public String getDescription() {
+      return "Ship Export File";
+   }
+
+   @Override
+   public boolean accept(File var1) {
+      return var1.isDirectory() ? !var1.isHidden() : var1.getName().endsWith(".sh0");
    }
 }

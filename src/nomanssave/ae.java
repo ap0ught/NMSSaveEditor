@@ -1,23 +1,40 @@
 package nomanssave;
 
-class ae extends G {
-   ae(X var1) {
-      this.bV = var1;
+import javax.swing.ComboBoxModel;
+import javax.swing.event.ListDataListener;
+
+class aE implements ComboBoxModel {
+   aI cA;
+
+   aE(aD var1) {
+      this.cB = var1;
+      this.cA = null;
    }
 
    @Override
-   protected String g(String var1) {
-      gj var2 = (gj)X.k(this.bV).getSelectedItem();
-      if (var2 == null) {
-         return "";
-      } else {
-         var1 = var1.trim();
-         if (!var1.equals(var2.cN())) {
-            var2.ab(var1);
-            X.e(this.bV).setText(var1);
-         }
+   public int getSize() {
+      return aI.values().length;
+   }
 
-         return var1;
-      }
+   public aI t(int var1) {
+      return aI.values()[var1];
+   }
+
+   @Override
+   public void addListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void removeListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void setSelectedItem(Object var1) {
+      this.cA = (aI)var1;
+   }
+
+   @Override
+   public Object getSelectedItem() {
+      return this.cA;
    }
 }

@@ -1,21 +1,21 @@
 package nomanssave;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class br implements ActionListener {
-   br(bl var1, Application var2) {
-      this.er = var1;
-      this.bv = var2;
+class bR implements ActionListener {
+   bR(bO var1) {
+      this.eX = var1;
    }
 
    @Override
    public void actionPerformed(ActionEvent var1) {
-      if (bl.b(this.er) >= 0) {
-         String var2 = hg.eo().toString();
-         bl.a(this.er, this.bv.a(bl.c(this.er)[bl.b(this.er)].getIndex(), var2));
-         bl.g(this.er).setEnabled(bl.c(this.er).length < 30 || en.aS());
-         bl.e(this.er).updateUI();
+      if (bO.a(this.eX) != null) {
+         Dimension var2 = aQ.a(this.eX, bO.a(this.eX).getSize(), bO.a(this.eX).dm(), bO.a(this.eX).dn());
+         if (var2 != null && bO.a(this.eX).a(var2)) {
+            bO.c(this.eX);
+         }
       }
    }
 }

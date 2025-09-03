@@ -1,51 +1,52 @@
 package nomanssave;
 
-public enum gy {
-   qR("Vy’keen", "Warriors", "MODELS/COMMON/PLAYER/PLAYERCHARACTER/NPCVYKEEN.SCENE.MBIN"),
-   qS("Korvax", "Explorers", "MODELS/COMMON/PLAYER/PLAYERCHARACTER/NPCKORVAX.SCENE.MBIN"),
-   qT("Gek", "Traders", "MODELS/COMMON/PLAYER/PLAYERCHARACTER/NPCGEK.SCENE.MBIN"),
-   qU("Fourth Race", null, "MODELS/COMMON/PLAYER/PLAYERCHARACTER/NPCFOURTH.SCENE.MBIN"),
-   qV("Vy’keen (Old)", null, "MODELS/PLANETS/NPCS/WARRIOR/WARRIOR.SCENE.MBIN"),
-   qW("Korvax (Old)", null, "MODELS/PLANETS/NPCS/EXPLORER/EXPLORERIPAD.SCENE.MBIN"),
-   qX("Gek (Old)", null, "MODELS/PLANETS/NPCS/LOWERORDER/LOWERORDER.SCENE.MBIN"),
-   qY("Fourth Race (Old)", null, "MODELS/PLANETS/NPCS/FOURTHRACE/FOURTHRACE.SCENE.MBIN");
+import java.io.IOException;
+import java.io.InputStream;
 
-   private String name;
-   private String qZ;
-   private String filename;
+class gY extends InputStream {
+   private int sc;
 
-   private gy(String var3, String var4, String var5) {
-      this.name = var3;
-      this.qZ = var4;
-      this.filename = var5;
-   }
-
-   public String K() {
-      return this.filename;
+   private gY(gX var1, int var2) {
+      this.sd = var1;
+      this.sc = var2;
    }
 
    @Override
-   public String toString() {
-      return this.name;
-   }
-
-   public static gy as(String var0) {
-      for (int var1 = 0; var1 < values().length; var1++) {
-         if (var0.equals(values()[var1].filename)) {
-            return values()[var1];
+   public int read() {
+      if (this.sc == 0) {
+         return -1;
+      } else {
+         int var1 = gX.a(this.sd).read();
+         if (var1 < 0) {
+            throw new IOException("short read");
+         } else {
+            this.sc--;
+            return var1;
          }
       }
-
-      return null;
    }
 
-   public static gy at(String var0) {
-      for (int var1 = 0; var1 < values().length; var1++) {
-         if (var0.equals(values()[var1].qZ)) {
-            return values()[var1];
+   @Override
+   public int read(byte[] var1) {
+      return this.read(var1, 0, var1.length);
+   }
+
+   @Override
+   public int read(byte[] var1, int var2, int var3) {
+      if (this.sc == 0) {
+         return -1;
+      } else {
+         if (var3 > this.sc) {
+            var3 = this.sc;
+         }
+
+         var3 = gX.a(this.sd).read(var1, var2, var3);
+         if (var3 <= 0) {
+            throw new IOException("short read");
+         } else {
+            this.sc -= var3;
+            return var3;
          }
       }
-
-      return null;
    }
 }

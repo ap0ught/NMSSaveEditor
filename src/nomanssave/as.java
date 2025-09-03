@@ -1,28 +1,33 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-class as implements ActionListener {
-   as(ap var1) {
-      this.cu = var1;
+class aS implements FocusListener {
+   aS(aQ var1) {
+      this.dr = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      String[] var2 = p.b(this.cu);
-      boolean var3 = false;
+   public void focusGained(FocusEvent var1) {
+   }
 
-      for (int var4 = 0; var4 < var2.length; var4++) {
-         if (!ap.a(this.cu).hasValue(var2[var4])) {
-            ap.a(this.cu).f(var2[var4]);
-            var3 = true;
+   @Override
+   public void focusLost(FocusEvent var1) {
+      int var2;
+      try {
+         var2 = Integer.parseInt(aQ.e(this.dr).getText());
+         if (var2 != aQ.b(this.dr).height) {
+            if (var2 < aQ.c(this.dr).height) {
+               var2 = aQ.c(this.dr).height;
+            } else if (var2 > aQ.d(this.dr).height && !en.aS()) {
+               var2 = aQ.d(this.dr).height;
+            }
          }
+      } catch (RuntimeException var4) {
+         var2 = aQ.b(this.dr).height;
       }
 
-      if (var3) {
-         ap.b(this.cu).sort();
-         ap.c(this.cu).updateUI();
-      }
+      aQ.e(this.dr).setText(Integer.toString(var2));
    }
 }

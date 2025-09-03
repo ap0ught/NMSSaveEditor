@@ -1,25 +1,9 @@
 package nomanssave;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
-public class en {
-   private static boolean iu = false;
-   private static List iv = new ArrayList();
-
-   public static void a(eo var0) {
-      iv.add(var0);
-   }
-
-   public static boolean aS() {
-      return iu;
-   }
-
-   public static void c(boolean var0) {
-      iu = var0;
-
-      for (eo var1 : iv) {
-         var1.a(var0);
-      }
+class eN implements Comparator {
+   public int a(eM var1, eM var2) {
+      return var1.name.compareTo(var2.name);
    }
 }

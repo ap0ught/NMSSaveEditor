@@ -3,13 +3,14 @@ package nomanssave;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class t implements ActionListener {
-   t(p var1) {
-      this.I = var1;
+class T implements ActionListener {
+   T(Q var1) {
+      this.bD = var1;
    }
 
    @Override
    public void actionPerformed(ActionEvent var1) {
-      this.I.setVisible(false);
+      Q.a(this.bD, new W(Integer.parseInt(Q.a(this.bD).getText()), Integer.parseInt(Q.d(this.bD).getText())));
+      this.bD.setVisible(false);
    }
 }

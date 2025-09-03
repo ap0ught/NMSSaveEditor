@@ -1,16 +1,23 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-class dg implements ActionListener {
-   dg(dd var1) {
-      this.gW = var1;
+class dG extends G {
+   dG(dE var1) {
+      this.hE = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      dd.a(this.gW, dd.b(this.gW).getSelectedIndex());
-      this.gW.setVisible(false);
+   protected String g(String var1) {
+      gE var2 = (gE)dE.a(this.hE).getSelectedItem();
+      if (var2 == null) {
+         return "";
+      } else {
+         var1 = var1.trim();
+         if (!var1.equals(var2.getName())) {
+            var2.setName(var1);
+            dE.c(this.hE).setText(var1);
+         }
+
+         return var1;
+      }
    }
 }

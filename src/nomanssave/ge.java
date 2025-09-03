@@ -1,105 +1,108 @@
 package nomanssave;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class ge {
-   private final List gT;
-   private final List nh;
-   private final List ni;
+public class gE {
+   private final int index;
+   private final eY bf;
 
-   public static ge m(eY var0) {
-      return new ge(var0);
-   }
+   public static gE[] z(eY var0) {
+      eV var1 = var0.d("TeleportEndpoints");
+      List var2 = var1.bB()
+         .filter(var0x -> "Settlement".equals(var0x.getValueAsString("TeleporterType")))
+         .map(var0x -> hl.n(var0x.H("UniverseAddress")))
+         .collect(Collectors.toList());
+      eV var3 = var0.d("SettlementStatesV2");
+      if (var3 != null && var3.size() != 0) {
+         ArrayList var4 = new ArrayList();
 
-   private static Function ap(int var0) {
-      return var1 -> {
-         String var2 = var1.getName();
-         if (var2 == null || var2.length() == 0 || "BLD_STORAGE_NAME".equals(var2)) {
-            var2 = "Chest " + var0;
-         }
-
-         return new String[]{var2};
-      };
-   }
-
-   private static Function cB() {
-      return var0 -> new String[]{"Ingredient Storage"};
-   }
-
-   private ge(eY var1) {
-      byte var2 = 8;
-      byte var3 = 6;
-      if (Application.e().D()) {
-         var2 = 10;
-         var3 = 8;
-      }
-
-      ArrayList var4 = new ArrayList();
-
-      for (int var5 = 0; var5 < 10; var5++) {
-         var4.add(new gt(ap(var5), var1.H("Chest" + (var5 + 1) + "Inventory"), 3584, var2, var3, false, false));
-      }
-
-      eY var14 = var1.H("CookingIngredientsInventory");
-      if (var14 != null) {
-         var4.add(new gt(cB(), var14, 36352, var2, var3, false, false));
-      }
-
-      this.gT = Collections.unmodifiableList(var4);
-      ArrayList var6 = new ArrayList();
-      eV var7 = var1.d("NPCWorkers");
-      String var8 = "";
-
-      for (int var10 = 0; var10 < var7.size() && var10 < 5; var10++) {
-         eY var9 = var7.V(var10);
-         if (var9.M("HiredWorker")) {
-            switch (var10) {
-               case 0:
-                  var8 = "Armorer";
-                  break;
-               case 1:
-                  var8 = "Farmer";
-                  break;
-               case 2:
-                  var8 = "Overseer";
-                  break;
-               case 3:
-                  var8 = "Technician";
-                  break;
-               case 4:
-                  var8 = "Scientist";
+         for (int var5 = 0; var5 < var3.size(); var5++) {
+            eY var6 = var3.V(var5);
+            hl var7 = hl.n(var6.getValue("UniverseAddress"));
+            if (var2.contains(var7)) {
+               var4.add(new gE(var5, var6));
             }
-
-            var6.add(new gh(this, var8, var9, null));
          }
+
+         return var4.toArray(new gE[0]);
+      } else {
+         return new gE[0];
       }
+   }
 
-      this.nh = Collections.unmodifiableList(var6);
-      ArrayList var15 = new ArrayList();
-      eV var11 = var1.d("PersistentPlayerBases");
+   private gE(int var1, eY var2) {
+      this.index = var1;
+      this.bf = var2;
+   }
 
-      for (int var13 = 0; var13 < var11.size(); var13++) {
-         eY var12 = var11.V(var13);
-         if ("HomePlanetBase".equals(var12.getValueAsString("BaseType.PersistentBaseTypes")) && var12.J("BaseVersion") >= 3) {
-            var15.add(new gf(this, var12, null));
+   public int getIndex() {
+      return this.index;
+   }
+
+   public String getName() {
+      return this.bf.getValueAsString("Name");
+   }
+
+   public void setName(String var1) {
+      this.bf.b("Name", var1);
+   }
+
+   public int aq(int var1) {
+      return this.bf.d("Stats").Y(var1);
+   }
+
+   public void e(int var1, int var2) {
+      this.bf.d("Stats").a(var1, var2);
+   }
+
+   public int a(gG var1) {
+      return this.bf.d("Stats").Y(var1.ordinal());
+   }
+
+   public void a(gG var1, int var2) {
+      this.bf.d("Stats").a(var1.ordinal(), var2);
+   }
+
+   public int dW() {
+      return this.bf.d("Perks").size();
+   }
+
+   public String aH(int var1) {
+      return this.bf.d("Perks").X(var1);
+   }
+
+   public void c(int var1, String var2) {
+      this.bf.d("Perks").a(var1, var2);
+   }
+
+   public String cK() {
+      return this.bf.I("SeedValue");
+   }
+
+   public void aa(String var1) {
+      this.bf.b("SeedValue", var1);
+   }
+
+   public gF[] dX() {
+      eV var1 = this.bf.d("ProductionState");
+      if (var1 == null) {
+         return new gF[0];
+      } else {
+         ArrayList var2 = new ArrayList();
+
+         for (int var3 = 0; var3 < var1.size(); var3++) {
+            eY var4 = var1.V(var3);
+            var2.add(new gF(this, var4, null));
          }
+
+         return var2.toArray(new gF[0]);
       }
-
-      this.ni = Collections.unmodifiableList(var15);
    }
 
-   public List cC() {
-      return this.gT;
-   }
-
-   public List cD() {
-      return this.nh;
-   }
-
-   public List cE() {
-      return this.ni;
+   @Override
+   public String toString() {
+      return this.getName();
    }
 }

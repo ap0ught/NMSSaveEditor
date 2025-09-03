@@ -1,27 +1,36 @@
 package nomanssave;
 
-class bn extends G {
-   bn(bl var1) {
-      this.er = var1;
+class bN extends ba {
+   bE ey;
+
+   bN(bE var1) {
+      super(aH.cJ, 0);
+      this.ey = var1;
    }
 
-   @Override
-   protected String g(String var1) {
-      if (bl.b(this.er) < 0) {
-         return "";
-      } else {
-         int var2 = bl.c(this.er)[bl.b(this.er)].dc();
+   void a(String var1, gs var2) {
+      this.a(var1, var2, true, null);
+   }
 
-         try {
-            int var3 = hf.b(var1, 0, Integer.MAX_VALUE);
-            if (var3 != var2) {
-               bl.c(this.er)[bl.b(this.er)].as(var3);
-            }
-
-            return Integer.toString(var3);
-         } catch (RuntimeException var4) {
-            return Integer.toString(var2);
-         }
+   void a(String var1, gs var2, boolean var3, String var4) {
+      bJ var5 = new bJ(this.ey, var2, var3);
+      if (var4 != null) {
+         var5.setToolTipText(var4);
       }
+
+      this.a(var1, var5);
+   }
+
+   void a(String var1, bK var2) {
+      this.a(var1, var2, true, null);
+   }
+
+   void a(String var1, bK var2, boolean var3, String var4) {
+      bL var5 = new bL(this.ey, var2, var3);
+      if (var4 != null) {
+         var5.setToolTipText(var4);
+      }
+
+      this.a(var1, var5);
    }
 }

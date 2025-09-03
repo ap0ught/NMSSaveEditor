@@ -1,25 +1,25 @@
 package nomanssave;
 
-class ch extends G {
-   ch(cg var1) {
-      this.fF = var1;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
+import javax.swing.text.TextAction;
+
+class cH extends TextAction implements ClipboardOwner {
+   public cH(cy var1) {
+      super("Paste From Clipboard");
+      this.gg = var1;
    }
 
    @Override
-   protected String g(String var1) {
-      if (cg.a(this.fF) == null) {
-         return "";
-      } else {
-         try {
-            int var2 = hf.b(var1, 0, 99999);
-            if (cg.a(this.fF) != var2) {
-               cg.b(this.fF).m(cg.c(this.fF).M(var2));
-               cg.a(this.fF, new Integer(var2));
-            }
-         } catch (RuntimeException var3) {
-         }
+   public void actionPerformed(ActionEvent var1) {
+      String var2 = cy.az();
+      ((JTextArea)var1.getSource()).replaceSelection(var2);
+   }
 
-         return cg.a(this.fF).toString();
-      }
+   @Override
+   public void lostOwnership(Clipboard var1, Transferable var2) {
    }
 }

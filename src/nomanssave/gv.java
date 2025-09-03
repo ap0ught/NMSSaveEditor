@@ -1,229 +1,150 @@
 package nomanssave;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.function.Function;
+import java.util.Collections;
+import java.util.List;
 
-public class gv {
-   private final int index;
-   private final eY qF;
-   private final gt qG;
-
-   public static gv[] v(eY var0) {
-      eV var1 = var0.d("Multitools");
-      if (var1 != null && var1.size() != 0) {
-         ArrayList var2 = new ArrayList();
-
-         for (int var3 = 0; var3 < var1.size(); var3++) {
-            eY var4 = var1.V(var3);
-            if (var4.d("Seed").ab(0)) {
-               var2.add(new gv(var3, var4, var4.H("Store")));
-            }
-         }
-
-         return var2.toArray(new gv[0]);
+public class gV {
+   private static double[] a(eY var0, String var1) {
+      eV var2 = var0.d(var1);
+      if (var2.size() != 3) {
+         throw new RuntimeException("Invalid " + var1 + " coordinates");
       } else {
-         return new gv[]{new gw(var0, var0.H("WeaponInventory"))};
+         return new double[]{var2.aa(0), var2.aa(1), var2.aa(2)};
       }
    }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public static gv b(eY var0, File var1) {
-      eV var2 = var0.d("Multitools");
-      if (var2 != null && var2.size() != 0) {
-         int var3 = -1;
-
-         for (int var4 = 0; var4 < var2.size(); var4++) {
-            eY var5 = var2.V(var4);
-            if (!var5.d("Seed").ab(0)) {
-               var3 = var4;
-               break;
-            }
-         }
-
-         if (var3 < 0) {
-            throw new RuntimeException("Weapon cannot be imported to current file!");
-         } else {
-            eY var14 = gR.az("multitool");
-            Throwable var15 = null;
-            Object var6 = null;
-
-            try {
-               ff var7 = new ff(new FileInputStream(var1));
-
-               try {
-                  if (var14 == null) {
-                     var14 = var7.bK();
-                  } else {
-                     var14.c(var7.bK());
-                  }
-               } finally {
-                  if (var7 != null) {
-                     var7.close();
-                  }
-               }
-            } catch (Throwable var13) {
-               if (var15 == null) {
-                  var15 = var13;
-               } else if (var15 != var13) {
-                  var15.addSuppressed(var13);
-               }
-
-               throw var15;
-            }
-
-            var2.a(var3, var14);
-            eY var16 = var14.H("Store");
-            if (var16 == null) {
-               throw new RuntimeException("Invalid weapon data");
-            } else {
-               var6 = var14.d("Seed");
-               if (var6 != null && ((eV)var6).ab(0)) {
-                  return new gv(var3, var14, var16);
-               } else {
-                  throw new RuntimeException("Invalid weapon data");
-               }
-            }
-         }
-      } else {
-         throw new RuntimeException("Weapon cannot be imported to current file!");
-      }
+   private static void a(eY var0, String var1, double[] var2) {
+      var0.b(
+         var1,
+         new eV(
+            new Double(Double.isNaN(var2[0]) ? 0.0 : var2[0]),
+            new Double(Double.isNaN(var2[1]) ? 0.0 : var2[1]),
+            new Double(Double.isNaN(var2[2]) ? 0.0 : var2[2])
+         )
+      );
    }
 
-   private static Function b(gv var0) {
-      return var1 -> {
-         String var2 = var0.getName();
-         if (var2 == null || var2.length() == 0) {
-            var2 = "Multitool [" + var0.index + "]";
-         }
-
-         return new String[]{var2};
-      };
+   public static boolean F(eY var0) {
+      return b(var0, "^BUILDSIGNAL");
    }
 
-   gv(int var1, eY var2, eY var3) {
-      this.index = var1;
-      this.qF = var2;
-      byte var4 = 8;
-      byte var5 = 6;
-      if (Application.e().D()) {
-         var4 = 10;
-         var5 = 10;
-      }
+   public static boolean b(eY var0, String var1) {
+      eV var2 = var0.d("Objects");
+      eY var3 = null;
+      eY var4 = null;
 
-      this.qG = new gt(b(this), var3, 2, var4, var5, true, true);
-   }
+      for (int var5 = 0; var5 < var2.size(); var5++) {
+         eY var6 = var2.V(var5);
+         if ("^BASE_FLAG".equals(var6.getValueAsString("ObjectID"))) {
+            if (var3 != null) {
+               hc.warn("  multiple base computers found");
+               return false;
+            }
 
-   // $VF: Could not inline inconsistent finally blocks
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   public void j(File var1) {
-      Throwable var2 = null;
-      Object var3 = null;
-
-      try {
-         fj var4 = new fj(new FileOutputStream(var1));
-
-         try {
-            eY var5 = this.qF.bE();
-            var4.h(var5);
-         } finally {
+            var3 = var6;
+         } else if (var1.equals(var6.getValueAsString("ObjectID"))) {
             if (var4 != null) {
-               var4.close();
+               hc.warn("  multiple " + var1 + " objects found");
+               return false;
             }
-         }
-      } catch (Throwable var11) {
-         if (var2 == null) {
-            var2 = var11;
-         } else if (var2 != var11) {
-            var2.addSuppressed(var11);
-         }
 
-         throw var2;
+            var4 = var6;
+         }
+      }
+
+      if (var3 == null) {
+         hc.warn("  no base computer found");
+         return false;
+      } else if (var4 == null) {
+         hc.warn("  no " + var1 + " object found");
+         return false;
+      } else {
+         a(var0, var3, var4);
+         return true;
       }
    }
 
-   public int getIndex() {
-      return this.index;
+   public static List G(eY var0) {
+      ArrayList var1 = new ArrayList();
+      boolean var2 = false;
+      eV var3 = var0.d("Objects");
+
+      for (int var4 = 0; var4 < var3.size(); var4++) {
+         eY var5 = var3.V(var4);
+         String var6 = var5.getValueAsString("ObjectID");
+         if ("^BASE_FLAG".equals(var5.getValueAsString("ObjectID"))) {
+            var2 = true;
+         } else if ("^BUILDSIGNAL".equals(var6)) {
+            var1.add(var5);
+         } else if ("^BP_ANALYSER".equals(var6)) {
+            var1.add(var5);
+         } else if ("^BUILDBEACON".equals(var6)) {
+            var1.add(var5);
+         }
+      }
+
+      return (List)(var2 ? var1 : Collections.emptyList());
    }
 
-   public String getName() {
-      return this.qF.getValueAsString("Name");
+   public static boolean a(eY var0, eY var1) {
+      eV var2 = var0.d("Objects");
+      boolean var3 = false;
+      eY var4 = null;
+
+      for (int var5 = 0; var5 < var2.size(); var5++) {
+         eY var6 = var2.V(var5);
+         if ("^BASE_FLAG".equals(var6.getValueAsString("ObjectID"))) {
+            if (var4 != null) {
+               hc.warn("  multiple base computers found");
+               return false;
+            }
+
+            var4 = var6;
+         } else if (var6 == var1) {
+            var3 = true;
+         }
+      }
+
+      if (var4 == null) {
+         hc.warn("  no base computer found");
+         return false;
+      } else if (!var3) {
+         hc.warn("  replacement object found");
+         return false;
+      } else {
+         a(var0, var4, var1);
+         return true;
+      }
    }
 
-   public void setName(String var1) {
-      this.qF.b("Name", var1);
-   }
+   private static void a(eY var0, eY var1, eY var2) {
+      double[] var3 = a(var0, "Position");
+      double[] var4 = a(var0, "Forward");
+      double[] var5 = a(var2, "Position");
+      gT var6 = new gT(var3, var4);
+      double[] var7 = var6.c(var5);
+      var7[0] += var3[0];
+      var7[1] += var3[1];
+      var7[2] += var3[2];
+      a(var0, "Position", var7);
+      var7 = a(var1, "At");
+      double[] var8 = a(var2, "At");
+      a(var1, "At", var8);
+      a(var2, "At", var7);
+      var7 = new double[]{-var5[0], -var5[1], -var5[2]};
+      a(var2, "Position", var7);
+      eV var9 = var0.d("Objects");
 
-   public String cT() {
-      return this.qF.getValueAsString("Resource.Filename");
-   }
-
-   public void ag(String var1) {
-      this.qF.b("Resource.Filename", var1);
-   }
-
-   public String cK() {
-      return this.qF.d("Seed").X(1);
-   }
-
-   public void aa(String var1) {
-      this.qF.d("Seed").a(1, var1);
-   }
-
-   public String cW() {
-      return this.qF.getValueAsString("Store.Class.InventoryClass");
-   }
-
-   public void aj(String var1) {
-      this.qF.b("Store.Class.InventoryClass", var1);
-   }
-
-   public gt dE() {
-      return this.qG;
-   }
-
-   private double ak(String var1) {
-      return this.qG.ak(var1);
-   }
-
-   private void d(String var1, double var2) {
-      this.qG.d(var1, var2);
-   }
-
-   public double dF() {
-      return this.ak("^WEAPON_DAMAGE");
-   }
-
-   public void d(double var1) {
-      this.d("^WEAPON_DAMAGE", var1);
-   }
-
-   public double dG() {
-      return this.ak("^WEAPON_MINING");
-   }
-
-   public void e(double var1) {
-      this.d("^WEAPON_MINING", var1);
-   }
-
-   public double dH() {
-      return this.ak("^WEAPON_SCAN");
-   }
-
-   public void f(double var1) {
-      this.d("^WEAPON_SCAN", var1);
-   }
-
-   public void cm() {
-      this.qF.b("Seed", new eV(Boolean.FALSE, "0x0"));
-   }
-
-   @Override
-   public String toString() {
-      String var1 = this.getName();
-      return var1 != null && var1.length() != 0 ? var1 : "Multitool [" + this.index + "]";
+      for (int var10 = 0; var10 < var9.size(); var10++) {
+         eY var11 = var9.V(var10);
+         if (var11 != var1 && var11 != var2) {
+            var7 = a(var11, "Position");
+            var7[0] -= var5[0];
+            var7[1] -= var5[1];
+            var7[2] -= var5[2];
+            a(var11, "Position", var7);
+         }
+      }
    }
 }

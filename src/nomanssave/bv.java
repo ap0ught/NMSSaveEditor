@@ -1,23 +1,21 @@
 package nomanssave;
 
-class bv extends G {
-   bv(bl var1) {
-      this.er = var1;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+class bV implements ActionListener {
+   bV(bS var1, int var2, int var3) {
+      this.fk = var1;
+      this.fl = var2;
+      this.fm = var3;
    }
 
    @Override
-   protected String g(String var1) {
-      if (bl.b(this.er) < 0) {
-         return "";
-      } else {
-         var1 = var1.trim();
-         if (!var1.equals(bl.c(this.er)[bl.b(this.er)].getName())) {
-            bl.c(this.er)[bl.b(this.er)].setName(var1);
-            bl.j(this.er).setText(var1);
-            bl.e(this.er).updateUI();
-         }
-
-         return var1;
+   public void actionPerformed(ActionEvent var1) {
+      gu var2 = bO.a(bS.j(this.fk)).f(this.fl, this.fm);
+      if (var2 != null && var2.dA() >= 0 && var2.dB() > 0) {
+         var2.aA(var2.dB());
+         bS.c(this.fk);
       }
    }
 }

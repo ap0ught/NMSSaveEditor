@@ -1,36 +1,20 @@
 package nomanssave;
 
-public enum gq {
-   oS("Combat"),
-   oT("Exploration"),
-   oU("Industry"),
-   oV("Trading"),
-   oW("Cost Per Warp"),
-   oX("Expedition Fuel Cost", -1),
-   oY("Expedition Duration", -1),
-   oZ("Loot"),
-   pa("Repair"),
-   pb("Damage Reduction"),
-   pc("Stealth");
+public interface gQ {
+   String getType();
 
-   private String name;
-   private int pd;
+   Object dz();
 
-   private gq(String var3) {
-      this(var3, 1);
+   default String ei() {
+      Object var1 = this.dz();
+      return var1 instanceof fg ? ((fg)var1).bP() : var1.toString();
    }
 
-   private gq(String var3, int var4) {
-      this.name = var3;
-      this.pd = var4;
-   }
+   void m(Object var1);
 
-   public int di() {
-      return this.pd;
-   }
+   int dA();
 
-   @Override
-   public String toString() {
-      return this.name;
-   }
+   void aA(int var1);
+
+   int dB();
 }

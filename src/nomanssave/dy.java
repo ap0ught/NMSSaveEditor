@@ -1,19 +1,28 @@
 package nomanssave;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-class dy extends MouseAdapter {
-   dy(du var1, gF var2) {
-      this.hp = var1;
-      this.hq = var2;
+class dY extends G {
+   dY(dN var1) {
+      this.ia = var1;
    }
 
    @Override
-   public void mouseClicked(MouseEvent var1) {
-      if (var1.getClickCount() == 2 && this.hq != null) {
-         cg.a(du.d(this.hp), this.hq);
-         du.c(this.hp);
+   protected String g(String var1) {
+      gH var2 = (gH)dN.p(this.ia).getSelectedItem();
+      if (var2 == null) {
+         return "";
+      } else {
+         double var3 = var2.dF();
+
+         try {
+            double var5 = hf.a(var1, 0.0, 1000.0);
+            if (var5 != var3) {
+               var2.d(var5);
+            }
+
+            return Double.toString(var5);
+         } catch (RuntimeException var7) {
+            return Double.toString(var3);
+         }
       }
    }
 }

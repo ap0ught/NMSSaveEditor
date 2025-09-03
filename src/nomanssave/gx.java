@@ -1,45 +1,56 @@
 package nomanssave;
 
-public enum gx implements gD {
-   qH("Standard", "MODELS/COMMON/WEAPONS/MULTITOOL/MULTITOOL.SCENE.MBIN"),
-   qI("Royal", "MODELS/COMMON/WEAPONS/MULTITOOL/ROYALMULTITOOL.SCENE.MBIN"),
-   qJ("Sentinel", "MODELS/COMMON/WEAPONS/MULTITOOL/SENTINELMULTITOOL.SCENE.MBIN"),
-   qK("Sentinel B", "MODELS/COMMON/WEAPONS/MULTITOOL/SENTINELMULTITOOLB.SCENE.MBIN"),
-   qL("Switch", "MODELS/COMMON/WEAPONS/MULTITOOL/SWITCHMULTITOOL.SCENE.MBIN"),
-   qM("Staff", "MODELS/COMMON/WEAPONS/MULTITOOL/STAFFMULTITOOL.SCENE.MBIN"),
-   qN("Staff NPC", "MODELS/COMMON/WEAPONS/MULTITOOL/STAFFNPCMULTITOOL.SCENE.MBIN"),
-   qO("Atlas", "MODELS/COMMON/WEAPONS/MULTITOOL/ATLASMULTITOOL.SCENE.MBIN"),
-   qP("Atlas Scepter", "MODELS/COMMON/WEAPONS/MULTITOOL/STAFFMULTITOOLATLAS.SCENE.MBIN");
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-   private String name;
-   private String filename;
+public class gX extends FilterInputStream {
+   private ha sa;
+   private int sb;
 
-   private gx(String var3, String var4) {
-      this.name = var3;
-      this.filename = var4;
+   public gX(InputStream var1, byte[] var2) {
+      super(var1);
+      int var3 = 255 & var2[4] | (255 & var2[5]) << 8 | (255 & var2[6]) << 16 | (255 & var2[7]) << 24;
+      int var4 = 255 & var2[8] | (255 & var2[9]) << 8 | (255 & var2[10]) << 16 | (255 & var2[11]) << 24;
+      this.sa = new ha(new gY(this, var3, null), var4);
+      this.sb = 1;
    }
 
-   @Override
-   public String K() {
-      return this.filename;
+   public int getFrameCount() {
+      return this.sb;
    }
 
-   @Override
-   public String toString() {
-      return this.name;
-   }
-
-   public static gx ar(String var0) {
-      if (var0 == null) {
-         return null;
+   private boolean ej() {
+      byte[] var1 = new byte[16];
+      int var2 = this.in.read(var1, 0, 16);
+      if (var2 < 0) {
+         this.sa = null;
+         return false;
+      } else if (var2 < 16) {
+         throw new IOException("Short read " + var2);
+      } else if ((255 & var1[0]) == 229 && (255 & var1[1]) == 161 && (255 & var1[2]) == 237 && (255 & var1[3]) == 254) {
+         int var3 = 255 & var1[4] | (255 & var1[5]) << 8 | (255 & var1[6]) << 16 | (255 & var1[7]) << 24;
+         int var4 = 255 & var1[8] | (255 & var1[9]) << 8 | (255 & var1[10]) << 16 | (255 & var1[11]) << 24;
+         this.sa = new ha(new gY(this, var3, null), var4);
+         this.sb++;
+         return true;
       } else {
-         for (int var1 = 0; var1 < values().length; var1++) {
-            if (var0.equals(values()[var1].filename)) {
-               return values()[var1];
-            }
-         }
-
-         return null;
+         throw new IOException("Invalid header");
       }
+   }
+
+   @Override
+   public int read() {
+      return this.sa != null && (this.sa.available() != 0 || this.ej()) ? this.sa.read() : -1;
+   }
+
+   @Override
+   public int read(byte[] var1) {
+      return this.read(var1, 0, var1.length);
+   }
+
+   @Override
+   public int read(byte[] var1, int var2, int var3) {
+      return this.sa != null && (this.sa.available() != 0 || this.ej()) ? this.sa.read(var1, var2, var3) : -1;
    }
 }

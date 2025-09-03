@@ -1,58 +1,32 @@
 package nomanssave;
 
-public enum ex {
-   iL("Fuel"),
-   iM("Metal"),
-   iN("Catalyst"),
-   iO("Stellar"),
-   iP("Flora"),
-   iQ("Earth"),
-   iR("Exotic"),
-   iS("Special"),
-   iT("Component"),
-   iU("Consumable"),
-   iV("Tradeable"),
-   iW("Curiosity"),
-   iX("Building Part"),
-   iY("Procedural"),
-   iZ("Customisation Part"),
-   ja("Emote"),
-   jb("Pet"),
-   jc("Fish"),
-   jd("TechBox"),
-   je("Ship"),
-   jf("Weapon"),
-   jg("Procedural"),
-   jh("Suit"),
-   ji("Procedural"),
-   jj("Personal"),
-   jk("Freighter"),
-   jl("Procedural"),
-   jm("Vehicle"),
-   jn("Procedural"),
-   jo("Aquatic"),
-   jp("Procedural"),
-   jq("Living Ship"),
-   jr("Procedural"),
-   js("All Ships"),
-   jt("All Vehicles"),
-   ju("Robot Ship"),
-   jv("All Ships Except Alien"),
-   jw("Procedural"),
-   jx("Mech"),
-   jy("Procedural"),
-   jz("Maintenance"),
-   jA("Corvette"),
-   jB("Procedural");
+import java.io.IOException;
 
-   private String name;
+public class eX extends IOException {
+   final int kF;
+   final int kG;
 
-   private ex(String var3) {
-      this.name = var3;
+   eX(String var1) {
+      this(var1, 1, 0);
    }
 
-   @Override
-   public String toString() {
-      return this.name;
+   eX(String var1, int var2, int var3) {
+      super(var1);
+      this.kF = var2;
+      this.kG = var3;
+   }
+
+   eX(String var1, IOException var2, int var3, int var4) {
+      super(var1, var2);
+      this.kF = var3;
+      this.kG = var4;
+   }
+
+   public int getLineNumber() {
+      return this.kF;
+   }
+
+   public int bD() {
+      return this.kG;
    }
 }

@@ -1,16 +1,27 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
 
-class da implements ActionListener {
-   da(cY var1) {
-      this.gR = var1;
+class dA implements ListModel {
+   dA(dz var1) {
+      this.hu = var1;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      cY.a(this.gR, cY.b(this.gR).getSelectedIndex());
-      this.gR.setVisible(false);
+   public int getSize() {
+      return dz.a(this.hu).length;
+   }
+
+   public ft m(int var1) {
+      return dz.a(this.hu)[var1];
+   }
+
+   @Override
+   public void addListDataListener(ListDataListener var1) {
+   }
+
+   @Override
+   public void removeListDataListener(ListDataListener var1) {
    }
 }

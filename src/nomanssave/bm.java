@@ -1,27 +1,31 @@
 package nomanssave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import javax.swing.JTextField;
 
-class bm implements ActionListener {
-   bm(bl var1, Application var2) {
-      this.er = var1;
-      this.bv = var2;
+class bM implements FocusListener {
+   bM(bL var1, bK var2) {
+      this.eC = var1;
+      this.eD = var2;
    }
 
    @Override
-   public void actionPerformed(ActionEvent var1) {
-      if (bl.b(this.er) >= 0) {
-         if (JOptionPane.showConfirmDialog(this.er, "Are you sure you want to delete this frigate?", "Delete", 2) == 0) {
-            bl.a(this.er, this.bv.k(bl.c(this.er)[bl.b(this.er)].getIndex()));
-            if (bl.c(this.er).length > 0) {
-               bl.e(this.er).setRowSelectionInterval(0, 0);
-            } else {
-               bl.e(this.er).clearSelection();
-            }
+   public void focusGained(FocusEvent var1) {
+   }
 
-            bl.e(this.er).updateUI();
+   @Override
+   public void focusLost(FocusEvent var1) {
+      if (bE.a(bL.a(this.eC)) != null) {
+         JTextField var2 = (JTextField)var1.getComponent();
+         String var3 = this.eD.ab();
+         String var4 = var2.getText();
+         if (!var4.equals(var3)) {
+            try {
+               this.eD.l(var4);
+            } catch (RuntimeException var6) {
+               var2.setText(var3);
+            }
          }
       }
    }

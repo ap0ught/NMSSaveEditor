@@ -1,20 +1,23 @@
 package nomanssave;
 
 import java.io.File;
-import javax.swing.filechooser.FileFilter;
+import javax.swing.Icon;
+import javax.swing.filechooser.FileView;
 
-class cu extends FileFilter {
-   cu(cs var1) {
-      this.fP = var1;
+class cU extends FileView {
+   cU(cT var1) {
+      this.gw = var1;
    }
 
    @Override
-   public String getDescription() {
-      return "Freighter Backup File";
+   public Icon getIcon(File var1) {
+      String var2 = var1.getName();
+      return (Icon)(var2.endsWith(".sh0") ? cT.as() : super.getIcon(var1));
    }
 
    @Override
-   public boolean accept(File var1) {
-      return var1.isDirectory() ? !var1.isHidden() : var1.getName().endsWith(".fb3");
+   public String getName(File var1) {
+      String var2 = var1.getName();
+      return var2.endsWith(".sh0") ? var2.substring(0, var2.length() - 4) : var2;
    }
 }

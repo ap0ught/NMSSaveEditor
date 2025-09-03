@@ -85,6 +85,11 @@ src/
 - VS Code ready for development
 - All resources and dependencies included
 
+### Development Tools
+- **Decompile Error Analysis**: `scripts/check_decompile_errors.sh` - Script to analyze and catalog decompilation errors in the source code
+- **Binary Validation**: `validate-binary.sh` - Comprehensive test suite for validating JAR functionality
+- **Automated Testing**: `automated-validation.sh` - Quick validation script for CI/CD integration
+
 ## Success Criteria ✅
 
 1. **JAR Extraction** → Complete decompilation with Vineflower

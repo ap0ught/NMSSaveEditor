@@ -15,66 +15,74 @@ public class fJ implements fq {
    private fK mr;
    private fM[] ms;
 
-   fJ(File var1, fR var2) {
-      this.lX = var1;
-      this.lE = var2;
-
+public static byte[] j(Object var0) throws IOException {
+   ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+   fj writer = new fj(outputStream, 0);
+   try {
+      writer.k(var0);
+   } finally {
+      if (writer != null) {
+         writer.close();
+      }
+   }
+   return outputStream.toByteArray();
+}
       try {
-         this.mr = new fK(this);
-      } catch (FileNotFoundException var5) {
-      } catch (IOException var6) {
-         hc.a("cannot read file metadata: mf_accountdata.hg", var6);
-      }
-
-      this.ms = new fM[30];
-
-      for (int var3 = 0; var3 < this.ms.length; var3++) {
-         try {
-            this.ms[var3] = new fM(this, var3);
-         } catch (FileNotFoundException var7) {
-         } catch (IOException var8) {
-            hc.a("cannot read file metadata: mf_save" + (var3 == 0 ? "" : Integer.toString(var3 + 1)) + ".hg", var8);
+try {
+   writer.k(var0);
+} finally {
+   if (writer != null) {
+      writer.close();
+   }
+}
          }
       }
-
-      fl.a(this, var1);
+fl.a(this, var1);
    }
 
-   @Override
-   protected void finalize() {
-      fl.b(this);
-   }
-
-   @Override
-   public void X(String var1) {
-      if (var1.equals("accountdata.hg")) {
-         try {
-            this.mr = new fK(this);
-            hc.info("Account data reloaded from storage.");
-         } catch (FileNotFoundException var5) {
-            this.mr = null;
-            hc.info("Account data deleted from storage.");
-         } catch (IOException var6) {
-            this.mr = null;
-            hc.a("cannot read file metadata: mf_accountdata.hg", var6);
-         }
-
-         this.lE.a(this);
+public static byte[] g(eY var0) throws IOException {
+   ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+   fj writer = new fj(outputStream, 0);
+   try {
+      writer.h(var0);
+   } finally {
+      if (writer != null) {
+         writer.close();
       }
-
-      Matcher var2 = lV.matcher(var1);
-      if (var2.matches()) {
-         int var3 = var2.group(1).length() == 0 ? 0 : Integer.parseInt(var2.group(1)) - 1;
-
+   }
+   return outputStream.toByteArray();
+}
          try {
-            this.ms[var3] = new fM(this, var3);
-            hc.info("Save file reloaded from storage: " + var1);
-         } catch (FileNotFoundException var7) {
-            this.ms[var3] = null;
-            hc.info("Save file deleted from storage: " + var1);
-         } catch (IOException var8) {
-            this.ms[var3] = null;
-            hc.a("cannot read file metadata: mf_save" + (var3 == 0 ? "" : Integer.toString(var3 + 1)) + ".hg", var8);
+try {
+   this.mr = new fK(this);
+   hc.info("Account data reloaded from storage.");
+} catch (FileNotFoundException var5) {
+   this.mr = null;
+   hc.info("Account data deleted from storage.");
+} catch (IOException var6) {
+   this.mr = null;
+   hc.a("cannot read file metadata: mf_accountdata.hg", var6);
+}
+
+this.lE.a(this);
+
+Matcher var2 = lV.matcher(var1);
+if (var2.matches()) {
+   int var3 = var2.group(1).length() == 0 ? 0 : Integer.parseInt(var2.group(1)) - 1;
+
+   try {
+      this.ms[var3] = new fM(this, var3);
+      hc.info("Save file reloaded from storage: " + var1);
+   } catch (FileNotFoundException var7) {
+      this.ms[var3] = null;
+      hc.info("Save file deleted from storage: " + var1);
+   } catch (IOException var8) {
+      this.ms[var3] = null;
+      hc.a("cannot read file metadata: mf_save" + (var3 == 0 ? "" : Integer.toString(var3 + 1)) + ".hg", var8);
+   }
+
+   this.lE.a(this, var3 / 2, var1);
+}
          }
 
          this.lE.a(this, var3 / 2, var1);

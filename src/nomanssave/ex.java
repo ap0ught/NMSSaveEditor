@@ -1,5 +1,6 @@
 package nomanssave;
 
+<<<<<<< HEAD
 import java.io.IOException;
 
 public class eX extends IOException {
@@ -29,4 +30,16 @@ public class eX extends IOException {
    public int bD() {
       return this.kG;
    }
+=======
+// Exception class for JSON parsing errors
+public class eX extends Exception {
+    public eX(String message) {
+        super(message);
+    }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
+>>>>>>> origin
 }

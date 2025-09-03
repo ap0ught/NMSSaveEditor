@@ -1,9 +1,11 @@
 package nomanssave;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
@@ -63,81 +65,36 @@ class fQ {
    }
 
    eY a(eG param1) {
-      // $VF: Couldn't be decompiled
-      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-      // java.lang.RuntimeException: parsing failure!
-      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.parseGraph(DomHelper.java:211)
-      //   at org.jetbrains.java.decompiler.main.rels.MethodProcessor.codeToJava(MethodProcessor.java:166)
-      //
-      // Bytecode:
-      // 00: new java/io/BufferedInputStream
-      // 03: dup
-      // 04: new java/io/FileInputStream
-      // 07: dup
-      // 08: new java/io/File
-      // 0b: dup
-      // 0c: aload 0
-      // 0d: getfield nomanssave/fQ.mt Lnomanssave/fJ;
-      // 10: invokestatic nomanssave/fJ.a (Lnomanssave/fJ;)Ljava/io/File;
-      // 13: aload 0
-      // 14: getfield nomanssave/fQ.filename Ljava/lang/String;
-      // 17: invokespecial java/io/File.<init> (Ljava/io/File;Ljava/lang/String;)V
-      // 1a: invokespecial java/io/FileInputStream.<init> (Ljava/io/File;)V
-      // 1d: invokespecial java/io/BufferedInputStream.<init> (Ljava/io/InputStream;)V
-      // 20: astore 2
-      // 21: bipush 16
-      // 23: newarray 8
-      // 25: astore 3
-      // 26: aload 2
-      // 27: aload 3
-      // 28: arraylength
-      // 29: invokevirtual java/io/InputStream.mark (I)V
-      // 2c: aload 2
-      // 2d: aload 3
-      // 2e: invokestatic nomanssave/hk.readFully (Ljava/io/InputStream;[B)V
-      // 31: sipush 255
-      // 34: aload 3
-      // 35: bipush 0
-      // 36: baload
-      // 37: iand
-      // 38: sipush 229
-      // 3b: if_icmpne 72
-      // 3e: sipush 255
-      // 41: aload 3
-      // 42: bipush 1
-      // 43: baload
-      // 44: iand
-      // 45: sipush 161
-      // 48: if_icmpne 72
-      // 4b: sipush 255
-      // 4e: aload 3
-      // 4f: bipush 2
-      // 50: baload
-      // 51: iand
-      // 52: sipush 237
-      // 55: if_icmpne 72
-      // 58: sipush 255
-      // 5b: aload 3
-      // 5c: bipush 3
-      // 5d: baload
-      // 5e: iand
-      // 5f: sipush 254
-      // 62: if_icmpne 72
-      // 65: new nomanssave/gX
-      // 68: dup
-      // 69: aload 2
-      // 6a: aload 3
-      // 6b: invokespecial nomanssave/gX.<init> (Ljava/io/InputStream;[B)V
-      // 6e: astore 2
-      // 6f: goto 76
-      // 72: aload 2
-      // 73: invokevirtual java/io/InputStream.reset ()V
-      // 76: aconst_null
-      // 77: astore 4
-      // 79: aconst_null
-      // 7a: astore 5
-      // 7c: new nomanssave/ff
-      // 7f: dup
+      InputStream inputStream = new BufferedInputStream(
+         new FileInputStream(new File(fJ.a(this.mt), this.filename))
+      );
+      
+      try {
+         // Check for compression signature
+         byte[] header = new byte[16];
+         inputStream.mark(header.length);
+         hk.readFully(inputStream, header);
+         
+         // Check magic bytes for compression: 0xE5, 0xA1, 0xED, 0xFE
+         if ((header[0] & 0xFF) == 0xE5 && 
+             (header[1] & 0xFF) == 0xA1 && 
+             (header[2] & 0xFF) == 0xED && 
+             (header[3] & 0xFF) == 0xFE) {
+            inputStream = new gX(inputStream, header);
+         } else {
+            inputStream.reset();
+         }
+         
+         // Create stream reader with flags from param1
+         ff reader = new ff(inputStream, this.lO);
+         try {
+            return reader.bK();
+         } finally {
+            reader.close();
+         }
+      } finally {
+         inputStream.close();
+      }
       // 80: aload 2
       // 81: bipush 6
       // 83: invokespecial nomanssave/ff.<init> (Ljava/io/InputStream;I)V

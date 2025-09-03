@@ -82,9 +82,20 @@ Frequently asked questions can be found [here](FAQ.md).
 
 ## Troubleshooting
 
+### Common Issues
+
+**Firewall and Network Restrictions:**
+If you encounter network connectivity issues, DNS blocks (especially `esm.ubuntu.com`), or GitHub Actions failures due to firewall restrictions, see the [**Firewall Guide**](docs/FIREWALL_GUIDE.md) for comprehensive solutions.
+
+**Application Exit Issues:**
 If you experience issues with the application forcefully exiting or "forceExit" problems, see the [Troubleshooting Guide](TROUBLESHOOTING.md).
 
-For firewall and network restriction issues, see the [Firewall Guide](docs/FIREWALL_GUIDE.md).
+### Quick Firewall Solutions
+
+For immediate relief from firewall-related issues:
+- **Corporate Networks**: Use `start-editor-offline.sh` (Linux/macOS) or `start-editor-offline.bat` (Windows)
+- **GitHub Actions**: See allowlist configuration in the [Firewall Guide](docs/FIREWALL_GUIDE.md)
+- **ESM Repository Blocks**: Pre-configured solutions available in documentation
 
 ### Quick Start Scripts
 
@@ -118,6 +129,8 @@ start-editor-offline.bat
 
 These scripts automatically configure the application to avoid network-related shutdown issues and firewall conflicts.
 
+For complete documentation of all available scripts, see [SCRIPTS.md](SCRIPTS.md).
+
 ## Contribution
 
 This tool will always be released publicly for free, and I intend to continue maintaining it for as long as there is interest in the game. If this tool has been useful and you want to contribute to it's further development, feel free to visit me on Patreon:
@@ -129,6 +142,7 @@ If you're contributing to this project:
 - Review the [Branch Protection Guide](docs/BRANCH_PROTECTION.md) for information about repository security
 - Follow the established pull request workflow
 - Ensure all status checks pass before requesting review
+- For enhanced development experience with firewall restrictions, see [Copilot coding agent tips](https://gh.io/copilot-coding-agent-tips)
 
 ## Previous Releases
 

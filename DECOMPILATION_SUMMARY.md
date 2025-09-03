@@ -55,6 +55,16 @@ src/
 - **Generic Type Issues**: Some type erasure compilation errors
 - **Variable Names**: Cryptic single/double letter variable names
 - **Code Structure**: Original obfuscation impacts readability
+- **Decompiler Limitations**: 23 remaining "$VF:" comments (down from 42 - 45% improvement)
+
+### Fixed Decompile Issues ✅
+- **Major Save File Operations**: Core loading/parsing methods (fQ, fL, fV)
+- **Stream Processing**: Abstract save file operations (fX) 
+- **Data Parsing Utilities**: Static methods for JSON/binary processing (ff, fh)
+- **JSON Serialization**: Output formatting methods (fj)
+- **File Access Methods**: Added missing fJ.a() static method
+- **Resource Management**: Fixed inconsistent finally blocks with proper try-with-resources
+- **Exception Handling**: Improved error propagation and cleanup
 
 ## Compilation Status
 - **Basic Structure**: ✅ Compiles with warnings
@@ -74,6 +84,11 @@ src/
 - Maven build system configured
 - VS Code ready for development
 - All resources and dependencies included
+
+### Development Tools
+- **Decompile Error Analysis**: `scripts/check_decompile_errors.sh` - Script to analyze and catalog decompilation errors in the source code
+- **Binary Validation**: `validate-binary.sh` - Comprehensive test suite for validating JAR functionality
+- **Automated Testing**: `automated-validation.sh` - Quick validation script for CI/CD integration
 
 ## Success Criteria ✅
 

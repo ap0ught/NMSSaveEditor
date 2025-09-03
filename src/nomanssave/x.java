@@ -90,5 +90,16 @@ public class X extends JPanel {
       }
 
       this.bG.updateUI();
+<<<<<<< HEAD
+=======
+   }
+
+   gj[] a() {
+      return this.bT;
+   }
+
+   JComboBox k() {
+      return this.bG;
+>>>>>>> origin
    }
 }

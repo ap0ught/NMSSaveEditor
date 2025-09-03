@@ -31,3 +31,7 @@ src_backup/
 
 # Maven wrapper (if added)
 .mvn/wrapper/maven-wrapper.jar
+/NMSSaveEditor.log
+/NMSSaveEditor.conf
+/bases/
+/backups/

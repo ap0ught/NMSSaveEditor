@@ -1,32 +1,93 @@
-[DEBUG] Java Vendor: Eclipse Adoptium
-[DEBUG] Java Version: 17.0.16
+[DEBUG] Java Vendor: Oracle Corporation
+[DEBUG] Java Version: 1.8.0_421
 [DEBUG] Java Architecture: amd64
-[DEBUG] Operating System: Linux
-[DEBUG] Working Dir: /home/runner/work/NMSSaveEditor/NMSSaveEditor
+[DEBUG] Operating System: Windows 11
+[DEBUG] Working Dir: D:\code\NMSSaveEditor
 [DEBUG] Look and Feel: FlatLaf Light
 [INFO] Starting Editor...
-[STDERR] java.awt.HeadlessException: 
-[STDERR] No X11 DISPLAY variable was set,
-[STDERR] 11 DISPLAY variable was set,
-[STDERR] No X11 DISPLAY variable was se	at java.desktop/java.awt.GraphicsEnvironment.checkHeadless(GraphicsEnvironment.java:164)
-[STDERR] 	at java.desktop/java.awt.Window.<init>(Window.java:553)
-[STDERR] 	at java.desktop/java.awt.Frame.<init>(Frame.java:428)
-[STDERR] 	at java.desktop/java.awt.Frame.<init>(Frame.java:393)
-[STDERR] 	at java.desktop/javax.swing.JFrame.<init>(JFrame.java:180)
-[STDERR] 	at nomanssave.Application.initialize(Unknown Source)
-[STDERR] 	at nomanssave.Application.<init>(Unknown Source)
-[STDERR] 	at nomanssave.Application.<init>(Unknown Source)
-[STDERR] 	at nomanssave.w.run(Unknown Source)
-[STDERR] 	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
-[STDERR] 	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
-[STDERR] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
-[STDERR] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
-[STDERR] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-[STDERR] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-[STDERR] 	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
-[STDERR] 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+[INFO] Reading metadata for accountdata.hg
+[DEBUG] DecompressedSize: 28791
+[INFO] Reading metadata for save.hg
+[DEBUG] DecompressedSize: 1631036
+[DEBUG] CompressedSize: 36676
+[INFO] TotalPlayTime: 0:06
+[INFO] Reading metadata for save2.hg
+[DEBUG] DecompressedSize: 1470372
+[INFO] TotalPlayTime: 0:06
+[INFO] Reading metadata for save3.hg
+[DEBUG] DecompressedSize: 3482958
+[DEBUG] CompressedSize: 845365
+[INFO] TotalPlayTime: 19:37
+[INFO] Reading metadata for save4.hg
+[DEBUG] DecompressedSize: 3525703
+[DEBUG] CompressedSize: 852031
+[INFO] TotalPlayTime: 19:22
+[INFO] Reading metadata for save5.hg
+[DEBUG] DecompressedSize: 9083376
+[DEBUG] CompressedSize: 3550316
+[INFO] TotalPlayTime: 7:02
+[INFO] Reading metadata for save6.hg
+[DEBUG] DecompressedSize: 5757714
+[DEBUG] CompressedSize: 1975890
+[INFO] TotalPlayTime: 7:02
+[INFO] Reading metadata for save7.hg
+[DEBUG] DecompressedSize: 8412895
+[DEBUG] CompressedSize: 3173652
+[INFO] TotalPlayTime: 0:51
+[INFO] Reading metadata for save9.hg
+[DEBUG] DecompressedSize: 5359038
+[DEBUG] CompressedSize: 1667305
+[INFO] TotalPlayTime: 2:05
+[INFO] Reading metadata for save10.hg
+[DEBUG] DecompressedSize: 4989041
+[DEBUG] CompressedSize: 1511953
+[INFO] TotalPlayTime: 2:05
+[INFO] Reading metadata for save11.hg
+[DEBUG] DecompressedSize: 1519512
+[DEBUG] CompressedSize: 1519512
+[INFO] TotalPlayTime: 2:05
+[INFO] Reading metadata for save13.hg
+[DEBUG] DecompressedSize: 3829041
+[DEBUG] CompressedSize: 830664
+[INFO] TotalPlayTime: 19:57
+[INFO] Reading metadata for save14.hg
+[DEBUG] DecompressedSize: 3811355
+[DEBUG] CompressedSize: 902975
+[INFO] TotalPlayTime: 19:57
+[INFO] Reading metadata for save15.hg
+[DEBUG] DecompressedSize: 1760752
+[DEBUG] CompressedSize: 81565
+[INFO] TotalPlayTime: 1:56
+[INFO] Reading metadata for save16.hg
+[DEBUG] DecompressedSize: 2081710
+[DEBUG] CompressedSize: 118539
+[INFO] TotalPlayTime: 1:57
+[DEBUG] Storage: Steam
+[DEBUG] Save Path: C:\Users\game\AppData\Roaming\HelloGames\NMS\st_76561197968621086
+[INFO] Reading account data...
+[DEBUG] Mem Usage: 408/7626 MB
+[DEBUG] Latest version: "1.19.0"
+[DEBUG] Current version: "1.19.0"
+[INFO] Loading saves for Slot 8...
+[INFO] Reading save file...
+[INFO] Slot: Slot 8 - NORMAL - All
+[INFO] Filename: save16.hg
+[INFO] Finished.
+[INFO] Setting BaseContext.PlayerStateData.Inventory.Slots: ARRAY[103]
+[INFO] Setting BaseContext.PlayerStateData.Inventory.Slots: ARRAY[104]
+[INFO] Formatting JSON...
+[INFO] Loading saves for Slot 8...
+[INFO] Finished.
+[INFO] Reading metadata for save16.hg
+[DEBUG] DecompressedSize: 2081934
+[DEBUG] CompressedSize: 118595
+[INFO] TotalPlayTime: 1:57
+[INFO] Save file reloaded from storage: save16.hg
+[INFO] Formatting JSON...
+[INFO] Loading saves for Slot 8...
+[INFO] Finished.
+[INFO] Reading metadata for save16.hg
+[DEBUG] DecompressedSize: 2081934
+[DEBUG] CompressedSize: 118595
+[INFO] TotalPlayTime: 1:57
+[INFO] Save file reloaded from storage: save16.hg
